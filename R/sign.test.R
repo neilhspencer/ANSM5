@@ -45,8 +45,10 @@ sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"), CI.w
   varname <- deparse(substitute(x))
   actualCIwidth <- 1 - lower.cumu - upper.cumu
 
-  #output
-  print(structure(list(title = "Sign test", varname = varname, H0 = H0, alternative = alternative, pval = pval,
-                       targetCIwidth = CI.width, actualCIwidth = actualCIwidth, CI.lower = CI.lower,
-                       CI.upper = CI.upper), class = "ANSMtest"))
+  #return
+  result <- list(title = "Sign test", varname = varname, H0 = H0, alternative = alternative, pval = pval,
+                 targetCIwidth = CI.width, actualCIwidth = actualCIwidth, CI.lower = CI.lower,
+                 CI.upper = CI.upper)
+  class(result) <- "ANSMtest"
+  return(result)
 }
