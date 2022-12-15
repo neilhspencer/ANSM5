@@ -1,7 +1,7 @@
 wilcoxon.signed.rank.test <-
   function(x, H0, alternative=c("two.sided", "less", "greater"),
-           cont.corr = TRUE, CI.width = 0.95, do.approx = TRUE, do.exact = TRUE,
-           do.CI = TRUE) {
+           cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000,
+           do.approx = TRUE, do.exact = TRUE, do.CI = TRUE) {
   stopifnot(is.vector(x), is.numeric(x), is.numeric(H0), length(H0) == 1,
             is.logical(cont.corr) == TRUE, CI.width > 0, CI.width < 1,
             is.logical(do.approx) == TRUE, is.logical(do.exact) == TRUE,
@@ -33,14 +33,19 @@ wilcoxon.signed.rank.test <-
   ranksumplus <- sum(rank(abs(x - H0))[sign(x - H0) == 1])
   ranksumminus <- sum(rank(abs(x - H0))[sign(x - H0) == -1])
   n <- length(x)
-  perms <- eval(parse(text = paste0("expand.grid(", strrep("c(-1, 1),", n - 1),
-                                    "c(-1, 1))")))
-  perms = perms * matrix(rep(seq(1, n), rep(2 ^ n)), nrow = 2 ^ n, ncol = n,
-                         byrow=TRUE)
-  permsplus <- data.frame(table(rowSums(replace(perms, perms < 0, 0))))
-  permsplus$Var1 <- strtoi(permsplus$Var1)
-  permsminus <- data.frame(table(rowSums(replace(perms, perms > 0, 0))))
-  permsminus$Var1 <- -strtoi(permsminus$Var1)
+  if (n < max.exact.cases){
+    permsums <- rep(0,sum(seq(1, n)) + 1)
+    permsums[1] <- 1
+    for (i in 1:n){
+      permsumsnow <- permsums
+      for (j in 1:length(permsums)){
+        if (permsumsnow[j] > 0){
+          permsums[(j - 1) + i + 1] <- permsums[(j - 1) + i + 1] + permsumsnow[j]
+        }
+      }
+    }
+    permsums <- data.frame(0:(length(permsums) - 1), permsums)
+  }
 
   #approx p-value (with/without continuity correction)
   if (do.approx){
@@ -70,14 +75,12 @@ wilcoxon.signed.rank.test <-
   }
 
   #exact p-value
-  if (do.exact && max(table(x)) == 1){
+  if (do.exact && max(table(x)) == 1 && n <= max.exact.cases){
     pval.exact.stat <- min(ranksumminus, ranksumplus)
     pval.exact.less <-
-      sum(permsminus[permsminus$Var1 >= ranksumminus, "Freq"]) /
-      sum(permsminus$Freq)
+      sum(permsums[permsums[, 1] >= ranksumminus, 2]) / sum(permsums[, 2])
     pval.exact.greater <-
-      sum(permsplus[permsplus$Var1 >= ranksumplus, "Freq"]) /
-      sum(permsplus$Freq)
+      sum(permsums[permsplus[, 1] >= ranksumplus, 2]) / sum(permsplus[, 2])
     if (alternative=="two.sided"){
       pval.exact <- min(pval.exact.less, pval.exact.greater) * 2
     }else if (alternative == "less"){
@@ -88,7 +91,7 @@ wilcoxon.signed.rank.test <-
   }
 
   #CI
-  if (do.CI){
+  if (do.CI && n <= max.exact.cases){
     Walsh.averages <- NULL
     for (i in 1:length(x)){
       for (j in i:length(x)){
@@ -98,14 +101,14 @@ wilcoxon.signed.rank.test <-
     i <- 0
     repeat{
       pval.tmp <-
-        sum(permsplus[permsplus$Var1 <= i, "Freq"]) / sum(permsplus$Freq) * 2
+        sum(permsplus[permsplus[, 1] <= i, 2]) / sum(permsplus[, 2]) * 2
       if (pval.tmp > (1 - CI.width)) {break}
       i <- i + 1
     }
     CI.lower <- sort(Walsh.averages, decreasing = FALSE)[i]
     CI.upper <- sort(Walsh.averages, decreasing = TRUE)[i]
-    actualCIwidth <- 1 - sum(permsplus[permsplus$Var1 <= i - 1, "Freq"]) /
-      sum(permsplus$Freq) * 2
+    actualCIwidth <- 1 - sum(permsplus[permsplus[, 1] <= i - 1, 2]) /
+      sum(permsplus[, 2]) * 2
     if (is.null(CI.lower) | is.null(CI.upper) | is.null(actualCIwidth)){
       actualCIwidth <- NULL
       CI.lower <- NULL
@@ -113,20 +116,44 @@ wilcoxon.signed.rank.test <-
     }
   }
 
-  #check if anything done
+  #check if message needed
   if (!do.approx && !do.exact && !do.CI) {
     test.note <- paste("Neither exact test, nor approximation test nor",
                        "confidence interval requested")
-  }else if ((do.approx | do.CI) && do.exact && max(table(x)) > 1) {
-    test.note <- paste("NOTE: Ties exist in the data being used so exact test",
-                       "not calculated\nand mid-ranks have been used for the",
-                       "approximation test")
-  }else if (do.exact && max(table(x)) > 1) {
-    test.note <- paste("NOTE: Ties exist in the data being used so exact test",
-                       "not calculated")
-  }else if (max(table(x)) > 1) {
-    test.note <- paste("NOTE: Ties exist in the data being used and mid-ranks",
-                       "have been calculated")
+  }else if (max(table(x)) > 1){
+    affected <- NULL
+    if (do.exact && do.CI){
+      affected <- "exact test and confidence interval"
+    }else if (do.exact) {
+      affected <- "exact test"
+    }else if (do.CI){
+      affected <- "confidence interval"
+    }
+    if (do.approx && !is.null(affected)){
+      test.note <- paste("NOTE: Ties exist in data so", affected, "not",
+                          "calculated\nand mid-ranks used for approximation",
+                          "test")
+    }else if (!do.approx && !is.null(affected)){
+      test.note <- paste("NOTE: Ties exist in data so", affected, "not",
+                          "calculated")
+    }else if (do.approx && is.null (affected)){
+      test.note <- paste("NOTE: Ties exist in data so mid-ranks used for",
+                          "approximation test")
+    }
+  }else if (n > max.exact.cases) {
+    affected <- NULL
+    if (do.exact && do.CI){
+      affected <- "exact test and confidence interval"
+    }else if (do.exact) {
+      affected <- "exact test"
+    }else if (do.CI){
+      affected <- "confidence interval"
+    }
+    if (!is.null(affected)){
+      test.note <- paste0("NOTE: Number of useful cases greater than current ",
+                           "maximum allowed for exact\ncalculations required ",
+                           "for ", affected, " (", max.exact.cases, ")")
+    }
   }
 
   #return
