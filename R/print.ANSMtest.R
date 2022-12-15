@@ -26,7 +26,9 @@ print.ANSMtest <- function(toprint) {
     if (!is.null(toprint$pval.stat)){
       cat(paste0("Statistic for test: ", toprint$pval.stat), "\n")
     }
-    if (round(toprint$pval, 5) == 0){
+    if (is.na(toprint$pval)){
+      cat("p-value cannot be calculated\n")
+    }else if (round(toprint$pval, 5) == 0){
       cat("p-value: < 0.00001\n")
     }else{
       cat(paste0("p-value: ", round(toprint$pval,5), "\n"))
@@ -44,7 +46,9 @@ print.ANSMtest <- function(toprint) {
     }else{
       pval.approx.label = "Approx. p-value (continuity correction not used): "
     }
-    if (round(toprint$pval.approx, 5) == 0){
+    if (is.na(toprint$pval.approx)){
+      cat("Approx. p-value cannot be calculated\n")
+    }else if (round(toprint$pval.approx, 5) == 0){
       cat(paste0(pval.approx.label, "< 0.00001\n"))
     }else{
       cat(paste0(pval.approx.label, round(toprint$pval.approx,5), "\n"))
@@ -57,7 +61,9 @@ print.ANSMtest <- function(toprint) {
     if (!is.null(toprint$pval.exact.stat)){
       cat(paste0("Statistic for exact test: ", toprint$pval.exact.stat), "\n")
     }
-    if (round(toprint$pval.exact, 5) == 0){
+    if (is.na(toprint$pval.exact)){
+      cat("Exact p-value cannot be calculated\n")
+    }else if (round(toprint$pval.exact, 5) == 0){
       cat("Exact p-value: < 0.00001\n")
     }else{
       cat(paste0("Exact p-value: ", round(toprint$pval.exact,5), "\n"))
@@ -72,14 +78,20 @@ print.ANSMtest <- function(toprint) {
     {cat("\n")}
 
   #print CI
-  if (!is.null(toprint$actualCIwidth)){
-    cat(paste0(100 * round(toprint$targetCIwidth, 5), "% Confidence Interval (",
-               100 * round(toprint$actualCIwidth, 5), "% achieved)"), "\n")
-    cat(paste0("(", toprint$CI.lower, ", ", toprint$CI.upper, ")"), "\n")
-  }else if (!is.null(toprint$CI.lower) && !is.null(toprint$CI.upper)){
-    cat(paste0(100 * round(toprint$targetCIwidth, 5), "% Confidence Interval"),
-        "\n")
-    cat(paste0("(", toprint$CI.lower, ", ", toprint$CI.upper, ")"), "\n")
+  if (!is.null(toprint$CI.lower) && !is.null(toprint$CI.upper)){
+    if (is.na(toprint$CI.lower) | is.na(toprint$CI.upper)){
+      cat(paste0(100 * round(toprint$targetCIwidth, 5),
+                 "% Confidence Interval cannot be calculated"), "\n")
+    }else if (!is.null(toprint$actualCIwidth)){
+      cat(paste0(100 * round(toprint$targetCIwidth, 5),
+                 "% Confidence Interval (",
+                 100 * round(toprint$actualCIwidth, 5), "% achieved)"), "\n")
+      cat(paste0("(", toprint$CI.lower, ", ", toprint$CI.upper, ")"), "\n")
+    }else{
+      cat(paste0(100 * round(toprint$targetCIwidth, 5),
+                 "% Confidence Interval"), "\n")
+      cat(paste0("(", toprint$CI.lower, ", ", toprint$CI.upper, ")"), "\n")
+    }
   }
   if (!is.null(toprint$CI.note)){cat(toprint$CI.note, "\n")}
 
