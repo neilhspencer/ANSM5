@@ -1,7 +1,9 @@
 sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
-                      cont.corr = TRUE, CI.width = 0.95, do.approx = TRUE,
+                      cont.corr = TRUE, CI.width = 0.95,
+                      max.exact.cases = 1000000, do.approx = TRUE,
                       do.exact = TRUE, do.CI = TRUE) {
   stopifnot(is.vector(x), is.numeric(x), is.numeric(H0), length(H0) == 1,
+            is.numeric(max.exact.cases), length(max.exact.cases) == 1,
             is.logical(cont.corr) == TRUE, CI.width > 0, CI.width < 1,
             is.logical(do.approx) == TRUE, is.logical(do.exact) == TRUE,
             is.logical(do.CI) == TRUE)
@@ -27,8 +29,10 @@ sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
   test.note <- NULL
 
   #statistics
-  pluses <- sum(x > H0, na.rm = TRUE)
-  n <- sum(x != H0, na.rm = TRUE)
+  x <- x[complete.cases(x)] #remove missing cases
+  x <- x[x != H0] #remove cases equal to H0
+  pluses <- sum(x > H0)
+  n <- length(x)
 
   #approx p-value (with/without continuity correction)
   if (do.approx){
@@ -52,22 +56,24 @@ sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
   }
 
   #exact p-value
-  if (do.exact){
+  if (do.exact && n <= max.exact.cases){
+    pval.exact.less <- pbinom(pluses, n, 0.5)
+    pval.exact.greater <- pbinom(n-pluses-1, n, 0.5)
     if (alternative=="two.sided"){
-      pval.exact <- pbinom(pluses, n, 0.5)+(1-pbinom(n-pluses-1, n, 0.5))
+      pval.exact <- min(pval.exact.less, pval.exact.greater) * 2
     }else if (alternative == "less"){
-      pval.exact <- pbinom(pluses, n, 0.5)
+      pval.exact <- pval.exact.less
     }else if (alternative == "greater"){
-      pval.exact <- pbinom(n-pluses-1, n, 0.5)
+      pval.exact <- pval.exact.greater
     }
   }
 
   #CI
-  if (do.CI){
+  if (do.CI && n <= max.exact.cases){
     lower <- 0
     lower.cumu <- 0
     repeat{
-      if (lower.cumu + dbinom(lower, n, 0.5) > (1-CI.width)/2) {break}
+      if (lower.cumu + dbinom(lower, n, 0.5) > (1 - CI.width) / 2) {break}
       lower.cumu <- lower.cumu + dbinom(lower, n, 0.5)
       lower <- lower + 1
     }
@@ -79,7 +85,7 @@ sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
     upper <- n
     upper.cumu <- 0
     repeat{
-      if (upper.cumu + dbinom(upper, n, 0.5) > (1-CI.width)/2) {break}
+      if (upper.cumu + dbinom(upper, n, 0.5) > (1 - CI.width) / 2) {break}
       upper.cumu <- upper.cumu + dbinom(upper, n, 0.5)
       upper <- upper - 1
     }
@@ -96,10 +102,15 @@ sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
     }
   }
 
-  #check if anything done
+  #check if message needed
   if (!do.approx && !do.exact && !do.CI) {
     test.note <- paste("Neither exact test, nor approximation test nor",
                        "confidence interval requested")
+  }else if ((do.CI | do.exact) && n > max.exact.cases) {
+    test.note <- paste0("NOTE: Number of useful cases greater than current ",
+                        "maximum allowed for exact calculations\nrequired for ",
+                        "exact test or confidence interval (", max.exact.cases,
+                        ")")
   }
 
   #return
