@@ -36,25 +36,25 @@ print.ANSMtest <- function(toprint) {
   }
   if (!is.null(toprint$pval.note)){cat(toprint$pval.note, "\n")}
 
-  #print pval.approx
-  if (!is.null(toprint$pval.approx)){
-    if (!is.null(toprint$pval.approx.stat)){
-      cat(paste0("Statistic for approximate test: ", toprint$pval.approx.stat), "\n")
+  #print pval.asymp
+  if (!is.null(toprint$pval.asymp)){
+    if (!is.null(toprint$pval.asymp.stat)){
+      cat(paste0("Statistic for asymptotic test: ", toprint$pval.asymp.stat), "\n")
     }
     if (toprint$cont.corr == TRUE){
-      pval.approx.label = "Approx. p-value (continuity correction used): "
+      pval.asymp.label = "Asymptotic p-value (continuity correction used): "
     }else{
-      pval.approx.label = "Approx. p-value (continuity correction not used): "
+      pval.asymp.label = "Asymptotic p-value (continuity correction not used): "
     }
-    if (is.na(toprint$pval.approx)){
-      cat("Approx. p-value cannot be calculated\n")
-    }else if (round(toprint$pval.approx, 5) == 0){
-      cat(paste0(pval.approx.label, "< 0.00001\n"))
+    if (is.na(toprint$pval.asymp)){
+      cat("Asymptotic p-value cannot be calculated\n")
+    }else if (round(toprint$pval.asymp, 5) == 0){
+      cat(paste0(pval.asymp.label, "< 0.00001\n"))
     }else{
-      cat(paste0(pval.approx.label, round(toprint$pval.approx,5), "\n"))
+      cat(paste0(pval.asymp.label, round(toprint$pval.asymp,5), "\n"))
     }
   }
-  if (!is.null(toprint$pval.approx.note)){cat(toprint$pval.approx.note, "\n")}
+  if (!is.null(toprint$pval.asymp.note)){cat(toprint$pval.asymp.note, "\n")}
 
   #print pval.exact
   if (!is.null(toprint$pval.exact)){
@@ -73,7 +73,7 @@ print.ANSMtest <- function(toprint) {
 
   #print space
   if (!is.null(toprint$pval) | !is.null(toprint$pval.note) |
-      !is.null(toprint$pval.approx) | !is.null(toprint$pval.approx.note) |
+      !is.null(toprint$pval.asymp) | !is.null(toprint$pval.asymp.note) |
       !is.null(toprint$pval.exact) | !is.null(toprint$pval.exact.note))
     {cat("\n")}
 
