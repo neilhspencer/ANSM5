@@ -12,7 +12,7 @@ sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
   #labels
   varname <- deparse(substitute(x))
 
-  #defaults
+  #default outputs
   pval <- NULL
   pval.stat <- NULL
   pval.note <- NULL
