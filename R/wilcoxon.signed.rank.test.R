@@ -34,7 +34,7 @@ wilcoxon.signed.rank.test <-
   s <- rank(abs(x - H0))
   ranksumplus <- sum(s[sign(x - H0) == 1])
   ranksumminus <- sum(s[sign(x - H0) == -1])
-  if (n < max.exact.cases){
+  if (n <= max.exact.cases){
     permsums <- rep(0,sum(seq(1, n)) + 1)
     permsums[1] <- 1
     for (i in 1:n){
@@ -52,6 +52,7 @@ wilcoxon.signed.rank.test <-
   #asymptotic p-value (with/without continuity correction)
   if (do.asymp){
     S <- min(ranksumminus, ranksumplus)
+    #with ties
     if (max(table(x)) > 1){
       pval.asymp.stat <- (S - 0.5 * sum(abs(s))) / (0.5 * sqrt(sum(s ** 2)))
       pval.asymp.less <-
@@ -61,6 +62,7 @@ wilcoxon.signed.rank.test <-
         pnorm((ranksumplus - 0.5 * sum(abs(s))) / (0.5 * sqrt(sum(s ** 2))),
               lower.tail = FALSE)
     }else{
+    #without ties
       pval.asymp.stat <- ((S + 0.5 * (cont.corr == TRUE)) - n * (n + 1) / 4) /
         sqrt(n * (n + 1) * (2 * n + 1) / 24)
       pval.asymp.less <-
