@@ -3,6 +3,7 @@ wilcoxon.signed.rank.test <-
            cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000,
            do.asymp = TRUE, do.exact = TRUE, do.CI = TRUE) {
   stopifnot(is.vector(x), is.numeric(x), is.numeric(H0), length(H0) == 1,
+            is.numeric(max.exact.cases), length(max.exact.cases) == 1,
             is.logical(cont.corr) == TRUE, CI.width > 0, CI.width < 1,
             is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE,
             is.logical(do.CI) == TRUE)
@@ -11,7 +12,7 @@ wilcoxon.signed.rank.test <-
   #labels
   varname <- deparse(substitute(x))
 
-  #defaults
+  #default outputs
   pval <- NULL
   pval.stat <- NULL
   pval.note <- NULL
