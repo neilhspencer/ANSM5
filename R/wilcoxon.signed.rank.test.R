@@ -28,39 +28,45 @@ wilcoxon.signed.rank.test <-
   CI.note <- NULL
   test.note <- NULL
 
-  #statistics
+  #prepare
   x <- x[complete.cases(x)] #remove missing cases
   x <- x[x != H0] #remove cases equal to H0
   n <- length(x)
-  s <- rank(abs(x - H0))
-  ranksumplus <- sum(s[sign(x - H0) == 1])
-  ranksumminus <- sum(s[sign(x - H0) == -1])
-  if (n <= max.exact.cases){
-    permsums <- rep(0,sum(seq(1, n)) + 1)
+  s <- rank(abs(x - H0), ties.method = "average")
+  multiplier = 2 - all(s == round(s,0)) # multiplier of 2 if average ranks, otherwise multiplier of 1
+  ranksumplus <- sum(s[sign(x - H0) == 1]) * multiplier
+  ranksumminus <- sum(s[sign(x - H0) == -1]) * multiplier
+
+  #statistics
+  if (do.exact && n <= max.exact.cases){
+    permfrom <- s * multiplier
+    permfrom <- sort(permfrom)
+    permsums <- rep(0,sum(permfrom) + 1)
     permsums[1] <- 1
-    for (i in 1:n){
+    current.max <- 0
+    for (i in 1:length(permfrom)){
       permsumsnow <- permsums
-      for (j in 1:length(permsums)){
-        if (permsumsnow[j] > 0){
-          permsums[(j - 1) + i + 1] <-
-            permsums[(j - 1) + i + 1] + permsumsnow[j]
-        }
-      }
+      to.add <- permfrom[i]
+      j <- 1:(current.max + 1)
+      k <- (j - 1) + to.add + 1
+      gtzero <- permsumsnow[j] > 0
+      permsums[k][gtzero] <- permsums[k][gtzero] + permsumsnow[j][gtzero]
+      current.max <- current.max + to.add
     }
     permsums <- data.frame(0:(length(permsums) - 1), permsums)
   }
 
   #asymptotic p-value (with/without continuity correction)
   if (do.asymp){
-    S <- min(ranksumminus, ranksumplus)
+    S <- min(ranksumminus, ranksumplus) / multiplier
     #with ties
-    if (max(table(x)) > 1){
+    if (multiplier == 2){
       pval.asymp.stat <- (S - 0.5 * sum(abs(s))) / (0.5 * sqrt(sum(s ** 2)))
       pval.asymp.less <-
-        pnorm((ranksumminus - 0.5 * sum(abs(s))) / (0.5 * sqrt(sum(s ** 2))),
+        pnorm((ranksumminus / 2 - 0.5 * sum(abs(s))) / (0.5 * sqrt(sum(s ** 2))),
               lower.tail = FALSE)
       pval.asymp.greater <-
-        pnorm((ranksumplus - 0.5 * sum(abs(s))) / (0.5 * sqrt(sum(s ** 2))),
+        pnorm((ranksumplus / 2 - 0.5 * sum(abs(s))) / (0.5 * sqrt(sum(s ** 2))),
               lower.tail = FALSE)
     }else{
     #without ties
@@ -90,7 +96,7 @@ wilcoxon.signed.rank.test <-
   }
 
   #exact p-value
-  if (do.exact && max(table(x)) == 1 && n <= max.exact.cases){
+  if (do.exact && n <= max.exact.cases){
     pval.exact.stat <- min(ranksumminus, ranksumplus)
     pval.exact.less <-
       sum(permsums[permsums[, 1] >= ranksumminus, 2]) / sum(permsums[, 2])
@@ -135,25 +141,9 @@ wilcoxon.signed.rank.test <-
   if (!do.asymp && !do.exact && !do.CI) {
     test.note <- paste("Neither exact test, nor asymptotic test nor",
                        "confidence interval requested")
-  }else if (max(table(x)) > 1){
-    affected <- NULL
-    if (do.exact && do.CI){
-      affected <- "exact test and confidence interval"
-    }else if (do.exact) {
-      affected <- "exact test"
-    }else if (do.CI){
-      affected <- "confidence interval"
-    }
-    if (do.asymp && !is.null(affected)){
-      test.note <- paste("NOTE: Ties exist in data so", affected, "not",
-                          "calculated\nand mid-ranks used for asymptotic test")
-    }else if (!do.asymp && !is.null(affected)){
-      test.note <- paste("NOTE: Ties exist in data so", affected, "not",
-                          "calculated")
-    }else if (do.asymp && is.null (affected)){
+  }else if (multiplier == 2 && do.asymp){
       test.note <- paste("NOTE: Ties exist in data so mid-ranks used for",
                           "asymptotic test")
-    }
   }else if (n > max.exact.cases) {
     affected <- NULL
     if (do.exact && do.CI){
