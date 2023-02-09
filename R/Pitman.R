@@ -1,8 +1,9 @@
 Pitman.test <-
   function(x, H0, alternative=c("two.sided", "less", "greater"),
-           max.exact.cases = 1000) {
+           max.exact.cases = 1000, do.asymp = TRUE, do.exact = TRUE) {
     stopifnot(is.vector(x), is.numeric(x), is.numeric(H0), length(H0) == 1,
-              is.numeric(max.exact.cases), length(max.exact.cases) == 1)
+              is.numeric(max.exact.cases), length(max.exact.cases) == 1,
+              is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE)
     alternative <- match.arg(alternative)
 
     #labels
@@ -11,8 +12,6 @@ Pitman.test <-
     #unused arguments
     cont.corr <- NULL
     CI.width <- NULL
-    do.asymp <- NULL
-    do.exact <- NULL
     do.CI <- NULL
     #default outputs
     pval <- NULL
@@ -30,11 +29,20 @@ Pitman.test <-
     CI.note <- NULL
     test.note <- NULL
 
-    #statistics
+    #prepare
     x <- x[complete.cases(x)] #remove missing cases
     x <- x[x != H0] #remove cases equal to H0
     n <- length(x)
-    if (n <= max.exact.cases){
+
+    #statistics
+    if (do.exact && n <= max.exact.cases){
+      for (dp in 0:6){ #determine max decimal places (max 6)
+        if (all(x == round(x, dp))){
+          break
+        }
+      }
+      x <- round(x * 10 ^ dp, 0) #multiply up and round to integers
+      H0 <- H0 * 10 ^ dp #adjust H0 to match changes
       permfrom <- abs(x - H0)
       permfrom <- sort(permfrom)
       permsums <- rep(0,sum(permfrom) + 1)
@@ -47,34 +55,68 @@ Pitman.test <-
         k <- (j - 1) + to.add + 1
         gtzero <- permsumsnow[j] > 0
         permsums[k][gtzero] <- permsums[k][gtzero] + permsumsnow[j][gtzero]
-      current.max <- current.max + to.add
+        current.max <- current.max + to.add
       }
       permsums <- data.frame(0:(length(permsums) - 1), permsums)
     }
 
-    #p-value
-    if (n <= max.exact.cases){
+    #asymptotic p-value
+    if (do.asymp){
+      s <- x - H0
+      pval.stat.less <- sum((H0 - x)[(x - H0) < 0])
+      pval.stat.greater <- sum((x - H0)[(x - H0) > 0])
+      pval.asymp.less <-
+        pnorm((pval.stat.less - 0.5 * sum(abs(s))) / (0.5 * sqrt(sum(s ** 2))),
+              lower.tail = FALSE)
+      pval.asymp.greater <-
+        pnorm((pval.stat.greater - 0.5 * sum(abs(s))) / (0.5 * sqrt(sum(s ** 2))),
+              lower.tail = FALSE)
+      if (alternative=="two.sided"){
+        pval.asymp.stat <- abs((pval.stat.greater - 0.5 * sum(abs(s))) / (0.5 * sqrt(sum(s ** 2))))
+        pval.asymp <- min(pval.asymp.less, pval.asymp.greater) * 2
+      }else if (alternative == "less"){
+        pval.asymp.stat <- abs((pval.stat.less - 0.5 * sum(abs(s))) / (0.5 * sqrt(sum(s ** 2))))
+        pval.asymp <- pval.asymp.less
+      }else if (alternative == "greater"){
+        pval.asymp.stat <- abs((pval.stat.greater - 0.5 * sum(abs(s))) / (0.5 * sqrt(sum(s ** 2))))
+        pval.asymp <- pval.asymp.greater
+      }
+      if (n < 20){
+        pval.asymp.note <-
+          pval.asymp.note <- paste("(WARNING: n is less than 20 so asymptotic",
+                                   "test is not recommended)")
+      }
+    }
+
+    #exact p-value
+    if (do.exact && n <= max.exact.cases){
       pval.stat.greater <- sum((x - H0)[(x - H0) > 0])
       pval.greater <- sum(permsums[permsums[,1] >= pval.stat.greater, 2]) / sum(permsums[,2])
       pval.stat.less <- -sum((x - H0)[(x - H0) < 0])
       pval.less <- sum(permsums[permsums[,1] >= pval.stat.less, 2]) / sum(permsums[,2])
       if (alternative=="two.sided"){
-        pval.stat <- pval.stat.greater
-        pval <- min(pval.less, pval.greater) * 2
+        pval.exact.stat <- pval.stat.greater
+        pval.exact <- min(pval.less, pval.greater) * 2
       }else if (alternative == "less"){
-        pval.stat <- pval.stat.less
-        pval <- pval.less
+        pval.exact.stat <- pval.stat.less
+        pval.exact <- pval.less
       }else if (alternative == "greater"){
-        pval.stat <- pval.stat.greater
-        pval <- pval.greater
+        pval.exact.stat <- pval.stat.greater
+        pval.exact <- pval.greater
       }
     }
 
     #check if message needed
-    if (n > max.exact.cases) {
+    if (do.exact && n > max.exact.cases) {
       test.note <- paste0("NOTE: Number of useful cases greater than current ",
-                          "maximum allowed for\ncalculations required ",
+                          "maximum allowed for exact\n calculations required ",
                           "(max.exact.cases = ", max.exact.cases, ")")
+    }
+
+    #undo effect of dp adjustment for exact test
+    if (do.exact && n <= max.exact.cases) {
+      pval.exact.stat <- pval.exact.stat / 10 ^ dp
+      H0 <- H0 / 10 ^ dp
     }
 
     #return
