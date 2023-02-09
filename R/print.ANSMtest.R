@@ -24,7 +24,7 @@ print.ANSMtest <- function(toprint) {
   #print pval
   if (!is.null(toprint$pval)){
     if (!is.null(toprint$pval.stat)){
-      cat(paste0("Statistic for test: ", toprint$pval.stat), "\n")
+      cat(paste0("Statistic for test: ", round(toprint$pval.stat,5)), "\n")
     }
     if (is.na(toprint$pval)){
       cat("p-value cannot be calculated\n")
@@ -39,16 +39,20 @@ print.ANSMtest <- function(toprint) {
   #print pval.asymp
   if (!is.null(toprint$pval.asymp)){
     if (!is.null(toprint$pval.asymp.stat)){
-      cat(paste0("Statistic for asymptotic test: ", toprint$pval.asymp.stat), "\n")
+      cat(paste0("Statistic for asymptotic test: ", round(toprint$pval.asymp.stat,5)), "\n")
     }
-    if (toprint$cont.corr == TRUE){
-      pval.asymp.label = "Asymptotic p-value (continuity correction used): "
+    if (!is.null(toprint$cont.corr)){
+      if (toprint$cont.corr == TRUE){
+        pval.asymp.label = "Asymptotic p-value (continuity correction used): "
+      }else{
+        pval.asymp.label = "Asymptotic p-value (continuity correction not used): "
+      }
     }else{
-      pval.asymp.label = "Asymptotic p-value (continuity correction not used): "
+      pval.asymp.label = "Asymptotic p-value: "
     }
     if (is.na(toprint$pval.asymp)){
       cat("Asymptotic p-value cannot be calculated\n")
-    }else if (round(toprint$pval.asymp, 5) == 0){
+    }else if (round(toprint$pval.asymp, 5) == 0 | round(toprint$pval.asymp,5) == 1e-05){
       cat(paste0(pval.asymp.label, "< 0.00001\n"))
     }else{
       cat(paste0(pval.asymp.label, round(toprint$pval.asymp,5), "\n"))
@@ -59,11 +63,11 @@ print.ANSMtest <- function(toprint) {
   #print pval.exact
   if (!is.null(toprint$pval.exact)){
     if (!is.null(toprint$pval.exact.stat)){
-      cat(paste0("Statistic for exact test: ", toprint$pval.exact.stat), "\n")
+      cat(paste0("Statistic for exact test: ", round(toprint$pval.exact.stat,5)), "\n")
     }
     if (is.na(toprint$pval.exact)){
       cat("Exact p-value cannot be calculated\n")
-    }else if (round(toprint$pval.exact, 5) == 0){
+    }else if (round(toprint$pval.exact, 5) == 0 | round(toprint$pval.exact,5) == 1e-05){
       cat("Exact p-value: < 0.00001\n")
     }else{
       cat(paste0("Exact p-value: ", round(toprint$pval.exact,5), "\n"))
