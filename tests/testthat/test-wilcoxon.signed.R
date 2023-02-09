@@ -6,15 +6,25 @@ test_that("exact p-val works", {
   expect_equal(wilcoxon.signed.rank.test(heartrates1, 70,
                                          "greater")$pval.exact.stat, 4)
   expect_equal(wilcoxon.signed.rank.test(heartrates1, 70,
-                                         "greater")$pval.exact, 0.05469)
+                                         "greater")$pval.exact, 0.0546875)
   expect_equal(wilcoxon.signed.rank.test(heartrates2, 15,
                                          "less")$pval.exact.stat, 14)
   expect_equal(wilcoxon.signed.rank.test(heartrates2, 15,
-                                         "less")$pval.exact, 0.02612)
+                                         "less")$pval.exact, 0.026123047)
   expect_equal(wilcoxon.signed.rank.test(heartrates2, 15)$pval.exact.stat, 14)
-  expect_equal(wilcoxon.signed.rank.test(heartrates2, 15)$pval.exact, 0.05225)
-  expect_equal(wilcoxon.signed.rank.test(withties, 6, "greater")$pval.exact.stat, NULL)
-  expect_equal(wilcoxon.signed.rank.test(withties, 6, "greater")$pval.exact, NULL)
-  expect_equal(wilcoxon.signed.rank.test(ages, 30, "greater")$pval.exact.stat, NULL)
-  expect_equal(wilcoxon.signed.rank.test(ages, 30, "greater")$pval.exact, NULL)
+  expect_equal(wilcoxon.signed.rank.test(heartrates2, 15)$pval.exact, 0.052246094)
+  expect_equal(wilcoxon.signed.rank.test(withties, 6, "greater")$pval.exact.stat, 10)
+  expect_equal(wilcoxon.signed.rank.test(withties, 6, "greater")$pval.exact, 0.0859375)
+  expect_equal(wilcoxon.signed.rank.test(ages, 30, "greater")$pval.exact.stat, 33)
+  expect_equal(wilcoxon.signed.rank.test(ages, 30, "greater")$pval.exact, 0.040527344)
+})
+
+test_that("Example 3.12", {
+  sampleI <- c(5.5, 6.0, 6.5, 7.6, 7.6, 7.7, 8.0, 8.2, 9.1, 15.1)
+  sampleII <- c(5.6, 6.1, 6.3, 6.3, 6.5, 6.6, 7.0, 7.5, 7.9, 8.0, 8.0, 8.1, 8.1, 8.2, 8.4, 8.5,
+                8.7, 9.4, 14.3, 26.0)
+  expect_equal(wilcoxon.signed.rank.test(sampleI, 9)$pval.exact, 0.1015625)
+  expect_equal(wilcoxon.signed.rank.test(sampleI, 9)$pval.asymp, 0.092388857)
+  expect_equal(wilcoxon.signed.rank.test(sampleII, 9)$pval.exact, 0.0148468018)
+  expect_equal(wilcoxon.signed.rank.test(sampleII, 9)$pval.asymp, 0.0168522505)
 })
