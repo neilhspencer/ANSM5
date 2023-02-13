@@ -1,4 +1,4 @@
-wilcoxon.signed.rank.test <-
+wilcoxon.signedrank <-
   function(x, H0, alternative=c("two.sided", "less", "greater"),
            cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000,
            do.asymp = TRUE, do.exact = TRUE, do.CI = TRUE) {
