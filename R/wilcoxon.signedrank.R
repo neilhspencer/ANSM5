@@ -1,3 +1,4 @@
+#' @importFrom stats complete.cases pnorm
 wilcoxon.signedrank <-
   function(x, H0, alternative=c("two.sided", "less", "greater"),
            cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000,

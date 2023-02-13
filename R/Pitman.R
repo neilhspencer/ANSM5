@@ -1,3 +1,4 @@
+#' @importFrom stats complete.cases pnorm
 pitman.test <-
   function(x, H0, alternative=c("two.sided", "less", "greater"),
            max.exact.cases = 1000, do.asymp = TRUE, do.exact = TRUE) {
