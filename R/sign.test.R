@@ -1,7 +1,7 @@
 #' @importFrom stats complete.cases dbinom pbinom pnorm
 sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
                       cont.corr = TRUE, CI.width = 0.95,
-                      max.exact.cases = 1000000, do.asymp = TRUE,
+                      max.exact.cases = 1000000, do.asymp = FALSE,
                       do.exact = TRUE, do.CI = TRUE) {
   stopifnot(is.vector(x), is.numeric(x), is.numeric(H0), length(H0) == 1,
             is.numeric(max.exact.cases), length(max.exact.cases) == 1,
@@ -23,10 +23,13 @@ sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
   pval.exact <- NULL
   pval.exact.stat <- NULL
   pval.exact.note <- NULL
-  actualCIwidth <- NULL
-  CI.lower <- NULL
-  CI.upper <- NULL
-  CI.note <- NULL
+  actualCIwidth.exact <- NULL
+  CI.exact.lower <- NULL
+  CI.exact.upper <- NULL
+  CI.exact.note <- NULL
+  CI.asymp.lower <- NULL
+  CI.asymp.upper <- NULL
+  CI.asymp.note <- NULL
   test.note <- NULL
 
   #statistics
@@ -35,25 +38,9 @@ sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
   n <- length(x)
   pluses <- sum(x > H0)
 
-  #asymptotic p-value (with/without continuity correction)
-  if (do.asymp){
-    if (alternative=="two.sided"){
-      pval.asymp <- pnorm((pluses - n * 0.5 + (0.5 - (pluses > n * 0.5)) *
-                              (cont.corr == TRUE))/(0.5 * sqrt(n)),
-                           lower.tail = pluses < n * 0.5) * 2
-    }else if (alternative == "less"){
-      pval.asymp <- pnorm((pluses - n * 0.5 + (0.5 - (pluses > n * 0.5)) *
-                              (cont.corr == TRUE))/(0.5 * sqrt(n)),
-                           lower.tail = TRUE)
-    }else if (alternative == "greater"){
-      pval.asymp <- pnorm((pluses - n * 0.5 + (0.5 - (pluses > n * 0.5)) *
-                              (cont.corr == TRUE))/(0.5 * sqrt(n)),
-                           lower.tail = FALSE)
-    }
-    if (pluses < 5 | n - pluses < 5){
-      pval.asymp.note <- paste("(WARNING: n * p and/or n * (1 - p) are less",
-                                "than 5 so asymptotic test is not recommended)")
-    }
+  #give asymptotic output if exact not possible
+  if (do.exact && n > max.exact.cases){
+    do.asymp <- TRUE
   }
 
   #exact p-value
@@ -69,7 +56,7 @@ sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
     }
   }
 
-  #CI
+  #exact CI
   if (do.CI && n <= max.exact.cases){
     lower <- 0
     lower.cumu <- 0
@@ -79,9 +66,9 @@ sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
       lower <- lower + 1
     }
     if (lower == 0){
-      CI.lower = Inf
+      CI.exact.lower = Inf
     }else{
-      CI.lower <- sort(x)[lower]
+      CI.exact.lower <- sort(x, decreasing = FALSE)[lower]
     }
     upper <- n
     upper.cumu <- 0
@@ -91,15 +78,49 @@ sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
       upper <- upper - 1
     }
     if (upper == n){
-      CI.upper = Inf
+      CI.exact.upper = Inf
     }else{
-      CI.upper <- sort(x)[upper+1]
+      CI.exact.upper <- sort(x, decreasing = FALSE)[upper+1]
     }
     actualCIwidth <- 1 - lower.cumu - upper.cumu
     if (is.null(CI.lower) | is.null(CI.upper) | is.null(actualCIwidth)){
-      actualCIwidth <- NULL
-      CI.lower <- NULL
-      CI.upper <- NULL
+      actualCIwidth.exact <- NULL
+      CI.exact.lower <- NULL
+      CI.exact.upper <- NULL
+    }
+  }
+
+  #asymptotic p-value (with/without continuity correction)
+  if (do.asymp){
+    if (alternative=="two.sided"){
+      pval.asymp <- pnorm((pluses - n * 0.5 + (0.5 - (pluses > n * 0.5)) *
+                             (cont.corr == TRUE))/(0.5 * sqrt(n)),
+                          lower.tail = pluses < n * 0.5) * 2
+    }else if (alternative == "less"){
+      pval.asymp <- pnorm((pluses - n * 0.5 + (0.5 - (pluses > n * 0.5)) *
+                             (cont.corr == TRUE))/(0.5 * sqrt(n)),
+                          lower.tail = TRUE)
+    }else if (alternative == "greater"){
+      pval.asymp <- pnorm((pluses - n * 0.5 + (0.5 - (pluses > n * 0.5)) *
+                             (cont.corr == TRUE))/(0.5 * sqrt(n)),
+                          lower.tail = FALSE)
+    }
+    if (pluses < 5 | n - pluses < 5){
+      pval.asymp.note <- paste("(WARNING: n * p and/or n * (1 - p) are less",
+                               "than 5 so asymptotic test is not recommended)")
+    }
+  }
+
+  #asymptotic CI
+  if (do.asymp){
+    meanrank <- n / 2
+    sdrank <- sqrt(n) / 2
+    S <- qnorm((1 - CI.width) / 2) * sdrank + meanrank
+    CI.asymp.lower <- sort(x, decreasing = FALSE)[round(S, 0) + 1]
+    CI.asymp.upper <- sort(x, decreasing = FALSE)[n - round(S, 0)]
+    if (n < 20){
+      CI.asymp.note <- paste("(WARNING: n is less than 20 so asymptotic",
+                             "CI is not recommended)")
     }
   }
 
@@ -111,19 +132,23 @@ sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
     test.note <- paste0("NOTE: Number of useful cases greater than current ",
                         "maximum allowed for exact calculations\nrequired for ",
                         "exact test or confidence interval (max.exact.cases = ",
-                        max.exact.cases, ")")
+                        sprintf("%1.0f", max.exact.cases), ")")
   }
 
   #return
   result <- list(title = "Sign test", varname = varname, H0 = H0,
                  alternative = alternative, cont.corr = cont.corr, pval = pval,
                  pval.stat = pval.stat, pval.note = pval.note,
-                 pval.asymp = pval.asymp, pval.asymp.stat = pval.asymp.stat,
-                 pval.asymp.note = pval.asymp.note, pval.exact = pval.exact,
-                 pval.exact.stat = pval.exact.stat,
+                 pval.exact = pval.exact, pval.exact.stat = pval.exact.stat,
                  pval.exact.note = pval.exact.note, targetCIwidth = CI.width,
-                 actualCIwidth = actualCIwidth, CI.lower = CI.lower,
-                 CI.upper = CI.upper, CI.note = CI.note, test.note = test.note)
+                 actualCIwidth.exact = actualCIwidth.exact,
+                 CI.exact.lower = CI.exact.lower,
+                 CI.exact.upper = CI.exact.upper, CI.exact.note = CI.exact.note,
+                 pval.asymp = pval.asymp, pval.asymp.stat = pval.asymp.stat,
+                 pval.asymp.note = pval.asymp.note,
+                 CI.asymp.lower = CI.asymp.lower,
+                 CI.asymp.upper = CI.asymp.upper, CI.asymp.note = CI.asymp.note,
+                 test.note = test.note)
   class(result) <- "ANSMtest"
   return(result)
 }
