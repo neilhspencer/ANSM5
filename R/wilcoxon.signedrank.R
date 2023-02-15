@@ -47,7 +47,7 @@ wilcoxon.signedrank <-
   }
 
   #statistics
-  if ((do.exact | (do.asymp && multiplier == 1)) && n <= max.exact.cases){
+  if ((do.exact | ((do.asymp | do.CI) && multiplier == 1)) && n <= max.exact.cases){
     permfrom <- s * multiplier
     permfrom <- sort(permfrom)
     permsums <- rep(0,sum(permfrom) + 1)
