@@ -1,6 +1,6 @@
 test_that("exact p-val works", {
   heartrates1 <- c(73, 82, 87, 68, 106, 60, 97)
-  heartrates2 <- c(-2,4,8,25,-5,16,3,1,12,17,20,9)
+  heartrates2 <- c(-2, 4, 8, 25 ,-5 ,16 ,3 ,1 ,12 ,17 ,20 ,9)
   withties <- c(4, 4, 8, 8, 11, 11, 11)
   ages <- c(6, 18, 24, 26, 37, 40, 42, 47, 69, 69, 87, 130)
   expect_equal(wilcoxon.signedrank(heartrates1, 70,
@@ -24,7 +24,27 @@ test_that("Example 3.12", {
   sampleII <- c(5.6, 6.1, 6.3, 6.3, 6.5, 6.6, 7.0, 7.5, 7.9, 8.0, 8.0, 8.1, 8.1, 8.2, 8.4, 8.5,
                 8.7, 9.4, 14.3, 26.0)
   expect_equal(wilcoxon.signedrank(sampleI, 9)$pval.exact, 0.1015625)
-  expect_equal(wilcoxon.signedrank(sampleI, 9)$pval.asymp, 0.092388857)
+  expect_equal(wilcoxon.signedrank(sampleI, 9, do.asymp = TRUE)$pval.asymp, 0.092388857)
   expect_equal(wilcoxon.signedrank(sampleII, 9)$pval.exact, 0.0148468018)
-  expect_equal(wilcoxon.signedrank(sampleII, 9)$pval.asymp, 0.0168522505)
+  expect_equal(wilcoxon.signedrank(sampleII, 9, do.asymp = TRUE)$pval.asymp, 0.0168522505)
+})
+
+test_that("Example 3.13", {
+  sampleII <- c(5.6, 6.1, 6.3, 6.3, 6.5, 6.6, 7.0, 7.5, 7.9, 8.0, 8.0, 8.1, 8.1, 8.2, 8.4, 8.5,
+                8.7, 9.4, 14.3, 26.0)
+  expect_equal(wilcoxon.signedrank(sampleII, do.asymp = TRUE)$CI.asymp.lower, 7.15)
+  expect_equal(wilcoxon.signedrank(sampleII, do.asymp = TRUE)$CI.asymp.upper, 8.45)
+})
+
+test_that("Example 3.14", {
+  heartrates2a <- c(-2, 4, 8, 35 ,-5 ,16 ,3 ,1 ,12 ,17 ,20 ,9)
+  heartrates2b <- c(-2, 4, 8, 65 ,-5 ,16 ,3 ,1 ,12 ,17 ,20 ,9)
+  expect_equal(wilcoxon.signedrank(heartrates2a)$CI.exact.lower, 2.5)
+  expect_equal(wilcoxon.signedrank(heartrates2a)$CI.exact.upper, 17)
+  expect_equal(wilcoxon.signedrank(heartrates2a, CI.width = 0.99)$CI.exact.lower, 0.5)
+  expect_equal(wilcoxon.signedrank(heartrates2a, CI.width = 0.99)$CI.exact.upper, 20)
+  expect_equal(wilcoxon.signedrank(heartrates2b)$CI.exact.lower, 2.5)
+  expect_equal(wilcoxon.signedrank(heartrates2b)$CI.exact.upper, 18.5)
+  expect_equal(wilcoxon.signedrank(heartrates2b, CI.width = 0.99)$CI.exact.lower, 0.5)
+  expect_equal(wilcoxon.signedrank(heartrates2b, CI.width = 0.99)$CI.exact.upper, 34.5)
 })
