@@ -1,9 +1,10 @@
 #' @importFrom stats complete.cases pnorm
 wilcoxon.signedrank <-
-  function(x, H0, alternative=c("two.sided", "less", "greater"),
+  function(x, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000,
            do.asymp = FALSE, do.exact = TRUE, do.CI = TRUE) {
-  stopifnot(is.vector(x), is.numeric(x), is.numeric(H0), length(H0) == 1,
+  stopifnot(is.vector(x), is.numeric(x),
+            ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
             is.numeric(max.exact.cases), length(max.exact.cases) == 1,
             is.logical(cont.corr) == TRUE, CI.width > 0, CI.width < 1,
             is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE,
@@ -34,12 +35,18 @@ wilcoxon.signedrank <-
 
   #prepare
   x <- x[complete.cases(x)] #remove missing cases
-  x <- x[x != H0] #remove cases equal to H0
+  if (!is.null(H0)) {
+    x <- x[x != H0] #remove cases equal to H0
+    s <- rank(abs(x - H0), ties.method = "average")
+  }else{
+    s <- rank(abs(x), ties.method = "average")
+  }
   n <- length(x)
-  s <- rank(abs(x - H0), ties.method = "average")
   multiplier = 2 - all(s == round(s,0)) # multiplier of 2 if average ranks, otherwise multiplier of 1
-  ranksumplus <- sum(s[sign(x - H0) == 1]) * multiplier
-  ranksumminus <- sum(s[sign(x - H0) == -1]) * multiplier
+  if (!is.null(H0)){
+    ranksumplus <- sum(s[sign(x - H0) == 1]) * multiplier
+    ranksumminus <- sum(s[sign(x - H0) == -1]) * multiplier
+  }
 
   #give asymptotic output if exact not possible
   if (do.exact && n > max.exact.cases){
@@ -74,7 +81,7 @@ wilcoxon.signedrank <-
   }
 
   #exact p-value
-  if (do.exact && n <= max.exact.cases){
+  if (!is.null(H0) && do.exact && n <= max.exact.cases){
     pval.exact.stat <- min(ranksumminus, ranksumplus)
     pval.exact.less <-
       sum(permsums[permsums[, 1] >= ranksumminus, 2]) / sum(permsums[, 2])
@@ -90,7 +97,7 @@ wilcoxon.signedrank <-
   }
 
   #exact CI
-  if (do.CI && n <= max.exact.cases){
+  if (do.exact && do.CI && n <= max.exact.cases){
     Walsh.averages <- NULL
     for (i in 1:length(x)){
       for (j in i:length(x)){
@@ -116,7 +123,7 @@ wilcoxon.signedrank <-
   }
 
   #asymptotic p-value (with/without continuity correction)
-  if (do.asymp){
+  if (!is.null(H0) && do.asymp){
     S <- min(ranksumminus, ranksumplus) / multiplier
     #with ties
     if (multiplier == 2){
@@ -154,7 +161,7 @@ wilcoxon.signedrank <-
   }
 
   #asymptotic CI
-  if (do.asymp){
+  if (do.asymp && do.CI){
     if (n <= max.exact.cases){
       if (multiplier == 2){ #recalculate if multiplier of 2 used for exact test
         permfrom <- 1:n
@@ -191,13 +198,15 @@ wilcoxon.signedrank <-
   }
 
   #check if message needed
-  if (!do.asymp && !do.exact && !do.CI) {
-    test.note <- paste("Neither exact test, nor asymptotic test nor",
-                       "confidence interval requested")
+  if (!do.asymp && !do.exact) {
+    test.note <- paste("Neither exact nor asymptotic test/confidence interval ",
+                       "requested")
   }else if (n > max.exact.cases) {
     affected <- NULL
-    if (do.exact && do.CI){
+    if (do.exact && do.CI && !is.null(H0)){
       affected <- "exact test and confidence interval"
+    }else if (do.exact && do.CI && is.null(H0)) {
+      affected <- "exact confidence interval"
     }else if (do.exact) {
       affected <- "exact test"
     }
@@ -208,12 +217,27 @@ wilcoxon.signedrank <-
                           sprintf("%1.0f", max.exact.cases), ")")
     }
   }
-  if (multiplier == 2 && do.asymp){
+  if (multiplier == 2 && do.asymp && (do.CI | !is.null(H0))){
     if (!is.null(test.note)){
       test.note <- paste0(test.note, "\n")
     }
-    test.note <- paste0(test.note, "NOTE: Ties exist in data so mid-ranks ",
-                        "used for asymptotic test")
+    if (do.CI && !is.null(H0)){
+      test.note <- paste0(test.note, "NOTE: Ties exist in data so mid-ranks ",
+                          "used for asymptotic test and confidence interval")
+    }else if (do.CI && is.null(H0)){
+      test.note <- paste0(test.note, "NOTE: Ties exist in data so mid-ranks ",
+                          "used for asymptotic confidence interval")
+    }else if (!do.CI){
+      test.note <- paste0(test.note, "NOTE: Ties exist in data so mid-ranks ",
+                          "used for asymptotic test")
+    }
+  }
+  if (is.null(H0) && (do.exact | do.asymp)){
+    if (!is.null(test.note)){
+      test.note <- paste0(test.note, "\n")
+    }
+    test.note <- paste0(test.note, "NOTE: No value for H0 given so no p-value ",
+                        "can be calculated")
   }
 
   #return

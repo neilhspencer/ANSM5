@@ -1,9 +1,10 @@
 #' @importFrom stats complete.cases dbinom pbinom pnorm
-sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
-                      cont.corr = TRUE, CI.width = 0.95,
-                      max.exact.cases = 1000000, do.asymp = FALSE,
-                      do.exact = TRUE, do.CI = TRUE) {
-  stopifnot(is.vector(x), is.numeric(x), is.numeric(H0), length(H0) == 1,
+sign.test <-
+  function(x, H0 = NULL, alternative=c("two.sided", "less", "greater"),
+           cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000000,
+           do.asymp = FALSE, do.exact = TRUE, do.CI = TRUE) {
+  stopifnot(is.vector(x), is.numeric(x),
+            ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
             is.numeric(max.exact.cases), length(max.exact.cases) == 1,
             is.logical(cont.corr) == TRUE, CI.width > 0, CI.width < 1,
             is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE,
@@ -34,9 +35,11 @@ sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
 
   #statistics
   x <- x[complete.cases(x)] #remove missing cases
-  x <- x[x != H0] #remove cases equal to H0
+  if (!is.null(H0)) {
+    x <- x[x != H0] #remove cases equal to H0
+    pluses <- sum(x > H0)
+  }
   n <- length(x)
-  pluses <- sum(x > H0)
 
   #give asymptotic output if exact not possible
   if (do.exact && n > max.exact.cases){
@@ -44,7 +47,7 @@ sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
   }
 
   #exact p-value
-  if (do.exact && n <= max.exact.cases){
+  if (!is.null(H0) && do.exact && n <= max.exact.cases){
     pval.exact.less <- pbinom(pluses, n, 0.5)
     pval.exact.greater <- pbinom(n-pluses-1, n, 0.5)
     if (alternative=="two.sided"){
@@ -57,7 +60,7 @@ sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
   }
 
   #exact CI
-  if (do.CI && n <= max.exact.cases){
+  if (do.exact && do.CI && n <= max.exact.cases){
     lower <- 0
     lower.cumu <- 0
     repeat{
@@ -82,8 +85,8 @@ sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
     }else{
       CI.exact.upper <- sort(x, decreasing = FALSE)[upper+1]
     }
-    actualCIwidth <- 1 - lower.cumu - upper.cumu
-    if (is.null(CI.lower) | is.null(CI.upper) | is.null(actualCIwidth)){
+    actualCIwidth.exact <- 1 - lower.cumu - upper.cumu
+    if (is.null(CI.exact.lower) | is.null(CI.exact.upper) | is.null(actualCIwidth.exact)){
       actualCIwidth.exact <- NULL
       CI.exact.lower <- NULL
       CI.exact.upper <- NULL
@@ -91,7 +94,7 @@ sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
   }
 
   #asymptotic p-value (with/without continuity correction)
-  if (do.asymp){
+  if (!is.null(H0) && do.asymp){
     if (alternative=="two.sided"){
       pval.asymp <- pnorm((pluses - n * 0.5 + (0.5 - (pluses > n * 0.5)) *
                              (cont.corr == TRUE))/(0.5 * sqrt(n)),
@@ -112,7 +115,7 @@ sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
   }
 
   #asymptotic CI
-  if (do.asymp){
+  if (do.asymp && do.CI){
     meanrank <- n / 2
     sdrank <- sqrt(n) / 2
     S <- qnorm((1 - CI.width) / 2) * sdrank + meanrank
@@ -125,15 +128,23 @@ sign.test <- function(x, H0, alternative=c("two.sided", "less", "greater"),
   }
 
   #check if message needed
-  if (!do.asymp && !do.exact && !do.CI) {
-    test.note <- paste("Neither exact test, nor asymptotic test nor",
-                       "confidence interval requested")
+  if (!do.asymp && !do.exact) {
+    test.note <- paste("Neither exact nor asymptotic test/confidence interval ",
+                       "requested")
   }else if ((do.CI | do.exact) && n > max.exact.cases) {
     test.note <- paste0("NOTE: Number of useful cases greater than current ",
                         "maximum allowed for exact calculations\nrequired for ",
                         "exact test or confidence interval (max.exact.cases = ",
                         sprintf("%1.0f", max.exact.cases), ")")
   }
+  if (is.null(H0) && (do.exact | do.asymp)){
+    if (!is.null(test.note)){
+      test.note <- paste0(test.note, "\n")
+    }
+    test.note <- paste0(test.note, "NOTE: No value for H0 given so no p-value ",
+                        "can be calculated")
+  }
+
 
   #return
   result <- list(title = "Sign test", varname = varname, H0 = H0,
