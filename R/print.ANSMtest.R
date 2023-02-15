@@ -9,17 +9,18 @@ print.ANSMtest <- function(toprint) {
   cat("\n")
 
   #print hypotheses
-  cat(paste0("Null hypothesis: theta = ", toprint$H0), "\n")
-  if (toprint$alternative == "two.sided") {
-    cat(paste0("Alternative hypothesis (2-sided): theta != ", toprint$H0), "\n")
-  }else if (toprint$alternative == "less") {
-    cat(paste0("Alternative hypothesis (1-sided): theta < ", toprint$H0), "\n")
-  }else{
-    cat(paste0("Alternative hypothesis (1-sided): theta > ", toprint$H0), "\n")
+  if (!is.null(toprint$H0)){
+    cat(paste0("Null hypothesis: theta = ", toprint$H0), "\n")
+    if (toprint$alternative == "two.sided") {
+      cat(paste0("Alternative hypothesis (2-sided): theta != ", toprint$H0), "\n")
+    }else if (toprint$alternative == "less") {
+      cat(paste0("Alternative hypothesis (1-sided): theta < ", toprint$H0), "\n")
+    }else{
+      cat(paste0("Alternative hypothesis (1-sided): theta > ", toprint$H0), "\n")
+    }
+    #print space
+    cat("\n")
   }
-
-  #print space
-  cat("\n")
 
   #print pval.exact
   if (!is.null(toprint$pval.exact)){
@@ -41,10 +42,10 @@ print.ANSMtest <- function(toprint) {
     if (is.na(toprint$CI.exact.lower) | is.na(toprint$CI.exact.upper)){
       cat(paste0("Exact ", 100 * round(toprint$targetCIwidth, 5),
                  "% Confidence Interval cannot be calculated"), "\n")
-    }else if (!is.null(toprint$actualCIwidth)){
+    }else if (!is.null(toprint$actualCIwidth.exact)){
       cat(paste0("Exact ", 100 * round(toprint$targetCIwidth, 5),
                  "% Confidence Interval (",
-                 100 * round(toprint$actualCIwidth, 5), "% achieved)"), "\n")
+                 100 * round(toprint$actualCIwidth.exact, 5), "% achieved)"), "\n")
       cat(paste0("(", toprint$CI.exact.lower, ", ", toprint$CI.exact.upper, ")"), "\n")
     }else{
       cat(paste0("Exact ", 100 * round(toprint$targetCIwidth, 5),
