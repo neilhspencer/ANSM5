@@ -24,6 +24,9 @@ wilcoxon.signedrank <-
   pval.exact <- NULL
   pval.exact.stat <- NULL
   pval.exact.note <- NULL
+  pval.mc <- NULL
+  nsims.mc <- NULL
+  pval.mc.note <- NULL
   actualCIwidth.exact <- NULL
   CI.exact.lower <- NULL
   CI.exact.upper <- NULL
@@ -31,6 +34,9 @@ wilcoxon.signedrank <-
   CI.asymp.lower <- NULL
   CI.asymp.upper <- NULL
   CI.asymp.note <- NULL
+  CI.mc.lower <- NULL
+  CI.mc.upper <- NULL
+  CI.mc.note <- NULL
   test.note <- NULL
 
   #prepare
@@ -253,6 +259,10 @@ wilcoxon.signedrank <-
                  pval.asymp.note = pval.asymp.note,
                  CI.asymp.lower = CI.asymp.lower,
                  CI.asymp.upper = CI.asymp.upper, CI.asymp.note = CI.asymp.note,
+                 pval.mc = pval.mc, nsims.mc = nsims.mc,
+                 pval.mc.note = pval.mc.note,
+                 CI.mc.lower = CI.mc.lower, CI.mc.upper = CI.mc.upper,
+                 CI.mc.note = CI.mc.note,
                  test.note = test.note)
   class(result) <- "ANSMtest"
   return(result)

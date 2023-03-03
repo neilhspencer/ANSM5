@@ -1,6 +1,6 @@
 #' @importFrom stats complete.cases dbinom pbinom pnorm
 sign.test <-
-  function(x, H0 = NULL, alternative=c("two.sided", "less", "greater"),
+  function(x, H0 = NULL, alternative = c("two.sided", "less", "greater"),
            cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000000,
            do.asymp = FALSE, do.exact = TRUE, do.CI = TRUE) {
   stopifnot(is.vector(x), is.numeric(x),
@@ -24,6 +24,9 @@ sign.test <-
   pval.exact <- NULL
   pval.exact.stat <- NULL
   pval.exact.note <- NULL
+  pval.mc <- NULL
+  nsims.mc <- NULL
+  pval.mc.note <- NULL
   actualCIwidth.exact <- NULL
   CI.exact.lower <- NULL
   CI.exact.upper <- NULL
@@ -31,6 +34,9 @@ sign.test <-
   CI.asymp.lower <- NULL
   CI.asymp.upper <- NULL
   CI.asymp.note <- NULL
+  CI.mc.lower <- NULL
+  CI.mc.upper <- NULL
+  CI.mc.note <- NULL
   test.note <- NULL
 
   #statistics
@@ -159,6 +165,10 @@ sign.test <-
                  pval.asymp.note = pval.asymp.note,
                  CI.asymp.lower = CI.asymp.lower,
                  CI.asymp.upper = CI.asymp.upper, CI.asymp.note = CI.asymp.note,
+                 pval.mc = pval.mc, nsims.mc = nsims.mc,
+                 pval.mc.note = pval.mc.note,
+                 CI.mc.lower = CI.mc.lower, CI.mc.upper = CI.mc.upper,
+                 CI.mc.note = CI.mc.note,
                  test.note = test.note)
   class(result) <- "ANSMtest"
   return(result)
