@@ -10,13 +10,17 @@ print.ANSMtest <- function(toprint) {
 
   #print hypotheses
   if (!is.null(toprint$H0)){
-    cat(paste0("Null hypothesis: theta = ", toprint$H0), "\n")
-    if (toprint$alternative == "two.sided") {
-      cat(paste0("Alternative hypothesis (2-sided): theta != ", toprint$H0), "\n")
-    }else if (toprint$alternative == "less") {
-      cat(paste0("Alternative hypothesis (1-sided): theta < ", toprint$H0), "\n")
+    if (is.character(toprint$H0)){
+      cat(toprint$H0)
     }else{
-      cat(paste0("Alternative hypothesis (1-sided): theta > ", toprint$H0), "\n")
+      cat(paste0("Null hypothesis: theta = ", toprint$H0), "\n")
+      if (toprint$alternative == "two.sided") {
+        cat(paste0("Alternative hypothesis (2-sided): theta != ", toprint$H0), "\n")
+      }else if (toprint$alternative == "less") {
+        cat(paste0("Alternative hypothesis (1-sided): theta < ", toprint$H0), "\n")
+      }else{
+        cat(paste0("Alternative hypothesis (1-sided): theta > ", toprint$H0), "\n")
+      }
     }
     #print space
     cat("\n")
@@ -46,11 +50,13 @@ print.ANSMtest <- function(toprint) {
       cat(paste0("Exact ", 100 * round(toprint$targetCIwidth, 5),
                  "% Confidence Interval (",
                  100 * round(toprint$actualCIwidth.exact, 5), "% achieved)"), "\n")
-      cat(paste0("(", toprint$CI.exact.lower, ", ", toprint$CI.exact.upper, ")"), "\n")
+      cat(paste0("(", sprintf("%.5f", toprint$CI.exact.lower), ", ",
+                 sprintf("%.5f", toprint$CI.exact.upper), ")"), "\n")
     }else{
       cat(paste0("Exact ", 100 * round(toprint$targetCIwidth, 5),
                  "% Confidence Interval"), "\n")
-      cat(paste0("(", toprint$CI.exact.lower, ", ", toprint$CI.exact.upper, ")"), "\n")
+      cat(paste0("(", sprintf("%.5f", toprint$CI.exact.lower), ", ",
+                 sprintf("%.5f", toprint$CI.exact.upper), ")"), "\n")
     }
   }
   if (!is.null(toprint$CI.exact.note)){cat(toprint$CI.exact.note, "\n")}
@@ -70,7 +76,7 @@ print.ANSMtest <- function(toprint) {
     }else if (toprint$pval < 0.00001){
       cat("p-value: < 0.00001\n")
     }else{
-      cat(paste0("p-value: ", sprintf("%.5",toprint$pval), "\n"))
+      cat(paste0("p-value: ", sprintf("%.5f",toprint$pval), "\n"))
     }
   }
   if (!is.null(toprint$pval.note)){cat(toprint$pval.note, "\n")}
@@ -111,7 +117,8 @@ print.ANSMtest <- function(toprint) {
     }else{
       cat(paste0("Asymptotic ", 100 * round(toprint$targetCIwidth, 5),
                  "% Confidence Interval"), "\n")
-      cat(paste0("(", toprint$CI.asymp.lower, ", ", toprint$CI.asymp.upper, ")"), "\n")
+      cat(paste0("(", sprintf("%.5f", toprint$CI.asymp.lower), ", ",
+                 sprintf("%.5f", toprint$CI.asymp.upper), ")"), "\n")
     }
   }
   if (!is.null(toprint$CI.asymp.note)){cat(toprint$CI.asymp.note, "\n")}
@@ -119,6 +126,42 @@ print.ANSMtest <- function(toprint) {
   #print space
   if (!is.null(toprint$pval.asymp) | !is.null(toprint$pval.asymp.note) |
       !is.null(toprint$CI.asymp.lower) | !is.null(toprint$CI.asymp.note))
+  {cat("\n")}
+
+  #print pval.mc
+  if (!is.null(toprint$pval.mc)){
+    pval.mc.label = paste0("Monte Carlo p-value (", sprintf("%1$d",toprint$nsims.mc),
+                           " simulations): ")
+    if (toprint$pval.mc < 0.00001){
+      cat(paste0(pval.mc.label, "< 0.00001\n"))
+    }else{
+      if (toprint$nsims.mc >= 100000){
+        cat(paste0(pval.mc.label, sprintf("%.5f",toprint$pval.mc), "\n"))
+      }else if (toprint$nsims.mc >= 10000){
+        cat(paste0(pval.mc.label, sprintf("%.4f",toprint$pval.mc), "\n"))
+      }else{
+        cat(paste0(pval.mc.label, sprintf("%.3f",toprint$pval.mc), "\n"))
+      }
+    }
+  }
+  if (!is.null(toprint$pval.mc.note)){cat(toprint$pval.mc.note, "\n")}
+
+  #print Monte Carlo CI
+  if (!is.null(toprint$CI.mc.lower) && !is.null(toprint$CI.mc.upper)){
+    if (is.na(toprint$CI.mc.lower) | is.na(toprint$CI.mc.upper)){
+      cat(paste0("Monte Carlo ", 100 * round(toprint$targetCIwidth, 5),
+                 "% Confidence Interval cannot be calculated"), "\n")
+    }else{
+      cat(paste0("Monte Carlo ", 100 * round(toprint$targetCIwidth, 5),
+                 "% Confidence Interval (", toprint$nsims.mc, " simulations)"), "\n")
+      cat(paste0("(", toprint$CI.mc.lower, ", ", toprint$CI.mc.upper, ")"), "\n")
+    }
+  }
+  if (!is.null(toprint$CI.mc.note)){cat(toprint$CI.mc.note, "\n")}
+
+  #print space
+  if (!is.null(toprint$pval.mc) | !is.null(toprint$pval.mc.note) |
+      !is.null(toprint$CI.mc.lower) | !is.null(toprint$CI.mc.note))
   {cat("\n")}
 
   #print test note
