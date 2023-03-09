@@ -55,7 +55,7 @@ sign.test <-
   #exact p-value
   if (!is.null(H0) && do.exact && n <= max.exact.cases){
     pval.exact.less <- pbinom(pluses, n, 0.5)
-    pval.exact.greater <- pbinom(n-pluses-1, n, 0.5)
+    pval.exact.greater <- pbinom(n-pluses, n, 0.5)
     if (alternative=="two.sided"){
       pval.exact <- min(pval.exact.less, pval.exact.greater) * 2
     }else if (alternative == "less"){
