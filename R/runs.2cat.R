@@ -1,18 +1,17 @@
-#' @importFrom stats pnorm
+#' @importFrom stats complete.cases pnorm
 runs.2cat <-
-  function(x, cont.corr = TRUE, do.asymp = FALSE, do.exact = TRUE) {
-    stopifnot(length(unique(x)) == 2, is.logical(cont.corr) == TRUE,
-              is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE)
+  function(x,  alternative=c("two.sided", "less", "greater"), cont.corr = TRUE,
+           do.asymp = FALSE, do.exact = TRUE) {
+    stopifnot(is.vector(x), length(unique(x)) == 2,
+              is.logical(cont.corr) == TRUE, is.logical(do.asymp) == TRUE,
+              is.logical(do.exact) == TRUE)
+    alternative <- match.arg(alternative)
 
     #labels
     varname <- deparse(substitute(x))
 
     #default outputs
-    H0 <- NULL
-    alternative <- NULL
     CI.width <- NULL
-    max.exact.case <- NULL
-    do.CI <- NULL
     pval <- NULL
     pval.stat <- NULL
     pval.note <- NULL
@@ -37,68 +36,100 @@ runs.2cat <-
     CI.mc.note <- NULL
     test.note <- NULL
 
-    #exact p-value
-    if (do.exact){
-      n <- length(x)
-      n1 <- sum(x == unique(x)[2])
-      n2 <- sum(x == unique(x)[1])
-      nruns <- 1
-      for (i in 2:n){
-        if (x[i] != x[i-1]){
-          nruns <- nruns + 1
-        }
+    #statistics
+    x <- x[complete.cases(x)] #remove missing cases
+    n <- length(x)
+    n1 <- sum(x == unique(x)[1])
+    n2 <- sum(x == unique(x)[2])
+    nruns <- 1
+    for (i in 2:n){
+      if (x[i] != x[i-1]){
+        nruns <- nruns + 1
       }
-      pval.exact <- NULL
-      #find cumulative prob associated with nruns
-      if (nruns > n / 2){
-        fromlimit <- nruns
-        tolimit <- n
-      }else{
-        fromlimit <- 1
-        tolimit <- nruns
-      }
-      cumup1 <- 0
-      for (i in fromlimit:tolimit){
-        if (i %% 2 ==0){ #even
-          s <- i / 2
-          pr <- 2 * choose(n1 - 1, s - 1) * choose(n2 - 1, s - 1) / choose(n, n1)
-          cumup1 <- cumup1 + pr
-        }else{ #odd
-          s <- (i - 1) / 2
-          pr <- (choose(n1 - 1, s - 1) * choose(n2 - 1, s) +
-                   choose(n1 - 1, s) * choose(n2 - 1, s - 1)) / choose(n, n1)
-          cumup1 <- cumup1 + pr
-        }
-      }
-      #find cumulative prob associated with opposite side
-      if (nruns > n / 2){
-        fromlimit <- 1
-        tolimit <- nruns - 1
-      }else{
-        fromlimit <- n
-        tolimit <- nruns + 1
-      }
-      cumup2 <- 0
-      for (i in fromlimit:tolimit){
-        if (i %% 2 ==0){ #even
-          s <- i / 2
-          pr <- 2 * choose(n1 - 1, s - 1) * choose(n2 - 1, s - 1) / choose(n, n1)
-          cumup2 <- cumup2 + pr
-        }else{ #odd
-          s <- (i - 1) / 2
-          pr <- (choose(n1 - 1, s - 1) * choose(n2 - 1, s) +
-                   choose(n1 - 1, s) * choose(n2 - 1, s - 1)) / choose(n, n1)
-          cumup2 <- cumup2 + pr
-        }
-        if (cumup2 - cumup1 > 1e-07){
-          pval.exact <- cumup1 + cumup2 - pr
-          break
-        }
-      }
-      if (is.null(pval.exact)){cumup <- cumup1 + cumup2}
-      pval.exact.stat <- nruns
     }
 
+    #exact p-value
+    if (do.exact){
+      pval.exact.stat <- nruns
+      if (alternative == "two.sided"){
+        pval.exact <- NULL
+        #find cumulative prob associated with nruns
+        if (nruns > n / 2){
+          fromlimit <- nruns
+          tolimit <- n
+        }else{
+          fromlimit <- 1
+          tolimit <- nruns
+        }
+        cumup1 <- 0
+        for (i in fromlimit:tolimit){
+          if (i %% 2 ==0){ #even
+            s <- i / 2
+            pr <- 2 * choose(n1 - 1, s - 1) * choose(n2 - 1, s - 1) / choose(n, n1)
+            cumup1 <- cumup1 + pr
+          }else{ #odd
+            s <- (i - 1) / 2
+            pr <- (choose(n1 - 1, s - 1) * choose(n2 - 1, s) +
+                     choose(n1 - 1, s) * choose(n2 - 1, s - 1)) / choose(n, n1)
+            cumup1 <- cumup1 + pr
+          }
+        }
+        #find cumulative prob associated with opposite side
+        if (nruns > n / 2){
+          fromlimit <- 1
+          tolimit <- nruns - 1
+        }else{
+          fromlimit <- n
+          tolimit <- nruns + 1
+        }
+        cumup2 <- 0
+        for (i in fromlimit:tolimit){
+          if (i %% 2 ==0){ #even
+            s <- i / 2
+            pr <- 2 * choose(n1 - 1, s - 1) * choose(n2 - 1, s - 1) / choose(n, n1)
+            cumup2 <- cumup2 + pr
+          }else{ #odd
+            s <- (i - 1) / 2
+            pr <- (choose(n1 - 1, s - 1) * choose(n2 - 1, s) +
+                     choose(n1 - 1, s) * choose(n2 - 1, s - 1)) / choose(n, n1)
+            cumup2 <- cumup2 + pr
+          }
+          if (cumup2 - cumup1 > 1e-07){
+            pval.exact <- cumup1 + cumup2 - pr
+            break
+          }
+        }
+        if (is.null(pval.exact)){cumup <- cumup1 + cumup2} #will sum to 1
+      }else if (alternative == "less"){
+        pval.exact <- 0
+        for (i in 1:nruns){
+          if (i %% 2 ==0){ #even
+            s <- i / 2
+            pr <- 2 * choose(n1 - 1, s - 1) * choose(n2 - 1, s - 1) / choose(n, n1)
+            pval.exact <- pval.exact + pr
+          }else{ #odd
+            s <- (i - 1) / 2
+            pr <- (choose(n1 - 1, s - 1) * choose(n2 - 1, s) +
+                     choose(n1 - 1, s) * choose(n2 - 1, s - 1)) / choose(n, n1)
+            pval.exact <- pval.exact + pr
+          }
+        }
+      }else if (alternative == "greater"){
+        pval.exact <- 0
+        for (i in nruns:n){
+          if (i %% 2 ==0){ #even
+            s <- i / 2
+            pr <- 2 * choose(n1 - 1, s - 1) * choose(n2 - 1, s - 1) / choose(n, n1)
+            pval.exact <- pval.exact + pr
+          }else{ #odd
+            s <- (i - 1) / 2
+            pr <- (choose(n1 - 1, s - 1) * choose(n2 - 1, s) +
+                     choose(n1 - 1, s) * choose(n2 - 1, s - 1)) / choose(n, n1)
+            pval.exact <- pval.exact + pr
+          }
+        }
+      }
+    }
 
     #asymptotic p-value
     if (do.asymp){
@@ -109,10 +140,16 @@ runs.2cat <-
       }else{
         pval.asymp.stat <- (nruns - ExpR) / sqrt(VarR)
       }
-      if (pval.asymp.stat < 0){
-        pval.asymp <- 2 * pnorm(pval.asymp.stat)
-      }else{
-        pval.asymp <- 2 * pnorm(-pval.asymp.stat)
+      if (alternative == "two.sided"){
+        if (pval.asymp.stat < 0){
+          pval.asymp <- 2 * pnorm(pval.asymp.stat)
+        }else{
+          pval.asymp <- 2 * pnorm(-pval.asymp.stat)
+        }
+      }else if (alternative == "less"){
+        pval.asymp <- pnorm(pval.asymp.stat)
+      }else if (alternative == "greater"){
+        pval.asymp <- 1 - pnorm(pval.asymp.stat)
       }
       if (n < 20){
         pval.asymp.note <-
@@ -127,8 +164,16 @@ runs.2cat <-
     }
 
     #define hypotheses
-    H0 <- paste0("H0: number of runs consistent with randomness\n",
-                 "H1: number of runs not consistent with randomness\n")
+    if (alternative == "two.sided"){
+      H0 <- paste0("H0: number of runs consistent with randomness\n",
+                   "H1: number of runs not consistent with randomness\n")
+    }else if (alternative == "less"){
+      H0 <- paste0("H0: number of runs consistent with randomness\n",
+                   "H1: number of runs fewer than consistent with randomness\n")
+    }else if (alternative == "greater"){
+      H0 <- paste0("H0: number of runs consistent with randomness\n",
+                   "H1: number of runs greater than consistent with randomness\n")
+    }
 
     #return
     result <- list(title = "Runs test for two categories" , varname = varname,
