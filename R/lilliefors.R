@@ -2,7 +2,9 @@
 lilliefors <-
   function(x, alternative = c("two.sided"), nsims.mc = 10000, seed = NULL) {
     stopifnot(is.vector(x), is.numeric(x),
-              is.numeric(nsims.mc), length(nsims.mc) == 1)
+              is.numeric(nsims.mc), length(nsims.mc) == 1,
+              is.numeric(seed) | is.null(seed),
+              length(seed) == 1 | is.null(seed))
     alternative <- match.arg(alternative)
 
     #labels
@@ -46,10 +48,6 @@ lilliefors <-
     diff <- zx.prorm - c(0, s[1:(length(s) - 1)])
     mc.stat <- max(abs(diff))
 
-    #create hypotheses
-    H0 <- paste0("H0: distribution of ", varname, " is Normal\n",
-                 "H1: distribution of ", varname, " is not Normal\n")
-
     #Monte Carlo p-value
     if (!is.null(seed)){set.seed(seed)}
     diffs.sim <- NULL
@@ -63,6 +61,10 @@ lilliefors <-
       diffs.sim <- c(diffs.sim, max(abs(diff.sim)))
     }
     pval.mc <- sum(mc.stat < diffs.sim) / nsims.mc
+
+    #create hypotheses
+    H0 <- paste0("H0: distribution of ", varname, " is Normal\n",
+                 "H1: distribution of ", varname, " is not Normal\n")
 
     #return
     result <- list(title = paste0("Lilliefors test of Normality"),
