@@ -13,7 +13,6 @@ pitman <- function(x, H0, alternative=c("two.sided", "less", "greater"),
   #unused arguments
   cont.corr <- NULL
   CI.width <- NULL
-  do.CI <- NULL
   #default outputs
   pval <- NULL
   pval.stat <- NULL
