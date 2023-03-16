@@ -1,0 +1,87 @@
+#' @importFrom stats complete.cases
+range.test <-
+  function(x, alternative = c("two.sided"), minx = 0, maxx = 360) {
+    stopifnot(is.vector(x), is.numeric(x), length(x) > 1, min(x) >= minx,
+              max(x) <= maxx)
+    alternative <- match.arg(alternative)
+
+    #labels
+    varname <- deparse(substitute(x))
+
+    #default outputs
+    cont.corr <- NULL
+    CI.width <- NULL
+    pval <- NULL
+    pval.stat <- NULL
+    pval.note <- NULL
+    pval.asymp <- NULL
+    pval.asymp.stat <- NULL
+    pval.asymp.note <- NULL
+    pval.exact <- NULL
+    pval.exact.stat <- NULL
+    pval.exact.note <- NULL
+    pval.mc <- NULL
+    nsims.mc <- NULL
+    pval.mc.note <- NULL
+    actualCIwidth.exact <- NULL
+    CI.exact.lower <- NULL
+    CI.exact.upper <- NULL
+    CI.exact.note <- NULL
+    CI.asymp.lower <- NULL
+    CI.asymp.upper <- NULL
+    CI.asymp.note <- NULL
+    CI.mc.lower <- NULL
+    CI.mc.upper <- NULL
+    CI.mc.note <- NULL
+    test.note <- NULL
+
+    #prepare
+    x <- x[complete.cases(x)] #remove missing cases
+    n <- length(x)
+    x <- (x + minx) #make smallest possible number zero
+    x <- x * (360 / maxx) #make largest possible number 360
+    x <- sort(x)
+
+    #calculate largest arc containing all cases
+    arclength <- 360 - x[length(x)] + x[1] #for length overlapping 360
+    for (i in 2:length(x)){
+      if (x[i] - x[i - 1] > arclength){
+        arclength <- x[i] - x[i - 1]
+      }
+    }
+    pval.stat <- (360 - arclength) * pi / 180
+
+    #p-value
+    pval <- 0
+    for (k in 1:n){
+      kpart <- 1 - (k * (2 * pi - pval.stat) / (2 * pi))
+      if (kpart < 0){break}
+      pval <- pval + ((-1) ^ (k - 1)) * choose(n, k) * (kpart ^ (n - 1))
+    }
+
+    #create hypotheses
+    H0 <- paste0("H0: distribution of ", varname, " is uniform\n",
+                 "H1: distribution of ", varname, " is not uniform\n")
+
+    #return
+    result <- list(title = paste0("Range test"),
+                   varname = varname, H0 = H0,
+                   alternative = alternative, cont.corr = cont.corr, pval = pval,
+                   pval.stat = pval.stat, pval.note = pval.note,
+                   pval.exact = pval.exact, pval.exact.stat = pval.exact.stat,
+                   pval.exact.note = pval.exact.note, targetCIwidth = CI.width,
+                   actualCIwidth.exact = actualCIwidth.exact,
+                   CI.exact.lower = CI.exact.lower,
+                   CI.exact.upper = CI.exact.upper, CI.exact.note = CI.exact.note,
+                   pval.asymp = pval.asymp, pval.asymp.stat = pval.asymp.stat,
+                   pval.asymp.note = pval.asymp.note,
+                   CI.asymp.lower = CI.asymp.lower,
+                   CI.asymp.upper = CI.asymp.upper, CI.asymp.note = CI.asymp.note,
+                   pval.mc = pval.mc, nsims.mc = nsims.mc,
+                   pval.mc.note = pval.mc.note,
+                   CI.mc.lower = CI.mc.lower, CI.mc.upper = CI.mc.upper,
+                   CI.mc.note = CI.mc.note,
+                   test.note = test.note)
+    class(result) <- "ANSMtest"
+    return(result)
+  }
