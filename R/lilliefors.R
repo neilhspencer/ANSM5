@@ -23,6 +23,7 @@ lilliefors <-
     pval.exact.stat <- NULL
     pval.exact.note <- NULL
     pval.mc <- NULL
+    pval.mc.stat <- NULL
     pval.mc.note <- NULL
     actualCIwidth.exact <- NULL
     CI.exact.lower <- NULL
@@ -46,7 +47,7 @@ lilliefors <-
     s <- rank(x, ties.method = "max") / n
     s <- unique(s)
     diff <- zx.prorm - c(0, s[1:(length(s) - 1)])
-    mc.stat <- max(abs(diff))
+    pval.mc.stat <- max(abs(diff))
 
     #Monte Carlo p-value
     if (!is.null(seed)){set.seed(seed)}
@@ -60,7 +61,7 @@ lilliefors <-
       diff.sim <- zx.sim.pnorm - c(0, s.sim[1:(length(s.sim) - 1)])
       diffs.sim <- c(diffs.sim, max(abs(diff.sim)))
     }
-    pval.mc <- sum(mc.stat < diffs.sim) / nsims.mc
+    pval.mc <- sum(pval.mc.stat < diffs.sim) / nsims.mc
 
     #create hypotheses
     H0 <- paste0("H0: distribution of ", varname, " is Normal\n",
@@ -80,8 +81,8 @@ lilliefors <-
                    pval.asymp.note = pval.asymp.note,
                    CI.asymp.lower = CI.asymp.lower,
                    CI.asymp.upper = CI.asymp.upper, CI.asymp.note = CI.asymp.note,
-                   pval.mc = pval.mc, nsims.mc = nsims.mc,
-                   pval.mc.note = pval.mc.note,
+                   pval.mc = pval.mc, pval.mc.stat = pval.mc.stat,
+                   nsims.mc = nsims.mc, pval.mc.note = pval.mc.note,
                    CI.mc.lower = CI.mc.lower, CI.mc.upper = CI.mc.upper,
                    CI.mc.note = CI.mc.note,
                    test.note = test.note)
