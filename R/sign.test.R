@@ -25,6 +25,7 @@ sign.test <-
   pval.exact.stat <- NULL
   pval.exact.note <- NULL
   pval.mc <- NULL
+  pval.mc.stat <- NULL
   nsims.mc <- NULL
   pval.mc.note <- NULL
   actualCIwidth.exact <- NULL
@@ -165,8 +166,8 @@ sign.test <-
                  pval.asymp.note = pval.asymp.note,
                  CI.asymp.lower = CI.asymp.lower,
                  CI.asymp.upper = CI.asymp.upper, CI.asymp.note = CI.asymp.note,
-                 pval.mc = pval.mc, nsims.mc = nsims.mc,
-                 pval.mc.note = pval.mc.note,
+                 pval.mc = pval.mc, pval.mc.stat = pval.mc.stat,
+                 nsims.mc = nsims.mc, pval.mc.note = pval.mc.note,
                  CI.mc.lower = CI.mc.lower, CI.mc.upper = CI.mc.upper,
                  CI.mc.note = CI.mc.note,
                  test.note = test.note)
