@@ -130,6 +130,9 @@ print.ANSMtest <- function(toprint) {
 
   #print pval.mc
   if (!is.null(toprint$pval.mc)){
+    if (!is.null(toprint$pval.mc.stat)){
+      cat(paste0("Statistic for Monte Carlo test: ", round(toprint$pval.mc.stat,5)), "\n")
+    }
     pval.mc.label = paste0("Monte Carlo p-value (", sprintf("%1$d",toprint$nsims.mc),
                            " simulations): ")
     if (toprint$pval.mc < 0.00001){
