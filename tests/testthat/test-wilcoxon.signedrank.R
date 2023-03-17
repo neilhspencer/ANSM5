@@ -48,3 +48,10 @@ test_that("Example 3.14", {
   expect_equal(wilcoxon.signedrank(heartrates2b, CI.width = 0.99)$CI.exact.lower, 0.5)
   expect_equal(wilcoxon.signedrank(heartrates2b, CI.width = 0.99)$CI.exact.upper, 34.5)
 })
+
+test_that("Example 5.1", {
+  diffs <- c(-1, 2, 7, 14, 16, 16, 19, 20, 20, 22, 30, 33)
+  expect_equal(wilcoxon.signedrank(diffs, 0)$pval.exact, 0.0009765625)
+  expect_equal(wilcoxon.signedrank(diffs)$CI.exact.lower, 9.5)
+  expect_equal(wilcoxon.signedrank(diffs)$CI.exact.upper, 23.5)
+})

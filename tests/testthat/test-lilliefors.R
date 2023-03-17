@@ -10,3 +10,9 @@ test_that("MC p-val works", {
   expect_equal(lilliefors(McAlpha, alternative = "two.sided", seed = 1)$pval.mc,
                0)
 })
+
+test_that("Example 5.1", {
+  diffs <- c(-1, 2, 7, 14, 16, 16, 19, 20, 20, 22, 30, 33)
+  expect_equal(lilliefors(diffs, seed = 1)$pval.mc.stat, 0.15254377)
+  expect_equal(lilliefors(diffs, seed = 1)$pval.mc, 0.3926)
+})

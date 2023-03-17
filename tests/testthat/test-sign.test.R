@@ -40,7 +40,6 @@ test_that("Example 3.13", {
   expect_equal(sign.test(sampleII, do.asymp = TRUE)$CI.asymp.upper, 8.2)
 })
 
-
 test_that("Example 3.14", {
   heartrates2a <- c(-2, 4, 8, 35 ,-5 ,16 ,3 ,1 ,12 ,17 ,20 ,9)
   heartrates2b <- c(-2, 4, 8, 65 ,-5 ,16 ,3 ,1 ,12 ,17 ,20 ,9)
@@ -54,3 +53,9 @@ test_that("Example 3.14", {
   expect_equal(sign.test(heartrates2b, CI.width = 0.99)$CI.exact.upper, 20)
 })
 
+test_that("Example 5.1", {
+  diffs <- c(-1, 2, 7, 14, 16, 16, 19, 20, 20, 22, 30, 33)
+  expect_equal(sign.test(diffs, 0)$pval.exact, 0.0063476563)
+  expect_equal(sign.test(diffs)$CI.exact.lower, 7)
+  expect_equal(sign.test(diffs)$CI.exact.upper, 22)
+})
