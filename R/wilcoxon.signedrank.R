@@ -43,8 +43,8 @@ wilcoxon.signedrank <-
   #prepare
   x <- x[complete.cases(x)] #remove missing cases
   if (!is.null(H0)) {
-    x <- x[x != H0] #remove cases equal to H0
     s <- rank(abs(x - H0), ties.method = "average")
+    s[x == H0] <- 0 #make ranks equal to zero for values equal to H0
   }else{
     s <- rank(abs(x), ties.method = "average")
   }
@@ -89,7 +89,10 @@ wilcoxon.signedrank <-
 
   #exact p-value
   if (!is.null(H0) && do.exact && n <= max.exact.cases){
-    pval.exact.stat <- min(ranksumminus, ranksumplus)
+    pval.exact.stat <- paste0(ranksumminus / multiplier,
+                              " (sum of negative ranks), ",
+                              ranksumplus / multiplier,
+                              " (sum of positive ranks)")
     pval.exact.less <-
       sum(permsums[permsums[, 1] >= ranksumminus, 2]) / sum(permsums[, 2])
     pval.exact.greater <-
@@ -245,6 +248,18 @@ wilcoxon.signedrank <-
     }
     test.note <- paste0(test.note, "NOTE: No value for H0 given so no p-value ",
                         "can be calculated")
+  }
+  if (!is.null(H0) && (do.exact | do.asymp)){
+    if (sum(x == H0) != 0){
+      if (!is.null(test.note)){
+        test.note <- paste0(test.note, "\n")
+      }
+      test.note <- paste0(test.note, "NOTE: At least one value is equal to ",
+                          "the null hypothesis - method of calculating ranks\n",
+                          "which includes values equal to the null hypothesis ",
+                          "in the ranking before setting their\n",
+                          "ranks to zero has been used")
+    }
   }
 
   #return
