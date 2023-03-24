@@ -59,3 +59,20 @@ test_that("Example 5.1", {
   expect_equal(sign.test(diffs)$CI.exact.lower, 7)
   expect_equal(sign.test(diffs)$CI.exact.upper, 22)
 })
+
+test_that("Example 5.3", {
+  bp1 <- c(-5, -5, 0, 2, 10, 15, 15, 15, 18, 20, 20, 20, 20, 22, 30, 30, 34, 40, 40, 40, 41, 47, 80, 85)
+  expect_equal(sign.test(bp1)$CI.exact.lower, 15)
+  expect_equal(sign.test(bp1)$CI.exact.upper, 40)
+  bp2<- c(-5, -103, 0, 2, 10, 15, 15, 15, 18, 20, 20, 20, 20, 22, 30, 30, 34, 40, 40, 40, 41, 47, 80, 85)
+  expect_equal(sign.test(bp2)$CI.exact.lower, 15)
+  expect_equal(sign.test(bp2)$CI.exact.upper, 40)
+})
+
+test_that("Example 5.4", {
+  expect_equal(sign.test(c(rep(0, 14), rep(1, 9)), 0.5)$pval.exact, 0.4048729)
+  expect_equal(sign.test(c(rep(0, 14), rep(1, 9)), 0.5, do.asymp = TRUE)$pval.asymp,
+               0.4042485)
+  expect_equal(sign.test(c(rep(0, 14), rep(1, 9)), 0.5, do.asymp = TRUE,
+                         cont.corr = FALSE)$pval.asymp, 0.29714653)
+})

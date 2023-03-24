@@ -55,3 +55,21 @@ test_that("Example 5.1", {
   expect_equal(wilcoxon.signedrank(diffs)$CI.exact.lower, 9.5)
   expect_equal(wilcoxon.signedrank(diffs)$CI.exact.upper, 23.5)
 })
+
+test_that("Example 5.2", {
+  arithmetic <- c(8, 6, 14, 5, 10, 2, 9, 19, 11, 4, 5)
+  expect_equal(wilcoxon.signedrank(arithmetic, 10)$pval.exact, 0.248046875)
+  expect_equal(wilcoxon.signedrank(arithmetic, 10, do.asymp = TRUE)$pval.asymp,
+               0.22887085)
+  expect_equal(wilcoxon.signedrank(arithmetic, 10, do.asymp = TRUE)$CI.asymp.lower, 5)
+  expect_equal(wilcoxon.signedrank(arithmetic, 10, do.asymp = TRUE)$CI.asymp.upper, 12)
+})
+
+test_that("Example 5.3", {
+  bp1 <- c(-5, -5, 0, 2, 10, 15, 15, 15, 18, 20, 20, 20, 20, 22, 30, 30, 34, 40, 40, 40, 41, 47, 80, 85)
+  expect_equal(wilcoxon.signedrank(bp1)$CI.exact.lower, 17.5)
+  expect_equal(wilcoxon.signedrank(bp1)$CI.exact.upper, 33.5)
+  bp2<- c(-5, -103, 0, 2, 10, 15, 15, 15, 18, 20, 20, 20, 20, 22, 30, 30, 34, 40, 40, 40, 41, 47, 80, 85)
+  expect_equal(wilcoxon.signedrank(bp2)$CI.exact.lower, 16)
+  expect_equal(wilcoxon.signedrank(bp2)$CI.exact.upper, 32.5)
+})
