@@ -42,25 +42,31 @@ lilliefors <-
     x <- sort(x)
     n <- length(x)
     zx <- scale(x)
-    zx.prorm <- pnorm(zx)
-    zx.prorm <- unique(zx.prorm)
+    zx.pnorm <- pnorm(zx)
+    zx.pnorm <- unique(zx.pnorm)
     s <- rank(x, ties.method = "max") / n
     s <- unique(s)
-    diff <- zx.prorm - c(0, s[1:(length(s) - 1)])
-    pval.mc.stat <- max(abs(diff))
+    diff1 <- zx.pnorm - c(0, s[1:(length(s) - 1)])
+    diff2 <- s - zx.pnorm
 
     #Monte Carlo p-value
     if (!is.null(seed)){set.seed(seed)}
     diffs.sim <- NULL
+    diffs1.sim <- NULL
+    diffs2.sim <- NULL
     for (i in 1:nsims.mc){
       x.sim <- rnorm(n, mean(x), sd(x))
       x.sim <- sort(x.sim)
       zx.sim <- scale(x.sim)
       zx.sim.pnorm <- pnorm(zx.sim)
       s.sim <- rank(x.sim, ties.method = "max") / n
-      diff.sim <- zx.sim.pnorm - c(0, s.sim[1:(length(s.sim) - 1)])
-      diffs.sim <- c(diffs.sim, max(abs(diff.sim)))
+      diff1.sim <- zx.sim.pnorm - c(0, s.sim[1:(length(s.sim) - 1)])
+      diff2.sim <- s.sim - zx.sim.pnorm
+      diffs.sim <- c(diffs.sim, max(abs(diff1.sim), abs(diff2.sim)))
+      diffs1.sim <- c(diffs1.sim, max(abs(diff1.sim)))
+      diffs2.sim <- c(diffs2.sim, max(abs(diff2.sim)))
     }
+    pval.mc.stat <- max(abs(diff1), abs(diff2))
     pval.mc <- sum(pval.mc.stat < diffs.sim) / nsims.mc
 
     #create hypotheses
