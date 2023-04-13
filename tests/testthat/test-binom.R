@@ -104,7 +104,7 @@ test_that("Example 5.5", {
   #
   expect_equal(binom(9, 10, 0.5, alternative = "greater")$pval.exact, 0.0107421875)
   expect_equal(binom(15, 20, 0.6915, alternative = "greater")$pval.exact, 0.38428146)
-  expect_equal(binom(20, 30, 0.6915, alternative = "greater")$pval.exact, 0.6951344)
+  expect_equal(binom(20, 30, 0.6915, alternative = "greater")$pval.exact, 0.69513442)
   expect_equal(binom(32, 50, 0.6915, alternative = "greater")$pval.exact, 0.82743112)
   expect_equal(binom(59, 100, 0.6915, alternative = "greater")$pval.exact, 0.9880261)
   #
@@ -113,8 +113,7 @@ test_that("Example 5.5", {
 })
 
 test_that("Example 5.5", {
-  library(VGAM)
-  expect_equal(plaplace(0, 1, sqrt(2), lower.tail = FALSE), 0.75346565)
+#  expect_equal(VGAM::plaplace(0, 1, sqrt(2), lower.tail = FALSE), 0.75346565)
   expect_equal(binom(7, 10, 0.7534, alternative = "greater")$pval.exact, 0.78376273)
   expect_equal(binom(8, 10, 0.7534, alternative = "greater")$pval.exact, 0.53582662)
   expect_equal(binom(9, 10, 0.7534, alternative = "greater")$pval.exact, 0.25177087)

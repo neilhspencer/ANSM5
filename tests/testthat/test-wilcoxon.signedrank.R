@@ -2,20 +2,26 @@ test_that("exact p-val works", {
   heartrates1 <- c(73, 82, 87, 68, 106, 60, 97)
   heartrates2 <- c(-2, 4, 8, 25 ,-5 ,16 ,3 ,1 ,12 ,17 ,20 ,9)
   withties <- c(4, 4, 8, 8, 11, 11, 11)
-  ages <- c(6, 18, 24, 26, 37, 40, 42, 47, 69, 69, 87, 130)
-  expect_equal(wilcoxon.signedrank(heartrates1, 70,
-                                         "greater")$pval.exact.stat, 4)
+  expect_equal(wilcoxon.signedrank(heartrates1, 70, "greater")$pval.exact.stat,
+               "4 (sum of negative ranks), 24 (sum of positive ranks)")
   expect_equal(wilcoxon.signedrank(heartrates1, 70,
                                          "greater")$pval.exact, 0.0546875)
-  expect_equal(wilcoxon.signedrank(heartrates2, 15,
-                                         "less")$pval.exact.stat, 14)
+  expect_equal(wilcoxon.signedrank(heartrates2, 15, "less")$pval.exact.stat,
+               "64 (sum of negative ranks), 14 (sum of positive ranks)")
   expect_equal(wilcoxon.signedrank(heartrates2, 15,
                                          "less")$pval.exact, 0.026123047)
-  expect_equal(wilcoxon.signedrank(heartrates2, 15)$pval.exact.stat, 14)
+  expect_equal(wilcoxon.signedrank(heartrates2, 15)$pval.exact.stat,
+               "64 (sum of negative ranks), 14 (sum of positive ranks)")
   expect_equal(wilcoxon.signedrank(heartrates2, 15)$pval.exact, 0.052246094)
-  expect_equal(wilcoxon.signedrank(withties, 6, "greater")$pval.exact.stat, 10)
+  expect_equal(wilcoxon.signedrank(withties, 6, "greater")$pval.exact.stat,
+               "5 (sum of negative ranks), 23 (sum of positive ranks)")
   expect_equal(wilcoxon.signedrank(withties, 6, "greater")$pval.exact, 0.0859375)
-  expect_equal(wilcoxon.signedrank(ages, 30, "greater")$pval.exact.stat, 33)
+})
+
+test_that("Example 3.9", {
+  ages <- c(6, 18, 24, 26, 37, 40, 42, 47, 69, 69, 87, 130)
+  expect_equal(wilcoxon.signedrank(ages, 30, "greater")$pval.exact.stat,
+               "16.5 (sum of negative ranks), 61.5 (sum of positive ranks)")
   expect_equal(wilcoxon.signedrank(ages, 30, "greater")$pval.exact, 0.040527344)
 })
 
