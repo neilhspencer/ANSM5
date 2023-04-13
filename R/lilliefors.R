@@ -1,4 +1,4 @@
-#' @importFrom stats complete.cases
+#' @importFrom stats complete.cases rnorm sd
 lilliefors <-
   function(x, alternative = c("two.sided"), nsims.mc = 10000, seed = NULL) {
     stopifnot(is.vector(x), is.numeric(x),

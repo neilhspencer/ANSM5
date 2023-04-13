@@ -1,4 +1,4 @@
-#' @importFrom stats complete.cases pnorm
+#' @importFrom stats complete.cases pnorm qnorm
 wilcoxon.signedrank <-
   function(x, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000,

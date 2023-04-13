@@ -1,4 +1,4 @@
-#' @importFrom stats dbinom pbinom pnorm
+#' @importFrom stats dbinom pbinom pnorm qnorm
 binom <-
   function(r, n, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            CI.width = 0.95, max.exact.cases = 10000000, do.asymp = FALSE,

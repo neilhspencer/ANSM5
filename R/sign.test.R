@@ -1,4 +1,4 @@
-#' @importFrom stats complete.cases dbinom pbinom pnorm
+#' @importFrom stats complete.cases dbinom pbinom pnorm qnorm
 sign.test <-
   function(x, H0 = NULL, alternative = c("two.sided", "less", "greater"),
            cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000000,
