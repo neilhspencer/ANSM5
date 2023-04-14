@@ -3,7 +3,12 @@ print.ANSMtest <- function(to.print) {
   cat("\n")
 
   #print test/variable name
-  cat(paste0(to.print$title, " for ", to.print$varname), "\n")
+  if (is.null(to.print$varname2)){
+    cat(paste0(to.print$title, " for ", to.print$varname1), "\n")
+  }else{
+    cat(paste0(to.print$title, " for ", to.print$varname1, " and ",
+        to.print$varname2, "\n"))
+  }
 
   #print space
   cat("\n")

@@ -8,9 +8,10 @@ pitman <- function(x, H0, alternative=c("two.sided", "less", "greater"),
   alternative <- match.arg(alternative)
 
   #labels
-  varname <- deparse(substitute(x))
+  varname1 <- deparse(substitute(x))
 
   #unused arguments
+  varname2 <- NULL
   cont.corr <- NULL
   CI.width <- NULL
   #default outputs
@@ -136,7 +137,8 @@ pitman <- function(x, H0, alternative=c("two.sided", "less", "greater"),
   }
 
   #return
-  result <- list(title = "Pitman test", varname = varname, H0 = H0,
+  result <- list(title = "Pitman test", varname1 = varname1,
+                 varname2 = varname2, H0 = H0,
                  alternative = alternative, cont.corr = cont.corr, pval = pval,
                  pval.stat = pval.stat, pval.note = pval.note,
                  pval.exact = pval.exact, pval.exact.stat = pval.exact.stat,

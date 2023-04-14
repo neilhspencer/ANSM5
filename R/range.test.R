@@ -6,9 +6,10 @@ range.test <-
     alternative <- match.arg(alternative)
 
     #labels
-    varname <- deparse(substitute(x))
+    varname1 <- deparse(substitute(x))
 
     #default outputs
+    varname2 <- NULL
     cont.corr <- NULL
     CI.width <- NULL
     pval <- NULL
@@ -61,12 +62,12 @@ range.test <-
     }
 
     #create hypotheses
-    H0 <- paste0("H0: distribution of ", varname, " is uniform\n",
-                 "H1: distribution of ", varname, " is not uniform\n")
+    H0 <- paste0("H0: distribution of ", varname1, " is uniform\n",
+                 "H1: distribution of ", varname1, " is not uniform\n")
 
     #return
     result <- list(title = paste0("Range test"),
-                   varname = varname, H0 = H0,
+                   varname1 = varname1, varname2 = varname2, H0 = H0,
                    alternative = alternative, cont.corr = cont.corr, pval = pval,
                    pval.stat = pval.stat, pval.note = pval.note,
                    pval.exact = pval.exact, pval.exact.stat = pval.exact.stat,

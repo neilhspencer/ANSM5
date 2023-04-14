@@ -12,9 +12,10 @@ wilcoxon.signedrank <-
   alternative <- match.arg(alternative)
 
   #labels
-  varname <- deparse(substitute(x))
+  varname1 <- deparse(substitute(x))
 
   #default outputs
+  varname2 <- NULL
   pval <- NULL
   pval.stat <- NULL
   pval.note <- NULL
@@ -263,7 +264,8 @@ wilcoxon.signedrank <-
   }
 
   #return
-  result <- list(title = "Wilcoxon signed-rank test", varname = varname, H0 = H0,
+  result <- list(title = "Wilcoxon signed-rank test", varname1 = varname1,
+                 varname2 = varname2, H0 = H0,
                  alternative = alternative, cont.corr = cont.corr, pval = pval,
                  pval.stat = pval.stat, pval.note = pval.note,
                  pval.exact = pval.exact, pval.exact.stat = pval.exact.stat,

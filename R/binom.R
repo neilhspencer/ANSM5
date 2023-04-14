@@ -14,9 +14,10 @@ binom <-
     alternative <- match.arg(alternative)
 
     #labels
-    varname <- paste0("r = ", r, ", n = ", n)
+    varname1 <- paste0("r = ", r, ", n = ", n)
 
     #default outputs
+    varname2 <- NULL
     cont.corr <- NULL
     pval <- NULL
     pval.stat <- NULL
@@ -201,7 +202,7 @@ binom <-
     }
 
     #return
-    result <- list(title = title, varname = varname,
+    result <- list(title = title, varname1 = varname1, varname2 = varname2,
                    H0 = H0, alternative = alternative, cont.corr = cont.corr,
                    pval = pval, pval.stat = pval.stat, pval.note = pval.note,
                    pval.exact = pval.exact, pval.exact.stat = pval.exact.stat,

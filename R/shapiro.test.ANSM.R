@@ -5,9 +5,10 @@ shapiro.test.ANSM <-
     alternative <- match.arg(alternative)
 
     #labels
-    varname <- deparse(substitute(x))
+    varname1 <- deparse(substitute(x))
 
     #default outputs
+    varname2 <- NULL
     cont.corr <- NULL
     CI.width <- NULL
     pval <- NULL
@@ -39,8 +40,8 @@ shapiro.test.ANSM <-
     x <- x[complete.cases(x)] #remove missing cases
 
     #create hypotheses
-    H0 <- paste0("H0: distribution of ", varname, " is Normal\n",
-                 "H1: distribution of ", varname, " is not Normal\n")
+    H0 <- paste0("H0: distribution of ", varname1, " is Normal\n",
+                 "H1: distribution of ", varname1, " is not Normal\n")
 
     #p-value
     test.result <- shapiro.test(x = x)
@@ -51,7 +52,7 @@ shapiro.test.ANSM <-
 
     #return
     result <- list(title = paste0("Shapiro-Wilk test of Normality"),
-                   varname = varname, H0 = H0,
+                   varname1 = varname1, varname2 = varname2, H0 = H0,
                    alternative = alternative, cont.corr = cont.corr, pval = pval,
                    pval.stat = pval.stat, pval.note = pval.note,
                    pval.exact = pval.exact, pval.exact.stat = pval.exact.stat,

@@ -8,9 +8,10 @@ ks.test.ANSM <-
     alternative <- match.arg(alternative)
 
     #labels
-    varname <- deparse(substitute(x))
+    varname1 <- deparse(substitute(x))
 
     #default outputs
+    varname2 <- NULL
     cont.corr <- NULL
     CI.width <- NULL
     pval <- NULL
@@ -48,15 +49,15 @@ ks.test.ANSM <-
     }
 
     #create hypotheses
-    H0 <- paste0("H0: distribution of ", varname, " matches that of ",
+    H0 <- paste0("H0: distribution of ", varname1, " matches that of ",
                  shQuote(testdistn))
     if (alternative == "two.sided"){
       H0 <- paste0(H0, "\nH1: distributions differ")
     }else if(alternative == "greater"){
-      H0 <- paste0(H0, "\nH1: distribution of ", varname,
+      H0 <- paste0(H0, "\nH1: distribution of ", varname1,
                    " lies above that of ", shQuote(testdistn))
     }else{
-      H0 <- paste0(H0, "\nH1: distribution of ", varname,
+      H0 <- paste0(H0, "\nH1: distribution of ", varname1,
                    " lies below that of ", shQuote(testdistn))
     }
     H0 <- paste0(H0, "\n")
@@ -94,7 +95,7 @@ ks.test.ANSM <-
     #return
     result <- list(title = paste0("Kolmogorov test - comparison with ",
                                   shQuote(testdistn)),
-                   varname = varname, H0 = H0,
+                   varname1 = varname1, varname2 = varname2, H0 = H0,
                    alternative = alternative, cont.corr = cont.corr, pval = pval,
                    pval.stat = pval.stat, pval.note = pval.note,
                    pval.exact = pval.exact, pval.exact.stat = pval.exact.stat,

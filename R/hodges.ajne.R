@@ -6,9 +6,10 @@ hodges.ajne <-
     alternative <- match.arg(alternative)
 
     #labels
-    varname <- deparse(substitute(x))
+    varname1 <- deparse(substitute(x))
 
     #default outputs
+    varname2 <- NULL
     cont.corr <- NULL
     CI.width <- NULL
     pval <- NULL
@@ -96,7 +97,7 @@ hodges.ajne <-
       pval <- choose(n, pval.stat) * (n - 2 * pval.stat) / (2 ^ (n - 1))
     }else{
       pval <- NA
-      pval.note <- paste0(varname, " is distributed in a sufficiently\n",
+      pval.note <- paste0(varname1, " is distributed in a sufficiently\n",
                           "uniform fashion to result in the smallest number\n",
                           "of cases found in a half circle being more than a\n",
                           "third of the total number of cases, meaning that\n",
@@ -105,12 +106,12 @@ hodges.ajne <-
     }
 
     #create hypotheses
-    H0 <- paste0("H0: distribution of ", varname, " is uniform\n",
-                 "H1: distribution of ", varname, " is not uniform\n")
+    H0 <- paste0("H0: distribution of ", varname1, " is uniform\n",
+                 "H1: distribution of ", varname1, " is not uniform\n")
 
     #return
     result <- list(title = paste0("Hodges-Ajne test"),
-                   varname = varname, H0 = H0,
+                   varname1 = varname1, varname2 = varname2, H0 = H0,
                    alternative = alternative, cont.corr = cont.corr, pval = pval,
                    pval.stat = pval.stat, pval.note = pval.note,
                    pval.exact = pval.exact, pval.exact.stat = pval.exact.stat,
