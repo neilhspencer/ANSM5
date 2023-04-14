@@ -18,3 +18,12 @@ test_that("Example 4.14", {
   expect_equal(runs.2cat(tosses3, do.asymp = TRUE)$pval.asymp.stat, 0.74299208)
   expect_equal(runs.2cat(tosses3, do.asymp = TRUE)$pval.asymp, 0.45748648)
 })
+
+test_that("Example 5.10", {
+  yr0910 <- c(4282, 5233, 4306, 3408, 4177, 2986, 3872, 3739, 2095, 3735, 3028,
+              2691)
+  yr1314 <- c(4443, 2847, 3291, 3699, 3071, 3801, 3815, 3527, 3939, 4104, 4307,
+              3939)
+  expect_equal(runs.2cat(sign(yr0910 - yr1314),
+                         alternative = "less")$pval.exact, 0.65151515)
+})
