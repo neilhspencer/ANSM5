@@ -102,7 +102,7 @@ test_that("Example 5.5", {
   expect_equal(binom(8, 10, 0.6915, alternative = "greater")$pval.exact, 0.3604304)
   expect_equal(binom(9, 10, 0.6915, alternative = "greater")$pval.exact, 0.13652719)
   #
-  expect_equal(binom(9, 10, 0.5, alternative = "greater")$pval.exact, 0.0107421875)
+  expect_equal(binom(9, 10, 0.6915, alternative = "greater")$pval.exact, 0.13652719)
   expect_equal(binom(15, 20, 0.6915, alternative = "greater")$pval.exact, 0.38428146)
   expect_equal(binom(20, 30, 0.6915, alternative = "greater")$pval.exact, 0.69513442)
   expect_equal(binom(32, 50, 0.6915, alternative = "greater")$pval.exact, 0.82743112)
@@ -112,12 +112,24 @@ test_that("Example 5.5", {
   expect_equal(binom(36, 58, 0.6915, alternative = "greater")$pval.exact, 0.90306589)
 })
 
-test_that("Example 5.5", {
+test_that("Example 5.6", {
 #  expect_equal(VGAM::plaplace(0, 1, sqrt(2), lower.tail = FALSE), 0.75346565)
+  expect_equal(binom(7, 10, 0.5, alternative = "greater")$pval.exact, 0.171875)
+  expect_equal(binom(8, 10, 0.5, alternative = "greater")$pval.exact, 0.0546875)
+  expect_equal(binom(9, 10, 0.5, alternative = "greater")$pval.exact, 0.0107421875)
   expect_equal(binom(7, 10, 0.7534, alternative = "greater")$pval.exact, 0.78376273)
   expect_equal(binom(8, 10, 0.7534, alternative = "greater")$pval.exact, 0.53582662)
   expect_equal(binom(9, 10, 0.7534, alternative = "greater")$pval.exact, 0.25177087)
   #
   expect_equal(binom(20, 30, 0.5, alternative = "greater")$pval.exact, 0.049368573)
   expect_equal(binom(20, 30, 0.7534, alternative = "greater")$pval.exact, 0.9023053)
+})
+
+test_that("Example 5.7", {
+  expect_equal(pexp(0.3862, rate = 1/2, lower.tail = FALSE), 0.82439953)
+  expect_equal(binom(7, 10, 0.5, alternative = "greater")$pval.exact, 0.171875)
+  expect_equal(binom(8, 10, 0.5, alternative = "greater")$pval.exact, 0.0546875)
+  expect_equal(binom(9, 10, 0.5, alternative = "greater")$pval.exact, 0.0107421875)
+  expect_equal(binom(8, 10, 0.8244, alternative = "greater")$pval.exact, 0.74991752)
+  expect_equal(binom(9, 10, 0.8244, alternative = "greater")$pval.exact, 0.45386729)
 })
