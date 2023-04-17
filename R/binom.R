@@ -1,4 +1,18 @@
+#' Perform binomial test
+#'
+#' @param r Number of "successes"
+#' @param n Number of trials
+#' @param H0 Null hypothesis value
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param CI.width confidence interval width (defaults to `0.95`)
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `10000000`)
+#' @param do.asymp Boolean for performing/not performing asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean for performing/not performing exact calculations (defaults to `TRUE`)
+#' @param do.CI Boolean for creating/not creating confidence interval (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results of the binomial test/confidence interval
+#'
 #' @importFrom stats dbinom pbinom pnorm qnorm
+#' @export
 binom <-
   function(r, n, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            CI.width = 0.95, max.exact.cases = 10000000, do.asymp = FALSE,
