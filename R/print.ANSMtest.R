@@ -1,3 +1,4 @@
+#' @export
 print.ANSMtest <- function(to.print) {
   #print space
   cat("\n")
