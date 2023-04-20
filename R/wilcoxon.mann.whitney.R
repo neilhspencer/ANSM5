@@ -45,6 +45,7 @@ wilcoxon.mann.whitney <-
     #prepare
     x <- x[complete.cases(x)] #remove missing cases
     y <- y[complete.cases(y)] #remove missing cases
+    n <- length(x) + length(y)
     if (!is.null(H0)) {
       xy <- c(x - H0, y)
       varname1 <- paste0(varname1, " - ", H0)
@@ -76,7 +77,7 @@ wilcoxon.mann.whitney <-
       try_result <- suppressWarnings(try(
         combins <- combn(length(xy), min(length(x), length(y))), silent = TRUE)
         )
-      if (class(try_result) == "try-error"){
+      if (any(class(try_result) == "try-error")){
         OverflowState <- TRUE
       }
         if (OverflowState){
