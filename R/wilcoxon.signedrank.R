@@ -6,7 +6,8 @@ wilcoxon.signedrank <-
   stopifnot(is.vector(x), is.numeric(x),
             ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
             is.numeric(max.exact.cases), length(max.exact.cases) == 1,
-            is.logical(cont.corr) == TRUE, CI.width > 0, CI.width < 1,
+            is.logical(cont.corr) == TRUE, is.numeric(CI.width),
+            length(CI.width) == 1, CI.width > 0, CI.width < 1,
             is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE,
             is.logical(do.CI) == TRUE)
   alternative <- match.arg(alternative)
@@ -43,43 +44,25 @@ wilcoxon.signedrank <-
 
   #prepare
   x <- x[complete.cases(x)] #remove missing cases
-  if (!is.null(H0)) {
-    s <- rank(abs(x - H0), ties.method = "average")
-    s[x == H0] <- 0 #make ranks equal to zero for values equal to H0
-  }else{
-    s <- rank(abs(x), ties.method = "average")
-  }
   n <- length(x)
-  multiplier = 2 - all(s == round(s,0)) # multiplier of 2 if average ranks, otherwise multiplier of 1
+  multiplier.test <- NULL
+  multiplier.ci <- NULL
+
+  #prepare for tests
   if (!is.null(H0)){
-    ranksumplus <- sum(s[sign(x - H0) == 1]) * multiplier
-    ranksumminus <- sum(s[sign(x - H0) == -1]) * multiplier
-  }
-
-  #give asymptotic output if exact not possible
-  if (do.exact && n > max.exact.cases){
-    do.asymp <- TRUE
-  }
-
-  #statistics
-  if ((do.exact | ((do.asymp | do.CI) && multiplier == 1)) && n <= max.exact.cases){
-    permfrom <- s * multiplier
-    permfrom <- sort(permfrom)
-    permsums <- rep(0,sum(permfrom) + 1)
-    permsums[1] <- 1
-    current.max <- 0
-    for (i in 1:length(permfrom)){
-      permsumsnow <- permsums
-      to.add <- permfrom[i]
-      j <- 1:(current.max + 1)
-      k <- (j - 1) + to.add + 1
-      gtzero <- permsumsnow[j] > 0
-      permsums[k][gtzero] <- permsums[k][gtzero] + permsumsnow[j][gtzero]
-      current.max <- current.max + to.add
+    s.test <- rank(abs(x - H0), ties.method = "average")
+    s.test[x == H0] <- 0 #make ranks equal to zero for values equal to H0
+    multiplier.test = 2 - all(s.test == round(s.test,0)) # multiplier of 2 if average ranks, otherwise multiplier of 1
+    if (!is.null(H0)){
+      ranksumplus <- sum(s.test[sign(x - H0) == 1]) * multiplier.test
+      ranksumminus <- sum(s.test[sign(x - H0) == -1]) * multiplier.test
     }
-    permsums <- data.frame(0:(length(permsums) - 1), permsums)
   }
-  if (do.CI && n <= max.exact.cases){
+
+  #prepare for CIs
+  if (do.CI){
+    s.ci <- rank(abs(x), ties.method = "average")
+    multiplier.ci = 2 - all(s.ci == round(s.ci,0)) # multiplier of 2 if average ranks, otherwise multiplier of 1
     Walsh.averages <- NULL
     for (i in 1:length(x)){
       for (j in i:length(x)){
@@ -88,16 +71,37 @@ wilcoxon.signedrank <-
     }
   }
 
+  #give asymptotic output if exact not possible
+  if (do.exact && n > max.exact.cases){
+    do.asymp <- TRUE
+  }
+
   #exact p-value
   if (!is.null(H0) && do.exact && n <= max.exact.cases){
-    pval.exact.stat <- paste0(ranksumminus / multiplier,
+    permfrom.test <- s.test * multiplier.test
+    permfrom.test <- sort(permfrom.test)
+    permsums.test <- rep(0, sum(permfrom.test) + 1)
+    permsums.test[1] <- 1
+    current.max <- 0
+    for (i in 1:length(permfrom.test)){
+      permsumsnow.test <- permsums.test
+      to.add <- permfrom.test[i]
+      j <- 1:(current.max + 1)
+      k <- (j - 1) + to.add + 1
+      gtzero <- permsumsnow.test[j] > 0
+      permsums.test[k][gtzero] <- permsums.test[k][gtzero] + permsumsnow.test[j][gtzero]
+      current.max <- current.max + to.add
+    }
+    permsums.test <- data.frame(0:(length(permsums.test) - 1), permsums.test)
+
+    pval.exact.stat <- paste0(ranksumminus / multiplier.test,
                               " (sum of negative ranks), ",
-                              ranksumplus / multiplier,
+                              ranksumplus / multiplier.test,
                               " (sum of positive ranks)")
     pval.exact.less <-
-      sum(permsums[permsums[, 1] >= ranksumminus, 2]) / sum(permsums[, 2])
+      sum(permsums.test[permsums.test[, 1] >= ranksumminus, 2]) / sum(permsums.test[, 2])
     pval.exact.greater <-
-      sum(permsums[permsums[, 1] >= ranksumplus, 2]) / sum(permsums[, 2])
+      sum(permsums.test[permsums.test[, 1] >= ranksumplus, 2]) / sum(permsums.test[, 2])
     if (alternative=="two.sided"){
       pval.exact <- min(pval.exact.less, pval.exact.greater) * 2
     }else if (alternative == "less"){
@@ -109,23 +113,34 @@ wilcoxon.signedrank <-
 
   #exact CI
   if (do.exact && do.CI && n <= max.exact.cases){
-    Walsh.averages <- NULL
-    for (i in 1:length(x)){
-      for (j in i:length(x)){
-        Walsh.averages <- c(Walsh.averages, (x[i] + x[j]) / 2)
-      }
+    permfrom.ci <- s.ci * multiplier.ci
+    permfrom.ci <- sort(permfrom.ci)
+    permsums.ci <- rep(0, sum(permfrom.ci) + 1)
+    permsums.ci[1] <- 1
+    current.max <- 0
+    for (i in 1:length(permfrom.ci)){
+      permsumsnow.ci <- permsums.ci
+      to.add <- permfrom.ci[i]
+      j <- 1:(current.max + 1)
+      k <- (j - 1) + to.add + 1
+      gtzero <- permsumsnow.ci[j] > 0
+      permsums.ci[k][gtzero] <- permsums.ci[k][gtzero] + permsumsnow.ci[j][gtzero]
+      current.max <- current.max + to.add
     }
+    permsums.ci <- data.frame(0:(length(permsums.ci) - 1), permsums.ci)
+
     i <- 0
+    denomsum <- sum(permsums.ci[, 2])
     repeat{
       pval.tmp <-
-        sum(permsums[permsums[, 1] <= i, 2]) / sum(permsums[, 2]) * 2
+        sum(permsums.ci[permsums.ci[, 1] <= i, 2]) / denomsum * 2
       if (pval.tmp > (1 - CI.width)) {break}
-      i <- i + multiplier
+      i <- i + multiplier.ci
     }
-    CI.exact.lower <- sort(Walsh.averages, decreasing = FALSE)[i / multiplier]
-    CI.exact.upper <- sort(Walsh.averages, decreasing = TRUE)[i / multiplier]
-    actualCIwidth.exact <- 1 - sum(permsums[permsums[, 1] <= i - 1, 2]) /
-      sum(permsums[, 2]) * 2
+    CI.exact.lower <- sort(Walsh.averages, decreasing = FALSE)[i / multiplier.ci]
+    CI.exact.upper <- sort(Walsh.averages, decreasing = TRUE)[i / multiplier.ci]
+    actualCIwidth.exact <- 1 - sum(permsums.ci[permsums.ci[, 1] <= i - multiplier.ci, 2]) /
+      denomsum * 2
     if (is.null(CI.exact.lower) | is.null(CI.exact.upper) | is.null(actualCIwidth.exact)){
       actualCIwidth.exact <- NULL
       CI.exact.lower <- NULL
@@ -135,19 +150,19 @@ wilcoxon.signedrank <-
 
   #asymptotic p-value (with/without continuity correction)
   if (!is.null(H0) && do.asymp){
-    S <- min(ranksumminus, ranksumplus) / multiplier
+    s.test.2 <- min(ranksumminus, ranksumplus) / multiplier.test
     #with ties
-    if (multiplier == 2){
-      pval.asymp.stat <- (S - 0.5 * sum(abs(s))) / (0.5 * sqrt(sum(s ** 2)))
+    if (multiplier.test == 2){
+      pval.asymp.stat <- (s.test.2 - 0.5 * sum(abs(s.test))) / (0.5 * sqrt(sum(s.test ** 2)))
       pval.asymp.less <-
-        pnorm((ranksumminus / 2 - 0.5 * sum(abs(s))) / (0.5 * sqrt(sum(s ** 2))),
+        pnorm((ranksumminus / 2 - 0.5 * sum(abs(s.test))) / (0.5 * sqrt(sum(s.test ** 2))),
               lower.tail = FALSE)
       pval.asymp.greater <-
-        pnorm((ranksumplus / 2 - 0.5 * sum(abs(s))) / (0.5 * sqrt(sum(s ** 2))),
+        pnorm((ranksumplus / 2 - 0.5 * sum(abs(s.test))) / (0.5 * sqrt(sum(s.test ** 2))),
               lower.tail = FALSE)
     }else{
       #without ties
-      pval.asymp.stat <- ((S + 0.5 * (cont.corr == TRUE)) - n * (n + 1) / 4) /
+      pval.asymp.stat <- ((s.test.2 + 0.5 * (cont.corr == TRUE)) - n * (n + 1) / 4) /
         sqrt(n * (n + 1) * (2 * n + 1) / 24)
       pval.asymp.less <-
         pnorm(((ranksumminus + (0.5 - (ranksumminus > ranksumplus)) *
@@ -174,24 +189,24 @@ wilcoxon.signedrank <-
   #asymptotic CI
   if (do.asymp && do.CI){
     if (n <= max.exact.cases){
-      if (multiplier == 2){ #recalculate if multiplier of 2 used for exact test
-        permfrom <- 1:n
-        permsums <- rep(0,sum(permfrom) + 1)
-        permsums[1] <- 1
+      if (multiplier.ci == 2){ #recalculate if multiplier of 2 used for exact test
+        permfrom.ci <- 1:n
+        permsums.ci <- rep(0,sum(permfrom.ci) + 1)
+        permsums.ci[1] <- 1
         current.max <- 0
-        for (i in 1:length(permfrom)){
-          permsumsnow <- permsums
-          to.add <- permfrom[i]
+        for (i in 1:length(permfrom.ci)){
+          permsumsnow.ci <- permsums.ci
+          to.add <- permfrom.ci[i]
           j <- 1:(current.max + 1)
           k <- (j - 1) + to.add + 1
-          gtzero <- permsumsnow[j] > 0
-          permsums[k][gtzero] <- permsums[k][gtzero] + permsumsnow[j][gtzero]
+          gtzero <- permsumsnow.ci[j] > 0
+          permsums.ci[k][gtzero] <- permsums.ci[k][gtzero] + permsumsnow.ci[j][gtzero]
           current.max <- current.max + to.add
         }
-        permsums <- data.frame(0:(length(permsums) - 1), permsums)
+        permsums.ci <- data.frame(0:(length(permsums.ci) - 1), permsums.ci)
       }
-      meanstat <- sum(permsums[, 1] * permsums[, 2]) / sum(permsums[, 2])
-      sdstat <- sqrt(sum(permsums[, 1] ^ 2 * permsums[, 2]) / sum(permsums[, 2]) - meanstat ^ 2)
+      meanstat <- sum(permsums.ci[, 1] * permsums.ci[, 2]) / sum(permsums.ci[, 2])
+      sdstat <- sqrt(sum(permsums.ci[, 1] ^ 2 * permsums.ci[, 2]) / sum(permsums.ci[, 2]) - meanstat ^ 2)
       S <- qnorm((1 - CI.width) / 2) * sdstat + meanstat
       CI.asymp.lower <- sort(Walsh.averages, decreasing = FALSE)[round(S, 0) + 1]
       CI.asymp.upper <- sort(Walsh.averages, decreasing = FALSE)[length(Walsh.averages) - round(S, 0)]
@@ -228,19 +243,33 @@ wilcoxon.signedrank <-
                           sprintf("%1.0f", max.exact.cases), ")")
     }
   }
-  if (multiplier == 2 && do.asymp && (do.CI | !is.null(H0))){
+
+  if (multiplier.test == 2 && do.asymp && !is.null(H0)){
     if (!is.null(test.note)){
       test.note <- paste0(test.note, "\n")
     }
-    if (do.CI && !is.null(H0)){
+    if (cont.corr){
+      cont.corr <- FALSE #set to FALSE so passed appropriately to print
       test.note <- paste0(test.note, "NOTE: Ties exist in data so mid-ranks ",
-                          "used for asymptotic test and confidence interval")
-    }else if (do.CI && is.null(H0)){
-      test.note <- paste0(test.note, "NOTE: Ties exist in data so mid-ranks ",
-                          "used for asymptotic confidence interval")
-    }else if (!do.CI){
+                          "used for asymptotic test\nand the continuity ",
+                          "correction has not been used")
+    }else{
       test.note <- paste0(test.note, "NOTE: Ties exist in data so mid-ranks ",
                           "used for asymptotic test")
+    }
+  }
+  if (multiplier.ci == 2 && do.CI){
+    if (!is.null(test.note)){
+      test.note <- paste0(test.note, "\n")
+    }
+    if (cont.corr){
+      cont.corr <- FALSE #set to FALSE so passed appropriately to print
+      test.note <- paste0(test.note, "NOTE: Ties exist in data so mid-ranks ",
+                          "used for asymptotic confidence interval\nand the ",
+                          "continuity correction has not been used")
+    }else{
+      test.note <- paste0(test.note, "NOTE: Ties exist in data so mid-ranks ",
+                          "used for asymptotic confidence interval")
     }
   }
   if (is.null(H0) && (do.exact | do.asymp)){
