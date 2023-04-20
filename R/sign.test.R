@@ -6,7 +6,8 @@ sign.test <-
   stopifnot(is.vector(x), is.numeric(x),
             ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
             is.numeric(max.exact.cases), length(max.exact.cases) == 1,
-            is.logical(cont.corr) == TRUE, CI.width > 0, CI.width < 1,
+            is.logical(cont.corr) == TRUE, is.numeric(CI.width),
+            length(CI.width) == 1, CI.width > 0, CI.width < 1,
             is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE,
             is.logical(do.CI) == TRUE)
   alternative <- match.arg(alternative)
