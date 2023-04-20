@@ -1,9 +1,11 @@
-test_that("calculations work", {
+test_that("Example 3.11", {
   heartrates1 <- c(73, 82, 87, 68, 106, 60, 97)
   expect_equal(pitman(heartrates1, 70, "greater")$pval.exact.stat, 95)
   expect_equal(pitman(heartrates1, 70, "greater")$pval.exact, 0.0546875)
   expect_equal(pitman(heartrates1, 70, "greater", do.asymp = TRUE)$pval.asymp.stat, 1.63691848888252 )
   expect_equal(pitman(heartrates1, 70, "greater", do.asymp = TRUE)$pval.asymp, 0.050823751)
+  expect_equal(pitman(heartrates1)$CI.mc.lower, 68)
+  expect_equal(pitman(heartrates1)$CI.mc.upper, 97)
 })
 
 test_that("Example 3.12", {
@@ -19,4 +21,13 @@ test_that("Example 3.12", {
                  8.7, 9.4, 12.6, 12.8)
   expect_equal(pitman(sampleIa, 9)$pval.exact, 0.123046875)
   expect_equal(pitman(sampleIIa, 9)$pval.exact, 0.035497665)
+})
+
+test_that("Exercise 3.17", {
+  sampleI <- c(1, 11, 35, 41, 50, 62, 104, 104, 151, 161)
+  sampleII <- c(2, 10, 27, 35, 38, 40, 47, 50, 58, 60, 68, 70, 79, 103, 108, 151, 157, 158, 162, 166)
+  expect_equal(pitman(sampleI, 110)$pval.exact, 0.05859375)
+  expect_equal(pitman(sampleI, 110, do.asymp = TRUE)$pval.asymp, 0.064739074)
+  expect_equal(pitman(sampleII, 110)$pval.exact, 0.0220565796)
+  expect_equal(pitman(sampleII, 110, do.asymp = TRUE)$pval.asymp, 0.0241634455)
 })
