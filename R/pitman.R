@@ -1,10 +1,16 @@
 #' @importFrom stats complete.cases pnorm
-pitman <- function(x, H0, alternative=c("two.sided", "less", "greater"),
-                        max.exact.cases = 1000, do.asymp = FALSE,
-                        do.exact = TRUE) {
-  stopifnot(is.vector(x), is.numeric(x), is.numeric(H0), length(H0) == 1,
-            is.numeric(max.exact.cases), length(max.exact.cases) == 1,
-            is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE)
+pitman <- function(x, H0 = NULL, alternative=c("two.sided", "less", "greater"),
+                   CI.width = 0.95, max.exact.cases = 1000, nsims.mc = 10000,
+                   seed = NULL, do.asymp = FALSE, do.exact = TRUE,
+                   do.CI = TRUE) {
+  stopifnot(is.vector(x), is.numeric(x),
+            ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
+            is.numeric(CI.width), length(CI.width) == 1, CI.width > 0,
+            CI.width < 1, is.numeric(max.exact.cases),
+            length(max.exact.cases) == 1, is.numeric(nsims.mc),
+            length(nsims.mc) == 1, is.numeric(seed) | is.null(seed),
+            length(seed) == 1 | is.null(seed), is.logical(do.asymp) == TRUE,
+            is.logical(do.exact) == TRUE, is.logical(do.CI) == TRUE)
   alternative <- match.arg(alternative)
 
   #labels
@@ -13,7 +19,6 @@ pitman <- function(x, H0, alternative=c("two.sided", "less", "greater"),
   #unused arguments
   varname2 <- NULL
   cont.corr <- NULL
-  CI.width <- NULL
   #default outputs
   pval <- NULL
   pval.stat <- NULL
@@ -26,7 +31,6 @@ pitman <- function(x, H0, alternative=c("two.sided", "less", "greater"),
   pval.exact.note <- NULL
   pval.mc <- NULL
   pval.mc.stat <- NULL
-  nsims.mc <- NULL
   pval.mc.note <- NULL
   actualCIwidth.exact <- NULL
   CI.exact.lower <- NULL
@@ -42,7 +46,9 @@ pitman <- function(x, H0, alternative=c("two.sided", "less", "greater"),
 
   #prepare
   x <- x[complete.cases(x)] #remove missing cases
-  x <- x[x != H0] #remove cases equal to H0
+  if (!is.null(H0)) {
+    x <- x[x != H0] #remove cases equal to H0
+  }
   n <- length(x)
 
   #give asymptotic output if exact not possible
@@ -51,7 +57,7 @@ pitman <- function(x, H0, alternative=c("two.sided", "less", "greater"),
   }
 
   #statistics
-  if (do.exact && n <= max.exact.cases){
+  if (!is.null(H0) && do.exact && n <= max.exact.cases){
     for (dp in 0:6){ #determine max decimal places (max 6)
       if (all(x == round(x, dp))){
         break
@@ -77,7 +83,7 @@ pitman <- function(x, H0, alternative=c("two.sided", "less", "greater"),
   }
 
   #exact p-value
-  if (do.exact && n <= max.exact.cases){
+  if (!is.null(H0) && do.exact && n <= max.exact.cases){
     pval.stat.greater <- sum((x - H0)[(x - H0) > 0])
     pval.greater <- sum(permsums[permsums[,1] >= pval.stat.greater, 2]) / sum(permsums[,2])
     pval.stat.less <- -sum((x - H0)[(x - H0) < 0])
@@ -122,8 +128,16 @@ pitman <- function(x, H0, alternative=c("two.sided", "less", "greater"),
     }
   }
 
+  #confidence interval
+  if (do.CI){
+    mc.ci.res <- mc.ci(x, CI.width = CI.width, nsims.mc = nsims.mc, seed = seed)
+    CI.mc.lower <- mc.ci.res[1]
+    CI.mc.upper <- mc.ci.res[2]
+    CI.mc.note <- "Confidence interval is basic bootstrap interval for the median"
+  }
+
   #check if message needed
-  if (do.exact && n > max.exact.cases) {
+  if (!is.null(H0) && do.exact && n > max.exact.cases) {
     test.note <- paste0("NOTE: Number of useful cases greater than current ",
                         "maximum allowed for exact\n calculations required ",
                         "(max.exact.cases = ",
@@ -131,7 +145,7 @@ pitman <- function(x, H0, alternative=c("two.sided", "less", "greater"),
   }
 
   #undo effect of dp adjustment for exact test
-  if (do.exact && n <= max.exact.cases) {
+  if (!is.null(H0) && do.exact && n <= max.exact.cases) {
     pval.exact.stat <- pval.exact.stat / 10 ^ dp
     H0 <- H0 / 10 ^ dp
   }
