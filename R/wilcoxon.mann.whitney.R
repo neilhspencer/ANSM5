@@ -72,8 +72,8 @@ wilcoxon.mann.whitney <-
     tiesexist = !all(s == round(s,0)) # TRUE if ties exist
 
     #exact p-value & CI
+    OverflowState <- FALSE
     if (do.exact && tiesexist){
-      OverflowState <- FALSE
       try_result <- suppressWarnings(try(
         combins <- combn(length(xy), min(length(x), length(y))), silent = TRUE)
         )
@@ -167,10 +167,8 @@ wilcoxon.mann.whitney <-
                          "requested")
     }else if (n > max.exact.cases) {
       affected <- NULL
-      if (do.exact && do.CI && !is.null(H0)){
+      if (do.exact && do.CI){
         affected <- "exact test and confidence interval"
-      }else if (do.exact && do.CI && is.null(H0)) {
-        affected <- "exact confidence interval"
       }else if (do.exact) {
         affected <- "exact test"
       }
@@ -195,7 +193,7 @@ wilcoxon.mann.whitney <-
       }
       if (do.CI){
         test.note <- paste0(test.note, "NOTE: Ties exist in data so exact ",
-                            "confidence interval not available")
+                            "confidence interval\nnot available")
       }else if (!do.CI){
         test.note <- paste0(test.note, "NOTE: Ties exist in data so mid-ranks ",
                             "used for asymptotic test")
@@ -207,7 +205,7 @@ wilcoxon.mann.whitney <-
       }
       if (do.CI){
         test.note <- paste0(test.note, "NOTE: Ties exist in data so mid-ranks ",
-                            "used for asymptotic test and confidence interval")
+                            "used for asymptotic\ntest and confidence interval")
       }else if (!do.CI){
         test.note <- paste0(test.note, "NOTE: Ties exist in data so mid-ranks ",
                             "used for asymptotic test")

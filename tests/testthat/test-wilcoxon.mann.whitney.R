@@ -48,7 +48,10 @@ test_that("Example 6.6", {
                85, 85, 85, 86, 88)
   McBeta <- c(0, 19, 22, 30, 31, 37, 55, 56, 66, 66, 67, 67, 68, 71, 73, 75, 75,
               78, 79, 82, 83, 83, 88, 96)
-  expect_equal(wilcoxon.mann.whitney(McGamma, McBeta, do.exact = FALSE,
-                                     do.asymp = TRUE,
+  expect_equal(wilcoxon.mann.whitney(McGamma, McBeta,
+                                     do.exact = FALSE, do.asymp = TRUE,
                                      cont.corr = FALSE)$pval.asymp, 0.41896844)
+  expect_equal(wilcoxon.mann.whitney(McGamma, McBeta,
+                                     do.exact = FALSE,
+                                     do.asymp = TRUE)$pval.asymp, 0.425550392)
 })
