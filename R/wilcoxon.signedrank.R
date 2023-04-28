@@ -251,14 +251,14 @@ wilcoxon.signedrank <-
     if (cont.corr){
       cont.corr <- FALSE #set to FALSE so passed appropriately to print
       test.note <- paste0(test.note, "NOTE: Ties exist in data so mid-ranks ",
-                          "used for asymptotic test\nand the continuity ",
+                          "used for asymptotic test and the\ncontinuity ",
                           "correction has not been used")
     }else{
       test.note <- paste0(test.note, "NOTE: Ties exist in data so mid-ranks ",
                           "used for asymptotic test")
     }
   }
-  if (multiplier.ci == 2 && do.CI){
+  if (multiplier.ci == 2 && do.asymp && do.CI){
     if (!is.null(test.note)){
       test.note <- paste0(test.note, "\n")
     }
@@ -285,9 +285,9 @@ wilcoxon.signedrank <-
         test.note <- paste0(test.note, "\n")
       }
       test.note <- paste0(test.note, "NOTE: At least one value is equal to ",
-                          "the null hypothesis - method of calculating ranks\n",
+                          "the null hypothesis - method of calculating\nranks ",
                           "which includes values equal to the null hypothesis ",
-                          "in the ranking before setting their\n",
+                          "in the ranking before\nsetting their ",
                           "ranks to zero has been used")
     }
   }
