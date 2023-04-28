@@ -1,3 +1,4 @@
+#' @importFrom stats median quantile
 mc.ci <-
   function(x, CI.width = 0.95, nsims.mc = 10000, seed = NULL) {
     stopifnot(is.vector(x), is.numeric(x), is.numeric(CI.width),

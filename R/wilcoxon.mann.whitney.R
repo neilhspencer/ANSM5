@@ -1,5 +1,5 @@
 #' @importFrom stats complete.cases wilcox.test
-#' @importFrom utils combn
+#' @importFrom utils combn tail
 wilcoxon.mann.whitney <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000,
