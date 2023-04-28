@@ -1,4 +1,4 @@
-#' @importFrom stats complete.cases
+#' @importFrom stats complete.cases median
 median.test <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000,
@@ -61,7 +61,7 @@ median.test <-
       factorial(nx + ny - x.gt - y.gt) / factorial(nx + ny)
 
     #Exact test
-    if (do.exact && nx + ny < max.exact.cases){
+    if (do.exact && nx + ny <= max.exact.cases){
       pval.exact <- 0
       for (x.gt.2 in 0:nx){
         y.gt.2 <- x.gt + y.gt - x.gt.2
@@ -85,7 +85,7 @@ median.test <-
     if (!do.asymp && !do.exact) {
       test.note <- paste("Neither exact nor asymptotic test/confidence interval ",
                          "requested")
-    }else if (n > max.exact.cases) {
+    }else if (nx + ny > max.exact.cases) {
       affected <- NULL
       if (do.exact && do.CI){
         affected <- "exact test and confidence interval"
