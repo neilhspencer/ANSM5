@@ -12,8 +12,8 @@ test_that("Example 3.12", {
   expect_equal(pitman(ch3data$sampleA, 9, do.asymp = TRUE)$pval.asymp, 0.3051186)
   expect_equal(pitman(ch3data$sampleB, 9)$pval.exact, 0.9159565)
   expect_equal(pitman(ch3data$sampleB, 9, do.asymp = TRUE)$pval.asymp, 0.81653892)
-  expect_equal(pitman(ch3data$sampleC, 9)$pval.exact, 0.123046875)
-  expect_equal(pitman(ch3data$sampleD, 9)$pval.exact, 0.035497665)
+  expect_equal(pitman(ch3data$sampleA2, 9)$pval.exact, 0.123046875)
+  expect_equal(pitman(ch3data$sampleA3, 9)$pval.exact, 0.035497665)
 })
 
 test_that("Exercise 3.17", {
