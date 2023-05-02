@@ -101,6 +101,10 @@ test_that("Exercise 3.11", {
   expect_equal(wilcoxon.signedrank(ch3data$fishlengths, do.asymp = TRUE)$CI.exact.upper, 73)
 })
 
+test_that("Exercise 3.12", {
+  expect_equal(wilcoxon.signedrank(ch3data$weightloss, 5)$pval.exact, 0.03137207)
+})
+
 test_that("Exercise 3.13", {
   expect_equal(wilcoxon.signedrank(ch3data$plants, 50)$pval.exact, 0.65339544)
 })

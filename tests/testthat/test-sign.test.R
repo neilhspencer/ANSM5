@@ -71,6 +71,10 @@ test_that("Exercise 3.11", {
   expect_equal(sign.test(ch3data$fishlengths, CI.width = 0.90)$CI.exact.upper, 72)
 })
 
+test_that("Exercise 3.12", {
+  expect_equal(sign.test(ch3data$weightloss, 5)$pval.exact, 0.17956543)
+})
+
 test_that("Exercise 3.13", {
   expect_equal(sign.test(ch3data$plants, 50)$pval.exact, 0.33678364)
 })
