@@ -7,7 +7,7 @@
 \format{
 \subsection{\code{ch3data}}{
 
-A list with 25 data objects
+A list with 25 data vectors
 }
 }
 \source{
@@ -35,11 +35,11 @@ Data used in Chapter 3 of "Applied Nonparametric Statistical Methods" (5th editi
 \item heartrates2b (amended version of heartrates2, used in example 3.14)
 \item sampleIa (amended version of sampleI, used in exercise 3.1)
 \item parkingtime (Exercise 3.3)
-\item Sprobs (Exercise 3.4)
+\item Svals (Exercise 3.4)
 \item children (Exercise 3.6)
 \item fishlengths (Exercises 3.7, 3.11)
-\item weightloss (Exercise 3.12)
 \item sleeptime (Exercise 3.10)
+\item weightloss (Exercise 3.12)
 \item plants (Exercise 3.13)
 \item birthprops (Exercise 3.14)
 \item assembly (Exercise 3.15)

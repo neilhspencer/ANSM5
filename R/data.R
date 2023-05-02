@@ -19,11 +19,11 @@
 #' * heartrates2b (amended version of heartrates2, used in example 3.14)
 #' * sampleIa (amended version of sampleI, used in exercise 3.1)
 #' * parkingtime (Exercise 3.3)
-#' * Sprobs (Exercise 3.4)
+#' * Svals (Exercise 3.4)
 #' * children (Exercise 3.6)
 #' * fishlengths (Exercises 3.7, 3.11)
-#' * weightloss (Exercise 3.12)
 #' * sleeptime (Exercise 3.10)
+#' * weightloss (Exercise 3.12)
 #' * plants (Exercise 3.13)
 #' * birthprops (Exercise 3.14)
 #' * assembly (Exercise 3.15)
@@ -31,6 +31,6 @@
 #'
 #'
 #' @format ## `ch3data`
-#' A list with 25 data objects
+#' A list with 25 data vectors
 #' @source "Applied Nonparametric Statistical Methods" (5th edition)
 "ch3data"
