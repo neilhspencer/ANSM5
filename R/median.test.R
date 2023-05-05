@@ -67,24 +67,31 @@ median.test <-
         y.gt.2 <- x.gt + y.gt - x.gt.2
         propdiffi <- x.gt.2 / nx - y.gt.2 / ny
         if (alternative == "less" && propdiffi <= propdiff){
-          pval.exact <- pval.exact + pbase / (factorial(x.gt.2) * factorial(y.gt.2) *
-                                                factorial(nx - x.gt.2) * factorial(ny - y.gt.2))
+          pval.exact <-
+            pval.exact + pbase /
+            (factorial(x.gt.2) * factorial(y.gt.2) * factorial(nx - x.gt.2) *
+               factorial(ny - y.gt.2))
         }else if (alternative == "greater" && propdiffi >= propdiff){
-          pval.exact <- pval.exact + pbase / (factorial(x.gt.2) * factorial(y.gt.2) *
-                                                factorial(nx - x.gt.2) * factorial(ny - y.gt.2))
+          pval.exact <-
+            pval.exact + pbase /
+            (factorial(x.gt.2) * factorial(y.gt.2) * factorial(nx - x.gt.2) *
+               factorial(ny - y.gt.2))
         }else if (alternative == "two.sided" &&
                   (abs(propdiffi) >= abs(propdiff) |
-                   abs(abs(propdiffi) - abs(propdiff)) < .Machine$double.eps ^ 0.5)){
-          pval.exact <- pval.exact + pbase / (factorial(x.gt.2) * factorial(y.gt.2) *
-                                                factorial(nx - x.gt.2) * factorial(ny - y.gt.2))
+                   abs(abs(propdiffi) - abs(propdiff)) <
+                   .Machine$double.eps ^ 0.5)){
+          pval.exact <-
+            pval.exact + pbase /
+            (factorial(x.gt.2) * factorial(y.gt.2) * factorial(nx - x.gt.2) *
+               factorial(ny - y.gt.2))
         }
       }
     }
 
     #check if message needed
     if (!do.asymp && !do.exact) {
-      test.note <- paste("Neither exact nor asymptotic test/confidence interval ",
-                         "requested")
+      test.note <- paste("Neither exact nor asymptotic test/confidence ",
+                         "interval requested")
     }else if (nx + ny > max.exact.cases) {
       affected <- NULL
       if (do.exact && do.CI){
@@ -93,9 +100,9 @@ median.test <-
         affected <- "exact test"
       }
       if (!is.null(affected)){
-        test.note <- paste0("NOTE: Number of useful cases greater than current ",
-                            "maximum allowed for exact\ncalculations required ",
-                            "for ", affected, " (max.exact.cases = ",
+        test.note <- paste0("NOTE: Number of useful cases greater than ",
+                            "current maximum allowed for exact\ncalculations ",
+                            "required for ", affected, " (max.exact.cases = ",
                             sprintf("%1.0f", max.exact.cases), ")")
       }
     }
