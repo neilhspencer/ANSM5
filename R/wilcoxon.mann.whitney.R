@@ -187,7 +187,7 @@ wilcoxon.mann.whitney <-
                           "too large for exact\ncalculations required ",
                           "for exact test")
     }
-    if (tiesexist && do.exact && do.CI){
+    if (tiesexist && !OverflowState && do.exact && do.CI){
       if (!is.null(test.note)){
         test.note <- paste0(test.note, "\n")
       }
