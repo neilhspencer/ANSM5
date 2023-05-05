@@ -54,4 +54,9 @@ test_that("Example 6.6", {
   expect_equal(wilcoxon.mann.whitney(McGamma, McBeta,
                                      do.exact = FALSE,
                                      do.asymp = TRUE)$pval.asymp, 0.425550392)
+  set.seed(1)
+  expect_equal(mean(
+    sapply(1:10000, function(x){
+      wilcoxon.mann.whitney(jitter(McGamma),jitter(McBeta))$pval.exact})),
+    0.42960798)
 })
