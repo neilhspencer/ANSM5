@@ -1,13 +1,12 @@
 #' @importFrom stats complete.cases median
 median.test <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
-           cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000,
-           do.asymp = FALSE, do.exact = TRUE, do.CI = TRUE) {
+           CI.width = 0.95, max.exact.cases = 1000,
+           do.exact = TRUE, do.CI = TRUE) {
     stopifnot(is.vector(x), is.numeric(x), is.vector(y), is.numeric(y),
               ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
               is.numeric(max.exact.cases), length(max.exact.cases) == 1,
-              is.logical(cont.corr) == TRUE, CI.width > 0, CI.width < 1,
-              is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE,
+              CI.width > 0, CI.width < 1, is.logical(do.exact) == TRUE,
               is.logical(do.CI) == TRUE)
     alternative <- match.arg(alternative)
 
@@ -16,6 +15,8 @@ median.test <-
     varname2 <- deparse(substitute(y))
 
     #default outputs
+    do.asymp <- FALSE
+    cont.corr <- NULL
     pval <- NULL
     pval.stat <- NULL
     pval.note <- NULL
@@ -60,7 +61,7 @@ median.test <-
     pbase <- factorial(nx) * factorial(ny) * factorial(x.gt + y.gt) *
       factorial(nx + ny - x.gt - y.gt) / factorial(nx + ny)
 
-    #Exact test
+    #exact p-value
     if (do.exact && nx + ny <= max.exact.cases){
       pval.exact <- 0
       for (x.gt.2 in 0:nx){
@@ -86,6 +87,59 @@ median.test <-
                factorial(ny - y.gt.2))
         }
       }
+    }
+
+    #exact CI
+    if (do.CI && do.exact && nx + ny <= max.exact.cases){
+      #prepare
+      if (median(x) > median(y)){
+        s1 <- x
+        s2 <- y
+      }else{
+        s1 <- y
+        s2 <- x
+      }
+      med <-median(c(s1, s2))
+      s1.gt <- sum(s1 > med)
+      s2.gt <- sum(s2 > med)
+      ns1 <- s1.gt + sum(s1 < med) #ignoring s1 == med
+      ns2 <- s2.gt + sum(s2 < med) #ignoring s2 == med
+      #get increment
+      increment <- min(abs(diff(sort(unique(c(s1, s2))))))
+      #get range to try
+      largest <- max(c(abs(s1), abs(s2)))
+      #Lower limit
+      for (i in seq(-largest, largest, increment)){
+        s1a <- s1 + i
+        median_tmp <- median(c(s1a, s2))
+        a <- sum(s1a > median_tmp)
+        b <- ns1 - a
+        c <- s1.gt + s2.gt - a
+        d <- ns2 - c
+        mat <- matrix(c(a, b, c, d), nrow = 2, ncol = 2, byrow = TRUE)
+        pval.tmp <- fisher.test(mat)$p.value
+        if (pval.tmp > (1 - CI.width)){break}
+        CI.exact.lower <- i
+        pval.lower <- pval.tmp / 2
+      }
+      #Upper limit
+      for (i in seq(largest, CI.exact.lower + increment, -increment)){
+        s1a <- s1 + i
+        median_tmp <- median(c(s1a, s2))
+        a <- sum(s1a > median_tmp)
+        b <- ns1 - a
+        c <- s1.gt + s2.gt - a
+        d <- ns2 - c
+        mat <- matrix(c(a, b, c, d), nrow = 2, ncol = 2, byrow = TRUE)
+        pval.tmp <- fisher.test(mat)$p.value
+        if (pval.tmp > (1 - CI.width)){
+          CI.exact.upper <- i
+          break
+        }
+        pval.upper <- pval.tmp / 2
+      }
+      #Actual CI width
+      actualCIwidth.exact <- 1 - pval.lower - pval.upper
     }
 
     #check if message needed
