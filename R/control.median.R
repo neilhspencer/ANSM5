@@ -1,5 +1,4 @@
-#' @importFrom stats complete.cases median
-#' @importFrom utils combn
+#' @importFrom stats complete.cases median pnorm
 control.median <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            CI.width = 0.95, max.exact.cases = 1000,
@@ -50,7 +49,7 @@ control.median <-
     #prepare
     x <- x[complete.cases(x)] #remove missing cases
     y <- y[complete.cases(y)] #remove missing cases
-    n <- length(x) + length(y)
+    nxy <- length(x) + length(y)
     if (!is.null(H0)) {
       x <- x - H0
       varname1 <- paste0(varname1, " - ", H0)
@@ -60,12 +59,12 @@ control.median <-
     med_x <- median(x)
 
     #give asymptotic output if exact not possible
-    if (do.exact && n > max.exact.cases){
+    if (do.exact && nxy > max.exact.cases){
       do.asymp <- TRUE
     }
 
     #exact p-value
-    if (do.exact && n <= max.exact.cases){
+    if (do.exact && nxy <= max.exact.cases){
       #test statistic
       if (alternative == "two.sided"){
         pval.exact.stat <- min(sum(y < med_x), sum(y > med_x))
@@ -101,7 +100,20 @@ control.median <-
 
     #asymptotic p-value
     if (do.asymp){
-
+      #test statistic
+      if (alternative == "two.sided"){
+        pval.asymp.stat <- min(sum(y < med_x), sum(y > med_x))
+      }else if (alternative == "greater"){
+        pval.asymp.stat <- sum(y < med_x)
+      }else{
+        pval.asymp.stat <- sum(y > med_x)
+      }
+      #calculate (N.B. m and n switched from exact test)
+      m <- length(y)
+      n <- length(x)
+      Z <- (pval.asymp.stat - (m / 2)) / sqrt(m * (m + n) / (4 * n))
+      pval.asymp <- pnorm(Z, lower.tail = TRUE)
+      if (alternative == "two.sided"){pval.asymp <- pval.asymp * 2}
     }
 
     #confidence interval
@@ -114,24 +126,14 @@ control.median <-
       " minus ", varname2, ")\nis basic bootstrap interval for the median")
     }
 
-    ##NEEDS AMENDING
     #check if message needed
     if (!do.asymp && !do.exact) {
-      test.note <- paste("Neither exact nor asymptotic test/confidence interval ",
-                         "requested")
-    }else if (n > max.exact.cases) {
-      affected <- NULL
-      if (do.exact && do.CI){
-        affected <- "exact test and confidence interval"
-      }else if (do.exact) {
-        affected <- "exact test"
-      }
-      if (!is.null(affected)){
-        test.note <- paste0("NOTE: Number of useful cases greater than current ",
-                            "maximum allowed for exact\ncalculations required ",
-                            "for ", affected, " (max.exact.cases = ",
-                            sprintf("%1.0f", max.exact.cases), ")")
-      }
+      test.note <- paste("Neither exact nor asymptotic test requested")
+    }else if (do.exact && nxy > max.exact.cases) {
+      test.note <- paste0("NOTE: Number of useful cases greater than current ",
+                          "maximum allowed for exact\ncalculations required ",
+                          "for exact test (max.exact.cases = ",
+                          sprintf("%1.0f", max.exact.cases), ")")
     }
 
     #define hypotheses
@@ -149,7 +151,7 @@ control.median <-
     }
 
     #return
-    result <- list(title = "Wilcoxon-Mann-Whitney test", varname1 = varname1,
+    result <- list(title = "Control median test", varname1 = varname1,
                    varname2 = varname2, H0 = H0,
                    alternative = alternative, cont.corr = cont.corr, pval = pval,
                    pval.stat = pval.stat, pval.note = pval.note,
