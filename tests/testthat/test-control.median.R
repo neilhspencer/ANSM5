@@ -3,6 +3,7 @@ test_that("Example 6.9", {
   SampleII <- c(50, 58, 96, 139, 152, 159, 189, 225, 239, 242, 257, 262, 292,
                 294, 300, 301, 306, 329, 342, 346, 349, 354, 359, 360, 365, 378,
                 381, 388)
-  expect_equal(control.median(SampleI, SampleII)$pval.exact, XXX)
+  expect_equal(control.median(SampleI, SampleII,
+                              alternative = "greater")$pval.exact, 0.0077527593)
 })
 

@@ -2,12 +2,16 @@
 #' @importFrom utils combn
 control.median <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
-           cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000,
+           CI.width = 0.95, max.exact.cases = 1000,
+           nsims.mc = 10000, seed = NULL,
            do.asymp = FALSE, do.exact = TRUE, do.CI = TRUE) {
     stopifnot(is.vector(x), is.numeric(x), is.vector(y), is.numeric(y),
               ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
               is.numeric(max.exact.cases), length(max.exact.cases) == 1,
-              is.logical(cont.corr) == TRUE, CI.width > 0, CI.width < 1,
+              is.numeric(nsims.mc), length(nsims.mc) == 1,
+              is.numeric(seed) | is.null(seed),
+              length(seed) == 1 | is.null(seed),
+              CI.width > 0, CI.width < 1,
               is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE,
               is.logical(do.CI) == TRUE)
     alternative <- match.arg(alternative)
@@ -16,6 +20,8 @@ control.median <-
     varname1 <- paste0(deparse(substitute(x)), " (Control)")
     varname2 <- deparse(substitute(y))
 
+    #unused arguments
+    cont.corr <- NULL
     #default outputs
     pval <- NULL
     pval.stat <- NULL
@@ -28,7 +34,6 @@ control.median <-
     pval.exact.note <- NULL
     pval.mc <- NULL
     pval.mc.stat <- NULL
-    nsims.mc <- NULL
     pval.mc.note <- NULL
     actualCIwidth.exact <- NULL
     CI.exact.lower <- NULL
@@ -70,138 +75,46 @@ control.median <-
         pval.exact.stat <- sum(y > med_x)
       }
       #calculate
-      m2 <- sum(x != med_x)
-      n2 <- sum(y != med_x)
-      r <- sum(x < med_x)
+      m <- length(x)
+      n <- length(y)
+      if (m %% 2 == 0){
+        r <- m / 2
+      }else{
+        r <- (m + 1) / 2
+      }
       pval.exact <- 0
       if (alternative == "two.sided" | alternative == "greater"){
         for (i in 0:pval.exact.stat){
           pval.exact <- pval.exact +
-            choose(r + i, i) * choose(m2 - r + n2 - i, n2 - i) /
-            choose(m2 + n2, n2)
-          message(choose(r + i, i) * choose(m2 - r + n2 - i, n2 - i) /
-                    choose(m2 + n2, n2))
+            choose(r + i, i) * choose(m - r + n - i, n - i) /
+            choose(m + n + 1, n)
         }
       }
       if (alternative == "two.sided" | alternative == "less"){
-        for (i in seq(n2, n2 - pval.exact.stat, -1)){
+        for (i in seq(n, n - pval.exact.stat, -1)){
           pval.exact <- pval.exact +
-            choose(r + i, i) * choose(m2 - r + n2 - i, n2 - i) /
-            choose(m2 + n2, n2)
-          message(choose(r + i, i) * choose(m2 - r + n2 - i, n2 - i) /
-                    choose(m2 + n2, n2))
+            choose(r + i, i) * choose(m - r + n - i, n - i) /
+            choose(m + n + 1, n)
         }
       }
     }
 
-
-
-    for (i in 0:n2){
-      pval.exact <- pval.exact +
-        choose(r + i, i) * choose(m2 - r + n2 - i, n2 - i) /
-        choose(m2 + n2, n2)
-      message(choose(r + i, i) * choose(m2 - r + n2 - i, n2 - i) /
-                choose(m2 + n2, n2))
-    }
-
-    i=11
-    choose(16, 11) * choose(22, 17) / choose(38, 28)
-
-
-
-    #check for ties
-    tiesexist = !all(s == round(s,0)) # TRUE if ties exist
-
-    #exact p-value & CI
-    OverflowState <- FALSE
-    if (do.exact && tiesexist){
-      try_result <- suppressWarnings(try(
-        combins <- combn(length(xy), min(length(x), length(y))), silent = TRUE)
-        )
-      if (any(class(try_result) == "try-error")){
-        OverflowState <- TRUE
-      }
-        if (OverflowState){
-        do.asymp <- TRUE
-      }
-    }
-    if (do.exact && ((!tiesexist && n <= max.exact.cases) |
-                     (tiesexist && !OverflowState))){
-      pval.exact.stat <- stat
-      if (!tiesexist){
-        wilcox.test.output <- wilcox.test(x, y, alternative = alternative,
-                                          mu = H0, exact = TRUE,
-                                          conf.int = do.CI,
-                                          conf.level = CI.width)
-        pval.exact <- wilcox.test.output$p.value
-        if (do.CI){
-          CI.exact.lower <- wilcox.test.output$conf.int[1]
-          CI.exact.upper <- wilcox.test.output$conf.int[2]
-        }
-      }else{
-        nfrom <- min(length(x), length(y))
-        permfrom <- s * 2
-        permfrom <- sort(permfrom)
-        permsums <- rep(0,sum(tail(permfrom, nfrom)))
-        for (i in 1:dim(combins)[2]){
-          tmpsum <- sum(permfrom[combins[,i]])
-          permsums[tmpsum] <- permsums[tmpsum] + 1
-        }
-        ranksum <- ifelse(length(x) < length(y), ranksumx * 2, ranksumy * 2)
-        if (length(x) < length(y) && alternative == "less"){
-          pval.exact.less <-
-            sum(permsums[1:ranksum]) / sum(permsums)
-          pval.exact.greater <-
-            sum(permsums[ranksum:length(permsums)]) / sum(permsums)
-        }else if (length(x) < length(y) && alternative == "greater"){
-          pval.exact.less <-
-            sum(permsums[ranksum:length(permsums)]) / sum(permsums)
-          pval.exact.greater <-
-            sum(permsums[1:ranksum]) / sum(permsums)
-        }else if (length(x) >= length(y) && alternative == "less"){
-          pval.exact.less <-
-            sum(permsums[ranksum:length(permsums)]) / sum(permsums)
-          pval.exact.greater <-
-            sum(permsums[1:ranksum]) / sum(permsums)
-        }else if (length(x) >= length(y) && alternative == "greater"){
-          pval.exact.less <-
-            sum(permsums[1:ranksum]) / sum(permsums)
-          pval.exact.greater <-
-            sum(permsums[ranksum:length(permsums)]) / sum(permsums)
-        }else{
-          pval.exact.less <-
-            sum(permsums[1:ranksum]) / sum(permsums)
-          pval.exact.greater <-
-            sum(permsums[ranksum:length(permsums)]) / sum(permsums)
-        }
-        if (alternative=="two.sided"){
-          pval.exact <- min(pval.exact.less, pval.exact.greater) * 2
-        }else if (alternative == "less"){
-          pval.exact <- pval.exact.less
-        }else if (alternative == "greater"){
-          pval.exact <- pval.exact.greater
-        }
-        if (do.CI){
-          CI.exact.lower <- NULL
-          CI.exact.upper <- NULL
-        }
-      }
-    }
-
-    #asymptotic p-value and CI (with/without continuity correction)
+    #asymptotic p-value
     if (do.asymp){
-      wilcox.test.output <- wilcox.test(x, y, alternative = alternative,
-                                        mu = H0, exact = FALSE,
-                                        correct = cont.corr, conf.int = do.CI,
-                                        conf.level = CI.width)
-      pval.asymp.stat <- stat
-      pval.asymp <- wilcox.test.output$p.value
-      if (do.CI){
-        CI.asymp.lower <- wilcox.test.output$conf.int[1]
-        CI.asymp.upper <- wilcox.test.output$conf.int[2]
-      }
+
     }
 
+    #confidence interval
+    if (do.CI){
+      mc.ci.res <- mc.ci(x = x, y = y, CI.width = CI.width, nsims.mc = nsims.mc,
+                         seed = seed)
+      CI.mc.lower <- mc.ci.res[1]
+      CI.mc.upper <- mc.ci.res[2]
+      CI.mc.note <- paste0("Confidence interval for difference (", varname1,
+      " minus ", varname2, ")\nis basic bootstrap interval for the median")
+    }
+
+    ##NEEDS AMENDING
     #check if message needed
     if (!do.asymp && !do.exact) {
       test.note <- paste("Neither exact nor asymptotic test/confidence interval ",
@@ -220,51 +133,19 @@ control.median <-
                             sprintf("%1.0f", max.exact.cases), ")")
       }
     }
-    if (tiesexist && OverflowState){
-      if (!is.null(test.note)){
-        test.note <- paste0(test.note, "\n")
-      }
-      test.note <- paste0(test.note, "NOTE: Ties exist in data and sample ",
-                          "too large for exact\ncalculations required ",
-                          "for exact test")
-    }
-    if (tiesexist && !OverflowState && do.exact && do.CI){
-      if (!is.null(test.note)){
-        test.note <- paste0(test.note, "\n")
-      }
-      if (do.CI){
-        test.note <- paste0(test.note, "NOTE: Ties exist in data so exact ",
-                            "confidence interval\nnot available")
-      }else if (!do.CI){
-        test.note <- paste0(test.note, "NOTE: Ties exist in data so mid-ranks ",
-                            "used for asymptotic test")
-      }
-    }
-    if (tiesexist && do.asymp){
-      if (!is.null(test.note)){
-        test.note <- paste0(test.note, "\n")
-      }
-      if (do.CI){
-        test.note <- paste0(test.note, "NOTE: Ties exist in data so mid-ranks ",
-                            "used for asymptotic\ntest and confidence interval")
-      }else if (!do.CI){
-        test.note <- paste0(test.note, "NOTE: Ties exist in data so mid-ranks ",
-                            "used for asymptotic test")
-      }
-    }
 
     #define hypotheses
     if (alternative == "two.sided"){
-      H0 <- paste0("H0: samples are from the same population\n",
-                   "H1: samples differ in location\n")
+      H0 <- paste0("H0: samples are from populations with the same median\n",
+                   "H1: samples are from populations with different medians\n")
     }else if (alternative == "less"){
-      H0 <- paste0("H0: samples are from the same population\n",
-                   "H1: location of ", varname1, " is less than location of ",
-                   varname2, "\n")
+      H0 <- paste0("H0: samples are from populations with the same median\n",
+                   "H1: median of ", varname2, " is less than median of ",
+                   varname1, "\n")
     }else if (alternative == "greater"){
-      H0 <- paste0("H0: samples are from the same population\n",
-                   "H1: location of ", varname1, " is greater than location of ",
-                   varname2, "\n")
+      H0 <- paste0("H0: samples are from populations with the same median\n",
+                   "H1: median of ", varname2, " is greater than median of ",
+                   varname1, "\n")
     }
 
     #return
