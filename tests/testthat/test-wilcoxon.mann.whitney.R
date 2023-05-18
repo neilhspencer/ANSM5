@@ -60,3 +60,15 @@ test_that("Example 6.6", {
       wilcoxon.mann.whitney(jitter(McGamma),jitter(McBeta))$pval.exact})),
     0.42960798)
 })
+
+test_that("Example 6.11", {
+  TypeA <- c(177, 200, 227, 230, 232, 268, 272, 297)
+  TypeB <- c(47, 105, 126, 142, 158, 172, 197, 220, 225, 230, 262, 270)
+  expect_equal(wilcoxon.mann.whitney(TypeA, TypeB)$pval.exact.stat,
+               paste0("\n","112.5 (rank sum from TypeA), ",
+                      "97.5 (rank sum from TypeB)", "\n",
+                      "76.5 (Mann-Whitney U from TypeA), ",
+                      "19.5 (Mann-Whitney U from TypeB)"))
+  expect_equal(wilcoxon.mann.whitney(TypeA, TypeB)$pval.exact, 0.026768278)
+})
+
