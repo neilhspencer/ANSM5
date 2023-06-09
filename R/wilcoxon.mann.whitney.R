@@ -53,7 +53,7 @@ wilcoxon.mann.whitney <-
       H0 <- 0
       xy <- c(x, y)
     }
-    s <- rank(abs(xy), ties.method = "average")
+    s <- rank(xy, ties.method = "average")
     ranksumx <- sum(s[1 : length(x)])
     ranksumy <- sum(s) - ranksumx
     mannwhitneyux <- ranksumx - length(x) * (length(x) + 1) / 2
