@@ -1,0 +1,180 @@
+#' @importFrom stats complete.cases
+#' @importFrom utils combn
+conover <-
+  function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
+           max.exact.cases = 25, do.asymp = FALSE, do.exact = TRUE) {
+    stopifnot(is.vector(x), is.numeric(x), is.vector(y), is.numeric(y),
+              ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
+              is.numeric(max.exact.cases), length(max.exact.cases) == 1,
+              is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE)
+    alternative <- match.arg(alternative)
+
+    #labels
+    varname1 <- deparse(substitute(x))
+    varname2 <- deparse(substitute(y))
+
+    #unused arguments
+    cont.corr <- NULL
+    CI.width <- NULL
+    do.CI <- FALSE
+    #default outputs
+    pval <- NULL
+    pval.stat <- NULL
+    pval.note <- NULL
+    pval.asymp <- NULL
+    pval.asymp.stat <- NULL
+    pval.asymp.note <- NULL
+    pval.exact <- NULL
+    pval.exact.stat <- NULL
+    pval.exact.note <- NULL
+    pval.mc <- NULL
+    pval.mc.stat <- NULL
+    nsims.mc <- NULL
+    pval.mc.note <- NULL
+    actualCIwidth.exact <- NULL
+    CI.exact.lower <- NULL
+    CI.exact.upper <- NULL
+    CI.exact.note <- NULL
+    CI.asymp.lower <- NULL
+    CI.asymp.upper <- NULL
+    CI.asymp.note <- NULL
+    CI.mc.lower <- NULL
+    CI.mc.upper <- NULL
+    CI.mc.note <- NULL
+    test.note <- NULL
+
+    #prepare
+    x <- x[complete.cases(x)] #remove missing cases
+    y <- y[complete.cases(y)] #remove missing cases
+    n.x <- length(x)
+    n.y <- length(y)
+    n.xy <- n.x + n.y
+    if (!is.null(H0)) {
+      x <- x - H0
+      varname1 <- paste0(varname1, " - ", H0)
+    }else{
+      H0 <- 0
+    }
+    #allocate ranks and calculate statistics
+    mean.x <- mean(x)
+    mean.y <- mean(y)
+    dev.x <- abs(x - mean.x)
+    dev.y <- abs(y - mean.y)
+    dev.xy <- c(dev.x, dev.y)
+    xyrankssq <- rank(dev.xy, ties.method = "average") ** 2
+    xyrankssq.x <- sum(xyrankssq[1:n.x])
+    xyrankssq.y <- sum(xyrankssq[(n.x + 1):n.xy])
+    if (xyrankssq.x < xyrankssq.y){
+      n.s <- n.x
+      xyrankssq.s <- xyrankssq.x
+    }else{
+      n.s <- n.y
+      xyrankssq.s <- xyrankssq.y
+    }
+
+    #give asymptotic output if exact not possible
+    if (do.exact && n.xy > max.exact.cases){
+      do.asymp <- TRUE
+    }
+
+    #exact p-value
+    if (do.exact && n.xy <= max.exact.cases){
+      if (alternative == "two.sided"){
+        pval.exact.stat <- xyrankssq.s
+        all.combn <- combn(n.xy, n.s)
+        count <- 0
+        for (i in 1:dim(all.combn)[2]){
+          if (sum(xyrankssq[all.combn[,i]]) <= xyrankssq.s) {
+            count <- count + 2
+          }
+        }
+      }else if (alternative == "less"){
+        pval.exact.stat <- xyrankssq.x
+        all.combn <- combn(n.xy, n.x)
+        count <- 0
+        for (i in 1:dim(all.combn)[2]){
+          if (sum(xyrankssq[all.combn[,i]]) <= xyrankssq.x) {
+            count <- count + 1
+          }
+        }
+      }else if (alternative == "greater"){
+        pval.exact.stat <- xyrankssq.x
+        all.combn <- combn(n.xy, n.x)
+        count <- 0
+        for (i in 1:dim(all.combn)[2]){
+          if (sum(xyrankssq[all.combn[,i]]) >= xyrankssq.x) {
+            count <- count + 1
+          }
+        }
+      }
+      pval.exact <- count / dim(all.combn)[2]
+    }
+
+    #asymptotic p-value (https://stat.ethz.ch/pipermail/r-help/2004-March/047190.html)
+    if (do.asymp){
+      if (alternative == "two.sided"){
+        pval.asymp.stat <- xyrankssq.s
+        test.mean <- n.s * mean(xyrankssq)
+        test.var <- n.s * (1 - n.s / (n.xy - 1)) * (var(xyrankssq) *
+                                                      (n.xy - 1) / n.xy)
+        pval.asymp <- pnorm((pval.asymp.stat - test.mean) / sqrt(test.var),
+                            lower.tail = TRUE) * 2
+      }else{
+        pval.asymp.stat <- xyrankssq.x
+        test.mean <- n.x * mean(xyrankssq)
+        test.var <- n.x * (1 - n.x / (n.xy - 1)) * (var(xyrankssq) *
+                                                      (n.xy - 1) / n.xy)
+        if (alternative == "greater"){
+          pval.asymp <- pnorm((pval.asymp.stat - test.mean) / sqrt(test.var),
+                              lower.tail = FALSE)
+        }else if (alternative == "less"){
+          pval.asymp <- pnorm((pval.asymp.stat - test.mean) / sqrt(test.var),
+                              lower.tail = TRUE)
+        }
+      }
+    }
+
+    #define hypotheses
+    if (alternative == "two.sided"){
+      H0 <- paste0("H0: samples have the same variance\n",
+                   "H1: samples have different variances\n")
+    }else if (alternative == "less"){
+      H0 <- paste0("H0: samples have the same variance\n",
+                   "H1: variance of ", varname1, " is less than variance of ",
+                   varname2, "\n")
+    }else if (alternative == "greater"){
+      H0 <- paste0("H0: samples have the same variance\n",
+                   "H1: variance of ", varname1, " is greater than variance of ",
+                   varname2, "\n")
+    }
+
+    #check if message needed
+    if (do.exact && n > max.exact.cases) {
+      test.note <- paste0("NOTE: Number of useful cases greater than current ",
+                          "maximum allowed for exact\n calculations required ",
+                          "(max.exact.cases = ",
+                          sprintf("%1.0f", max.exact.cases), ")")
+    }
+
+    #return
+    result <- list(title = "Conover test", varname1 = varname1,
+                   varname2 = varname2, H0 = H0,
+                   alternative = alternative, cont.corr = cont.corr, pval = pval,
+                   pval.stat = pval.stat, pval.note = pval.note,
+                   pval.exact = pval.exact, pval.exact.stat = pval.exact.stat,
+                   pval.exact.note = pval.exact.note, targetCIwidth = CI.width,
+                   actualCIwidth.exact = actualCIwidth.exact,
+                   CI.exact.lower = CI.exact.lower,
+                   CI.exact.upper = CI.exact.upper, CI.exact.note = CI.exact.note,
+                   pval.asymp = pval.asymp, pval.asymp.stat = pval.asymp.stat,
+                   pval.asymp.note = pval.asymp.note,
+                   CI.asymp.lower = CI.asymp.lower,
+                   CI.asymp.upper = CI.asymp.upper, CI.asymp.note = CI.asymp.note,
+                   pval.mc = pval.mc, pval.mc.stat = pval.mc.stat,
+                   nsims.mc = nsims.mc, pval.mc.note = pval.mc.note,
+                   CI.mc.lower = CI.mc.lower, CI.mc.upper = CI.mc.upper,
+                   CI.mc.note = CI.mc.note,
+                   test.note = test.note)
+    class(result) <- "ANSMtest"
+    return(result)
+  }
