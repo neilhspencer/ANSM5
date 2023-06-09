@@ -85,9 +85,11 @@ pitman <- function(x, H0 = NULL, alternative=c("two.sided", "less", "greater"),
   #exact p-value
   if (!is.null(H0) && do.exact && n <= max.exact.cases){
     pval.stat.greater <- sum((x - H0)[(x - H0) > 0])
-    pval.greater <- sum(permsums[permsums[,1] >= pval.stat.greater, 2]) / sum(permsums[,2])
+    pval.greater <- sum(permsums[permsums[,1] >= pval.stat.greater, 2]) /
+      sum(permsums[,2])
     pval.stat.less <- -sum((x - H0)[(x - H0) < 0])
-    pval.less <- sum(permsums[permsums[,1] >= pval.stat.less, 2]) / sum(permsums[,2])
+    pval.less <- sum(permsums[permsums[,1] >= pval.stat.less, 2]) /
+      sum(permsums[,2])
     if (alternative=="two.sided"){
       pval.exact.stat <- pval.stat.greater
       pval.exact <- min(pval.less, pval.greater) * 2
@@ -112,13 +114,16 @@ pitman <- function(x, H0 = NULL, alternative=c("two.sided", "less", "greater"),
       pnorm((pval.stat.greater - 0.5 * sum(abs(s))) / (0.5 * sqrt(sum(s ** 2))),
             lower.tail = FALSE)
     if (alternative=="two.sided"){
-      pval.asymp.stat <- abs((pval.stat.greater - 0.5 * sum(abs(s))) / (0.5 * sqrt(sum(s ** 2))))
+      pval.asymp.stat <- abs((pval.stat.greater - 0.5 * sum(abs(s))) /
+                               (0.5 * sqrt(sum(s ** 2))))
       pval.asymp <- min(pval.asymp.less, pval.asymp.greater) * 2
     }else if (alternative == "less"){
-      pval.asymp.stat <- abs((pval.stat.less - 0.5 * sum(abs(s))) / (0.5 * sqrt(sum(s ** 2))))
+      pval.asymp.stat <- abs((pval.stat.less - 0.5 * sum(abs(s))) /
+                               (0.5 * sqrt(sum(s ** 2))))
       pval.asymp <- pval.asymp.less
     }else if (alternative == "greater"){
-      pval.asymp.stat <- abs((pval.stat.greater - 0.5 * sum(abs(s))) / (0.5 * sqrt(sum(s ** 2))))
+      pval.asymp.stat <- abs((pval.stat.greater - 0.5 * sum(abs(s))) /
+                               (0.5 * sqrt(sum(s ** 2))))
       pval.asymp <- pval.asymp.greater
     }
     if (n < 20){
