@@ -1,20 +1,22 @@
 #' @importFrom stats complete.cases median
 siegel.tukey <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
-           cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000,
-           do.asymp = FALSE, do.exact = TRUE, do.CI = TRUE) {
+           cont.corr = TRUE, max.exact.cases = 1000, do.asymp = FALSE,
+           do.exact = TRUE) {
     stopifnot(is.vector(x), is.numeric(x), is.vector(y), is.numeric(y),
               ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
               is.numeric(max.exact.cases), length(max.exact.cases) == 1,
-              is.logical(cont.corr) == TRUE, CI.width > 0, CI.width < 1,
-              is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE,
-              is.logical(do.CI) == TRUE)
+              is.logical(cont.corr) == TRUE, is.logical(do.asymp) == TRUE,
+              is.logical(do.exact) == TRUE)
     alternative <- match.arg(alternative)
 
     #labels
     varname1 <- deparse(substitute(x))
     varname2 <- deparse(substitute(y))
 
+    #unused arguments
+    CI.width <- NULL
+    do.CI <- FALSE
     #default outputs
     pval <- NULL
     pval.stat <- NULL
@@ -44,8 +46,9 @@ siegel.tukey <-
     #prepare
     x <- x[complete.cases(x)] #remove missing cases
     y <- y[complete.cases(y)] #remove missing cases
-    x <- x + (median(y) - median(x)) #equalise medians
-    lenx <- length(x)
+    #equalise medians
+    x <- x + (median(y) - median(x))
+    n.x <- length(x)
     if (!is.null(H0)) {
       xy <- c(x - H0, y)
       varname1 <- paste0(varname1, " - ", H0)
@@ -53,9 +56,9 @@ siegel.tukey <-
       H0 <- 0
       xy <- c(x, y)
     }
-    lenxy <- length(xy)
+    n.xy <- length(xy)
     #allocate ranks
-    rankstoallocate <- c(1, rep(NA, lenxy - 1))
+    rankstoallocate <- c(1, rep(NA, n.xy - 1))
     slbin <- 2
     slbincount <- 0
     ns <- 1
@@ -78,21 +81,21 @@ siegel.tukey <-
         rankstoallocate[ns] <- i
       }else{
         nl <- nl + 1
-        rankstoallocate[lenxy - nl + 1] <- i
+        rankstoallocate[n.xy - nl + 1] <- i
       }
-      if (i == lenxy){break}
+      if (i == n.xy){break}
     }
     allocatedranks <- rankstoallocate[rank(xy)]
-    allocatedranksx <- allocatedranks[1:lenx]
-    allocatedranksy <- allocatedranks[(lenx + 1):lenxy]
+    allocatedranksx <- allocatedranks[1:n.x]
+    allocatedranksy <- allocatedranks[(n.x + 1):n.xy]
 
     #carry out test
     res <- wilcoxon.mann.whitney(x = allocatedranksx, y = allocatedranksy,
                                  H0 = NULL, alternative=alternative,
-                                 cont.corr = cont.corr, CI.width = CI.width,
+                                 cont.corr = cont.corr,
                                  max.exact.cases = max.exact.cases,
                                  do.asymp = do.asymp, do.exact = do.exact,
-                                 do.CI = do.CI)
+                                 do.CI = FALSE)
     pval <- res$pval
     pval.stat <- res$pval.stat
     pval.note <- res$pval.note
@@ -125,15 +128,15 @@ siegel.tukey <-
 
     #define hypotheses
     if (alternative == "two.sided"){
-      H0 <- paste0("H0: samples are from the same population\n",
-                   "H1: samples differ in location\n")
+      H0 <- paste0("H0: samples have the same variance\n",
+                   "H1: samples have different variances\n")
     }else if (alternative == "less"){
-      H0 <- paste0("H0: samples are from the same population\n",
-                   "H1: location of ", varname1, " is less than location of ",
+      H0 <- paste0("H0: samples have the same variance\n",
+                   "H1: variance of ", varname1, " is less than variance of ",
                    varname2, "\n")
     }else if (alternative == "greater"){
-      H0 <- paste0("H0: samples are from the same population\n",
-                   "H1: location of ", varname1, " is greater than location of ",
+      H0 <- paste0("H0: samples have the same variance\n",
+                   "H1: variance of ", varname1, " is greater than variance of ",
                    varname2, "\n")
     }
 
