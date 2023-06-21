@@ -1,19 +1,26 @@
 #' @importFrom stats complete.cases ks.test
 ks.test.ANSM <-
-  function(x, testdistn, ..., alternative = c("two.sided", "less", "greater"),
+  function(x, y, ..., alternative = c("two.sided", "less", "greater"),
            max.exact.cases = 1000, do.asymp = FALSE, do.exact = TRUE) {
-    stopifnot(is.vector(x), is.numeric(x), is.character(testdistn),
+    stopifnot(is.vector(x), is.numeric(x),
+              (is.vector(y) & is.numeric(y)) | is.character(y),
               is.numeric(max.exact.cases), length(max.exact.cases) == 1,
               is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE)
     alternative <- match.arg(alternative)
 
     #labels
     varname1 <- deparse(substitute(x))
+    if (is.numeric(y)){
+      varname2 <- deparse(substitute(y))
+    }else{
+      varname2 <- shQuote(y)
+    }
 
-    #default outputs
-    varname2 <- NULL
+    #unused arguments
     cont.corr <- NULL
     CI.width <- NULL
+    do.CI <- FALSE
+    #default outputs
     pval <- NULL
     pval.stat <- NULL
     pval.note <- NULL
@@ -41,7 +48,13 @@ ks.test.ANSM <-
 
     #prepare
     x <- x[complete.cases(x)] #remove missing cases
-    n <- length(x)
+    if (is.numeric(y)){
+      y <- y[complete.cases(y)] #remove missing cases
+      n <- length(x) + length(y)
+    }else{
+      varname2 <- shQuote(y)
+      n <- length(x)
+    }
 
     #give asymptotic output if exact not possible
     if (do.exact && n > max.exact.cases){
@@ -50,21 +63,21 @@ ks.test.ANSM <-
 
     #create hypotheses
     H0 <- paste0("H0: distribution of ", varname1, " matches that of ",
-                 shQuote(testdistn))
+                 varname2)
     if (alternative == "two.sided"){
       H0 <- paste0(H0, "\nH1: distributions differ")
     }else if(alternative == "greater"){
       H0 <- paste0(H0, "\nH1: distribution of ", varname1,
-                   " lies above that of ", shQuote(testdistn))
+                   " lies above that of ", varname2)
     }else{
       H0 <- paste0(H0, "\nH1: distribution of ", varname1,
-                   " lies below that of ", shQuote(testdistn))
+                   " lies below that of ", varname2)
     }
     H0 <- paste0(H0, "\n")
 
     #exact p-value
     if(do.exact && n <= max.exact.cases){
-      test.result <- ks.test(x = x, y = testdistn, ...,
+      test.result <- ks.test(x = x, y = y, ...,
                              alternative = alternative, exact = TRUE)
       if (test.result$exact){
         pval.exact.stat <- test.result$statistic[[1]]
@@ -74,7 +87,7 @@ ks.test.ANSM <-
 
     #asymptotic p-value
     if(do.asymp){
-      test.result <- ks.test(x = x, y = testdistn, ...,
+      test.result <- ks.test(x = x, y = y, ...,
                              alternative = alternative, exact = FALSE)
       if (is.numeric(test.result$p.value)){
         pval.asymp.stat <- test.result$statistic[[1]]
@@ -92,9 +105,14 @@ ks.test.ANSM <-
                           sprintf("%1.0f", max.exact.cases), ")")
     }
 
+    if (is.numeric(y)){
+      title <- paste0("Smirnov test")
+    }else{
+      title <- paste0("Kolmogorov test - comparison with ", varname2)
+    }
+
     #return
-    result <- list(title = paste0("Kolmogorov test - comparison with ",
-                                  shQuote(testdistn)),
+    result <- list(title = title,
                    varname1 = varname1, varname2 = varname2, H0 = H0,
                    alternative = alternative, cont.corr = cont.corr, pval = pval,
                    pval.stat = pval.stat, pval.note = pval.note,
