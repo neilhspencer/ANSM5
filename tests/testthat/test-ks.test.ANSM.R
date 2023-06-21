@@ -1,4 +1,4 @@
-test_that("exact p-val works", {
+test_that("Example 4.1", {
   breaks <- c(0.6, 0.8, 1.1, 1.2, 1.4, 1.7, 1.8, 1.9, 2.2, 2.4, 2.5, 2.9, 3.1,
               3.4, 3.4, 3.9, 4.4, 4.9, 5.2, 5.9)
   expect_equal(suppressWarnings(ks.test.ANSM(breaks, "punif", min = 0, max = 6,
@@ -12,4 +12,17 @@ test_that("exact p-val works", {
   expect_equal(suppressWarnings(ks.test.ANSM(breaks, "punif", min = 0, max = 6,
                            alternative = "two.sided",
                            do.asymp = TRUE)$pval.asymp), 0.51214416)
+})
+
+test_that("Example 6.15", {
+  Females <- c(0.45, 0.60, 0.80, 0.85, 0.95, 1.00, 1.75)
+  Males <- c(0.40, 0.50, 0.55, 0.65, 0.70, 0.75, 0.90, 1.05, 1.15, 1.25, 1.30,
+             1.35, 1.45, 1.50, 1.85, 1.90, 2.30, 2.55, 2.70, 2.85, 3.85)
+  expect_equal(ks.test.ANSM(Females, Males,
+                            alternative = "greater")$pval.exact.stat,
+               0.52380952)
+  expect_equal(ks.test.ANSM(Females, Males, alternative = "greater")$pval.exact,
+               0.046479004)
+  expect_equal(ks.test.ANSM(Females, Males,
+                            alternative = "two.sided")$pval.exact, 0.092958008)
 })
