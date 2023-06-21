@@ -86,6 +86,8 @@ print.ANSMtest <- function(x, ...) {
     }
     if (is.na(x$pval)){
       cat("p-value cannot be calculated\n")
+    }else if (is.character(x$pval)){
+      cat(x$pval, "\n")
     }else if (x$pval < 0.00001){
       cat("p-value: < 0.00001\n")
     }else{
