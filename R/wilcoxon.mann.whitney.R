@@ -80,7 +80,7 @@ wilcoxon.mann.whitney <-
       if (any(class(try_result) == "try-error")){
         OverflowState <- TRUE
       }
-        if (OverflowState){
+      if (OverflowState){
         do.asymp <- TRUE
       }
     }
