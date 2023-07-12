@@ -1,13 +1,15 @@
-#' @importFrom stats complete.cases median
+#' @importFrom stats complete.cases median chisq.test
 median.test <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            CI.width = 0.95, max.exact.cases = 1000,
-           do.exact = TRUE, do.CI = TRUE) {
-    stopifnot(is.vector(x), is.numeric(x), is.vector(y), is.numeric(y),
+           do.asymp = FALSE, do.exact = TRUE, do.CI = TRUE) {
+    stopifnot(is.vector(x), is.numeric(x), (is.vector(y) && is.numeric(y)) |
+              (is.factor(y) && length(x) == length(y) &&
+                 length(x[complete.cases(x)]) == length(y[complete.cases(y)])),
               ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
               is.numeric(max.exact.cases), length(max.exact.cases) == 1,
-              CI.width > 0, CI.width < 1, is.logical(do.exact) == TRUE,
-              is.logical(do.CI) == TRUE)
+              CI.width > 0, CI.width < 1, is.logical(do.asymp) == TRUE,
+              is.logical(do.exact) == TRUE, is.logical(do.CI) == TRUE)
     alternative <- match.arg(alternative)
 
     #labels
@@ -15,7 +17,6 @@ median.test <-
     varname2 <- deparse(substitute(y))
 
     #default outputs
-    do.asymp <- FALSE
     cont.corr <- NULL
     pval <- NULL
     pval.stat <- NULL
@@ -46,51 +47,114 @@ median.test <-
     x <- x[complete.cases(x)] #remove missing cases
     y <- y[complete.cases(y)] #remove missing cases
     if (!is.null(H0)) {
-      xy <- c(x - H0, y)
       varname1 <- paste0(varname1, " - ", H0)
     }else{
       H0 <- 0
-      xy <- c(x, y)
     }
-    med <-median(xy)
-    x.gt <- sum(x > med)
-    y.gt <- sum(y > med)
-    nx <- x.gt + sum(x < med) #ignoring x == med
-    ny <- y.gt + sum(y < med) #ignoring y == med
-    propdiff <- x.gt / nx - y.gt / ny
-    pbase <- factorial(nx) * factorial(ny) * factorial(x.gt + y.gt) *
-      factorial(nx + ny - x.gt - y.gt) / factorial(nx + ny)
+    if (!is.factor(y)){
+      if (!is.null(H0)) {
+        xy <- c(x - H0, y)
+      }else{
+        xy <- c(x, y)
+      }
+      med <- median(xy)
+      x <- x[x != med] #ignoring x == med
+      y <- y[y != med] #ignoring y == med
+      nx <- length(x)
+      ny <- length(y)
+      n <- nx + ny
+      x.gt <- sum(x > med)
+      y.gt <- sum(y > med)
+      propdiff <- x.gt / nx - y.gt / ny
+      pbase <- factorial(nx) * factorial(ny) * factorial(x.gt + y.gt) *
+        factorial(nx + ny - x.gt - y.gt) / factorial(nx + ny)
+      tab <- table(c(rep("x", nx), rep("y", ny)), c(x, y) < med)
+    }else{
+      if (!is.null(H0)) {
+        x2 <- x - H0
+      }else{
+        x2 <- x
+      }
+      med <- median(x2)
+      x2 <- x2[x2 != med] #ignoring x2 == med
+      n <- length(x2)
+      g <- y
+      table_g <- table(g)
+      nlev <- nlevels(g)
+      tab <- table(g, x2 < med)
+      col1sum <- colSums(tab)[1]
+      tab.p <- prod(factorial(colSums(tab))) * prod(factorial(rowSums(tab))) /
+        (factorial(n) * prod(factorial(tab)))
+    }
 
     #exact p-value
-    if (do.exact && nx + ny <= max.exact.cases){
-      pval.exact <- 0
-      for (x.gt.2 in 0:nx){
-        y.gt.2 <- x.gt + y.gt - x.gt.2
-        propdiffi <- x.gt.2 / nx - y.gt.2 / ny
-        if (alternative == "less" && propdiffi <= propdiff){
-          pval.exact <-
-            pval.exact + pbase /
-            (factorial(x.gt.2) * factorial(y.gt.2) * factorial(nx - x.gt.2) *
-               factorial(ny - y.gt.2))
-        }else if (alternative == "greater" && propdiffi >= propdiff){
-          pval.exact <-
-            pval.exact + pbase /
-            (factorial(x.gt.2) * factorial(y.gt.2) * factorial(nx - x.gt.2) *
-               factorial(ny - y.gt.2))
-        }else if (alternative == "two.sided" &&
-                  (abs(propdiffi) >= abs(propdiff) |
-                   abs(abs(propdiffi) - abs(propdiff)) <
-                   .Machine$double.eps ^ 0.5)){
-          pval.exact <-
-            pval.exact + pbase /
-            (factorial(x.gt.2) * factorial(y.gt.2) * factorial(nx - x.gt.2) *
-               factorial(ny - y.gt.2))
+    if(!is.factor(y)){
+      if (do.exact && n <= max.exact.cases){
+        pval.exact <- 0
+        for (x.gt.2 in 0:nx){
+          y.gt.2 <- x.gt + y.gt - x.gt.2
+          propdiffi <- x.gt.2 / nx - y.gt.2 / ny
+          if (alternative == "less" && propdiffi <= propdiff){
+            pval.exact <-
+              pval.exact + pbase /
+              (factorial(x.gt.2) * factorial(y.gt.2) * factorial(nx - x.gt.2) *
+                 factorial(ny - y.gt.2))
+          }else if (alternative == "greater" && propdiffi >= propdiff){
+            pval.exact <-
+              pval.exact + pbase /
+              (factorial(x.gt.2) * factorial(y.gt.2) * factorial(nx - x.gt.2) *
+                 factorial(ny - y.gt.2))
+          }else if (alternative == "two.sided" &&
+                    (abs(propdiffi) >= abs(propdiff) |
+                     abs(abs(propdiffi) - abs(propdiff)) <
+                     .Machine$double.eps ^ 0.5)){
+            pval.exact <-
+              pval.exact + pbase /
+              (factorial(x.gt.2) * factorial(y.gt.2) * factorial(nx - x.gt.2) *
+                 factorial(ny - y.gt.2))
+          }
+        }
+      }
+    }else{
+      if (do.exact && n <= max.exact.cases){
+        #evaluate all possible tables
+        pval.exact <- 0
+        ni <- rep(0, nlev)
+        id <- nlev
+        repeat{
+          ni[id] <- ni[id] + 1
+          if (ni[id] > table_g[nlev]){
+            repeat{
+              if (id == 2){break}
+              ni[id - 1] <- ni[id - 1] + 1
+              for (i in id:nlev){
+                ni[i] <- 0
+              }
+              if (ni[id - 1] <= table_g[id - 1]){
+                id <- nlev
+                break
+              }else{
+                id <- id - 1
+              }
+            }
+            if (id == 2){break}
+          }
+          ni[1] <- col1sum - sum(ni[2:nlev])
+          if (ni[1] <= table_g[1] && ni[1] >= 0){
+            tabi <- cbind(ni, table_g - ni)
+            tabi.p <- prod(factorial(colSums(tabi))) *
+              prod(factorial(rowSums(tabi))) /
+              (factorial(n) * prod(factorial(tabi)))
+            if (tabi.p <= tab.p){
+              pval.exact <- pval.exact + tabi.p
+            }
+          }
         }
       }
     }
 
     #exact CI
-    if (do.CI && do.exact && nx + ny <= max.exact.cases){
+    if (!is.factor(y) && do.CI && do.exact && n <= max.exact.cases){
       #prepare
       if (median(x) > median(y)){
         s1 <- x
@@ -142,13 +206,29 @@ median.test <-
       actualCIwidth.exact <- 1 - pval.lower - pval.upper
     }
 
+    #asymptotic p-value
+    if (do.asymp){
+      asymp.test <- tryCatch(chisq.test(tab), warning=function(w)
+        return(list(suppressWarnings(chisq.test(tab)), w)))
+      if (length(asymp.test) ==2){
+        pval.asymp.stat <- as.numeric(asymp.test[[1]]$statistic)
+        pval.asymp <- asymp.test[[1]]$p.value
+        pval.asymp.note <- paste0("NOTE: ", asymp.test[[2]]$message)
+      }else{
+        pval.asymp.stat <- as.numeric(asymp.test$statistic)
+        pval.asymp <- asymp.test$p.value
+      }
+    }
+
     #check if message needed
-    if (!do.asymp && !do.exact) {
+    if (!is.factor(y) && !do.asymp && !do.exact) {
       test.note <- paste("Neither exact nor asymptotic test/confidence ",
                          "interval requested")
-    }else if (nx + ny > max.exact.cases) {
+    }else if (!do.asymp && !do.exact) {
+        test.note <- paste("Neither exact nor asymptotic test requested")
+    }else if (n > max.exact.cases) {
       affected <- NULL
-      if (do.exact && do.CI){
+      if (!is.factor(y) && do.exact && do.CI){
         affected <- "exact test and confidence interval"
       }else if (do.exact) {
         affected <- "exact test"
@@ -177,7 +257,7 @@ median.test <-
 
     #create title
     title <- "Median test"
-    if (do.exact && !is.null(pval.exact)){
+    if (!is.factor(y) && do.exact && !is.null(pval.exact)){
       title <- "Median test (Fisher's Exact Test)"
     }
 
