@@ -1,9 +1,11 @@
 #' @importFrom stats complete.cases pf pchisq
+#' @importFrom utils combn
 friedman <-
   function(y, groups, blocks, ...,
            max.exact.cases = 1000, do.asymp = FALSE, do.exact = TRUE) {
     stopifnot(is.vector(y), is.numeric(y), is.factor(groups), is.factor(blocks),
               length(y) == length(groups), length(groups) == length(blocks),
+              length(y) == nlevels(groups) * nlevels(blocks),
               is.numeric(max.exact.cases), length(max.exact.cases) == 1,
               is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE)
 
@@ -65,7 +67,48 @@ friedman <-
 
     #exact p-value
     if(do.exact && n <= max.exact.cases){
-
+      #create combinations for each row
+      for (i in 1:t){
+        if (i == 1){
+          rowcomb <- matrix(1)
+        }else{
+          rowcomb.nrows <- nrow(rowcomb)
+          tmp.mtx <- matrix(nrow = i * rowcomb.nrows, ncol = i)
+          for(j in 1:i){
+            tmp.mtx[(j - 1) * rowcomb.nrows + 1:rowcomb.nrows,] <-
+              cbind(j, rowcomb + (rowcomb >= j))
+          }
+          rowcomb <- tmp.mtx
+        }
+      }
+      rowcomb.nrows <- dim(rowcomb)[1]
+      #initialise combins
+      combins <- array(NA, dim = c(b, t, rowcomb.nrows ** (b - 1)))
+      combins[1,,] <- y[blocks == levels(blocks)[1]] #fix first block as arbitrary
+      #update combins
+      for (ib in 2:b){
+          vals <- NULL
+          for (j in 1:rowcomb.nrows){
+            vals <- c(vals, rep(y[blocks == levels(blocks)[ib]][rowcomb[j,]],
+                              rowcomb.nrows ** (b - ib)))
+          }
+          combins[ib,,] <- vals
+      }
+      #cycle through combinations
+      pval.exact.stat <- Tstat
+      combins.n <- dim(combins)[3]
+      pval.exact <- 0
+      for (i in 1:combins.n){
+        y_i <- as.numeric(combins[,,i])
+        blocks_i <- rep(1:b, t)
+        rank.tab_i <- simplify2array(by(y_i, blocks_i, rank, simplify = TRUE))
+        Sr_i <- sum(rank.tab_i ** 2)
+        St_i <- sum(rowSums(rank.tab_i) ** 2) / b
+        Tstat_i <- b * (t - 1) * (St_i - C) / (Sr_i - C)
+        if (Tstat_i >= pval.exact.stat){
+          pval.exact <- pval.exact + 1 / combins.n
+        }
+      }
     }
 
     #asymptotic p-value
@@ -76,6 +119,8 @@ friedman <-
       }else{
         pval.asymp.stat <- T1stat
         pval.asymp <- pf(T1stat, t - 1, (b - 1) * (t - 1), lower.tail = FALSE)
+        pval.asymp.note <- paste0("NOTE: Method of Iman and Davenport used ",
+                                  "due to the presence of ties")
       }
     }
 

@@ -6,6 +6,8 @@ test_that("Example 7.6", {
   time_period <- as.factor(c("I", "I", "I", "I", "I", "I", "I", "II", "II",
                              "II", "II", "II", "II", "II", "III", "III", "III",
                              "III", "III", "III", "III"))
+  expect_equal(friedman(pulse, time_period, student)$pval.exact.stat, 10.5714286)
+  expect_equal(friedman(pulse, time_period, student)$pval.exact, 0.00272205075)
   expect_equal(friedman(pulse, time_period, student,
                                   do.asymp = TRUE)$pval.asymp.stat, 10.5714286)
   expect_equal(friedman(pulse, time_period, student,
@@ -27,8 +29,8 @@ test_that("Example 7.7", {
   blocks <- as.factor(c("I", "I", "I", "I", "I", "I", "II", "II", "II", "II",
                         "II", "II", "III", "III", "III", "III", "III", "III",
                         "IV", "IV", "IV", "IV", "IV", "IV"))
-  expect_equal(friedman(nodes, treatment, blocks,
+  expect_equal(friedman(nodes, treatment, blocks, do.exact = FALSE,
                                   do.asymp = TRUE)$pval.asymp.stat, 6.4035088)
-  expect_equal(friedman(nodes, treatment, blocks,
+  expect_equal(friedman(nodes, treatment, blocks, do.exact = FALSE,
                                   do.asymp = TRUE)$pval.asymp, 0.0022524635)
 })
