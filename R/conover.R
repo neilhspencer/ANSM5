@@ -1,11 +1,17 @@
-#' @importFrom stats complete.cases
+#' @importFrom stats complete.cases pnorm pchisq
 #' @importFrom utils combn
 conover <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
-           max.exact.cases = 25, do.asymp = FALSE, do.exact = TRUE) {
-    stopifnot(is.vector(x), is.numeric(x), is.vector(y), is.numeric(y),
+           max.exact.perms = 5000000, nsims.mc = 10000, seed = NULL,
+           do.asymp = FALSE, do.exact = TRUE) {
+    stopifnot(is.vector(x), is.numeric(x), (is.vector(y) && is.numeric(y)) |
+              (is.factor(y) && length(x) == length(y) &&
+                 length(x[complete.cases(x)]) == length(y[complete.cases(y)])),
               ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
-              is.numeric(max.exact.cases), length(max.exact.cases) == 1,
+              is.numeric(max.exact.perms), length(max.exact.perms) == 1,
+              is.numeric(nsims.mc), length(nsims.mc) == 1,
+              is.numeric(seed) | is.null(seed),
+              length(seed) == 1 | is.null(seed),
               is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE)
     alternative <- match.arg(alternative)
 
@@ -29,7 +35,6 @@ conover <-
     pval.exact.note <- NULL
     pval.mc <- NULL
     pval.mc.stat <- NULL
-    nsims.mc <- NULL
     pval.mc.note <- NULL
     actualCIwidth.exact <- NULL
     CI.exact.lower <- NULL
@@ -55,105 +60,214 @@ conover <-
     }else{
       H0 <- 0
     }
-    #allocate ranks and calculate statistics
-    mean.x <- mean(x)
-    mean.y <- mean(y)
-    dev.x <- abs(x - mean.x)
-    dev.y <- abs(y - mean.y)
-    dev.xy <- c(dev.x, dev.y)
-    xyrankssq <- rank(dev.xy, ties.method = "average") ** 2
-    xyrankssq.x <- sum(xyrankssq[1:n.x])
-    xyrankssq.y <- sum(xyrankssq[(n.x + 1):n.xy])
-    if (xyrankssq.x < xyrankssq.y){
-      n.s <- n.x
-      xyrankssq.s <- xyrankssq.x
+    if (!is.factor(y)){
+      mean.x <- mean(x)
+      mean.y <- mean(y)
+      dev.x <- abs(x - mean.x)
+      dev.y <- abs(y - mean.y)
+      dev.xy <- c(dev.x, dev.y)
+      xyrankssq <- rank(dev.xy, ties.method = "average") ** 2
+      xyrankssq.x <- sum(xyrankssq[1:n.x])
+      xyrankssq.y <- sum(xyrankssq[(n.x + 1):n.xy])
+      if (xyrankssq.x < xyrankssq.y){
+        n.s <- n.x
+        xyrankssq.s <- xyrankssq.x
+      }else{
+        n.s <- n.y
+        xyrankssq.s <- xyrankssq.y
+      }
+      n.perms <- choose(n.xy, n.s)
     }else{
-      n.s <- n.y
-      xyrankssq.s <- xyrankssq.y
-    }
-
-    #give asymptotic output if exact not possible
-    if (do.exact && n.xy > max.exact.cases){
-      do.asymp <- TRUE
+      #first reorder factor with smallest groups first for exact calculation purposes
+      y <- factor(y, levels = levels(y)[rank(table(y), ties.method = "random")])
+      y.count <- table(y)
+      n.perms <- 1
+      tmp.n <- 0
+      for (i in 1:(nlevels(y) - 1)){
+        n.perms <- n.perms * choose(n.x - tmp.n, as.integer(y.count[i]))
+        tmp.n <- tmp.n + as.integer(y.count[i])
+      }
+      mean.x <- simplify2array(by(x, y, mean, simplify = TRUE))
+      dev.x <- abs(x - mean.x[as.integer(y)])
+      rank.x <- rank(dev.x)
+      tab.rank.x <- simplify2array(by(rank.x ** 2, y, sum, simplify = TRUE))
+      Sk <- sum(tab.rank.x ** 2 / y.count)
+      C <- sum(rank.x ** 2) ** 2 / n.x
+      Sr <- sum(rank.x ** 4)
+      T0 <- (n.x - 1) * (Sk - C) / (Sr - C)
     }
 
     #exact p-value
-    if (do.exact && n.xy <= max.exact.cases){
-      if (alternative == "two.sided"){
-        pval.exact.stat <- xyrankssq.s
-        all.combn <- combn(n.xy, n.s)
-        count <- 0
-        for (i in 1:dim(all.combn)[2]){
-          if (sum(xyrankssq[all.combn[,i]]) <= xyrankssq.s) {
-            count <- count + 2
+    if (do.exact && n.perms <= max.exact.perms){
+      if (!is.factor(y)){
+        if (alternative == "two.sided"){
+          pval.exact.stat <- xyrankssq.s
+          all.combn <- combn(n.xy, n.s)
+          count <- 0
+          for (i in 1:dim(all.combn)[2]){
+            if (sum(xyrankssq[all.combn[,i]]) <= pval.exact.stat) {
+              count <- count + 2
+            }
+          }
+        }else if (alternative == "less"){
+          pval.exact.stat <- xyrankssq.x
+          all.combn <- combn(n.xy, n.x)
+          count <- 0
+          for (i in 1:dim(all.combn)[2]){
+            if (sum(xyrankssq[all.combn[,i]]) <= pval.exact.stat) {
+              count <- count + 1
+            }
+          }
+        }else if (alternative == "greater"){
+          pval.exact.stat <- xyrankssq.x
+          all.combn <- combn(n.xy, n.x)
+          count <- 0
+          for (i in 1:dim(all.combn)[2]){
+            if (sum(xyrankssq[all.combn[,i]]) >= pval.exact.stat) {
+              count <- count + 1
+            }
           }
         }
-      }else if (alternative == "less"){
-        pval.exact.stat <- xyrankssq.x
-        all.combn <- combn(n.xy, n.x)
-        count <- 0
-        for (i in 1:dim(all.combn)[2]){
-          if (sum(xyrankssq[all.combn[,i]]) <= xyrankssq.x) {
-            count <- count + 1
+        pval.exact <- count / dim(all.combn)[2]
+      }else{
+        combins <- NULL
+        for (ig in 1:(nlevels(y) - 1)){
+          if (ig == 1){
+            combins <- t(combn(n.x, y.count[ig]))
+          }else{
+            combins2 <- NULL
+            for (i in 1:dim(combins)[1]){
+              combins2 <- rbind(combins2,
+                                cbind(matrix(rep(combins[i,],
+                                                 choose(n.x - dim(combins)[2],
+                                                        y.count[ig])),
+                                             ncol = dim(combins)[2],
+                                             byrow = TRUE),
+                                      t(combn(setdiff(seq(1:n.x), combins[i,]),
+                                              y.count[ig]))))
+            }
+            combins <- combins2
           }
         }
-      }else if (alternative == "greater"){
-        pval.exact.stat <- xyrankssq.x
-        all.combn <- combn(n.xy, n.x)
-        count <- 0
-        for (i in 1:dim(all.combn)[2]){
-          if (sum(xyrankssq[all.combn[,i]]) >= xyrankssq.x) {
-            count <- count + 1
+        n.combins <- dim(combins)[1]
+        pval.exact.stat <- T0
+        pval.exact <- 0
+        for (i in 1:n.combins){
+          combin_i <- c(combins[i, ], setdiff(seq(1:n.x), combins[i,]))
+          x_i <- x[combin_i]
+          mean.x_i <- simplify2array(by(x_i, y, mean, simplify = TRUE))
+          dev.x_i <- abs(x_i - mean.x_i[as.integer(y)])
+          rank.x_i <- rank(dev.x_i)
+          tab.rank.x_i <- simplify2array(by(rank.x_i ** 2, y, sum, simplify = TRUE))
+          Sk_i <- sum(tab.rank.x_i ** 2 / y.count)
+          C_i <- sum(rank.x_i ** 2) ** 2 / n.x
+          Sr_i <- sum(rank.x_i ** 4)
+          T0_i <- (n.x - 1) * (Sk_i - C_i) / (Sr_i - C_i)
+          if (T0_i >= pval.exact.stat){
+            pval.exact <- pval.exact + 1 / n.combins
           }
         }
       }
-      pval.exact <- count / dim(all.combn)[2]
     }
+
+    #Monte Carlo p-value
+#    if (do.exact && n.perms > max.exact.perms){
+      if (!is.null(seed)){set.seed(seed)}
+      if (!is.factor(y)){
+        pval.mc.stat <- xyrankssq.s
+        pval.mc <- 0
+        for (i in 1:nsims.mc){
+          xy.sim <- sample(c(x, y), n.xy, replace = FALSE)
+          x.sim <- xy.sim[1:n.x]
+          y.sim <- xy.sim[(n.x + 1):n.xy]
+          mean.x.sim <- mean(x.sim)
+          mean.y.sim <- mean(y.sim)
+          dev.x.sim <- abs(x.sim - mean.x.sim)
+          dev.y.sim <- abs(y.sim - mean.y.sim)
+          dev.xy.sim <- c(dev.x.sim, dev.y.sim)
+          xyrankssq.sim <- rank(dev.xy.sim, ties.method = "average") ** 2
+          xyrankssq.x.sim <- sum(xyrankssq.sim[1:n.x])
+          xyrankssq.y.sim <- sum(xyrankssq.sim[(n.x + 1):n.xy])
+          xyrankssq.s.sim <- min(xyrankssq.x.sim, xyrankssq.y.sim)
+          if (xyrankssq.s.sim <= pval.mc.stat){
+            pval.mc <- pval.mc + 1 / nsims.mc
+          }
+        }
+      }else{
+        pval.mc.stat <- T0
+        pval.mc <- 0
+        for (i in 1:nsims.mc){
+          x.sim <- sample(x, n.x, replace = FALSE)
+          mean.x_i <- simplify2array(by(x.sim, y, mean, simplify = TRUE))
+          dev.x_i <- abs(x.sim - mean.x_i[as.integer(y)])
+          rank.x_i <- rank(dev.x_i)
+          tab.rank.x_i <- simplify2array(by(rank.x_i ** 2, y, sum, simplify = TRUE))
+          Sk_i <- sum(tab.rank.x_i ** 2 / y.count)
+          C_i <- sum(rank.x_i ** 2) ** 2 / n.x
+          Sr_i <- sum(rank.x_i ** 4)
+          T0_i <- (n.x - 1) * (Sk_i - C_i) / (Sr_i - C_i)
+          if (T0_i >= pval.mc.stat){
+            pval.mc <- pval.mc + 1 / nsims.mc
+          }
+        }
+      }
+#    }
 
     #asymptotic p-value (https://stat.ethz.ch/pipermail/r-help/2004-March/047190.html)
     if (do.asymp){
-      if (alternative == "two.sided"){
-        pval.asymp.stat <- xyrankssq.s
-        test.mean <- n.s * mean(xyrankssq)
-        test.var <- n.s * (1 - n.s / (n.xy - 1)) * (var(xyrankssq) *
-                                                      (n.xy - 1) / n.xy)
-        pval.asymp <- pnorm((pval.asymp.stat - test.mean) / sqrt(test.var),
-                            lower.tail = TRUE) * 2
-      }else{
-        pval.asymp.stat <- xyrankssq.x
-        test.mean <- n.x * mean(xyrankssq)
-        test.var <- n.x * (1 - n.x / (n.xy - 1)) * (var(xyrankssq) *
-                                                      (n.xy - 1) / n.xy)
-        if (alternative == "greater"){
+      if (!is.factor(y)){
+        if (alternative == "two.sided"){
+          pval.asymp.stat <- xyrankssq.s
+          test.mean <- n.s * mean(xyrankssq)
+          test.var <- n.s * (1 - n.s / (n.xy - 1)) * (var(xyrankssq) *
+                                                        (n.xy - 1) / n.xy)
           pval.asymp <- pnorm((pval.asymp.stat - test.mean) / sqrt(test.var),
-                              lower.tail = FALSE)
-        }else if (alternative == "less"){
-          pval.asymp <- pnorm((pval.asymp.stat - test.mean) / sqrt(test.var),
-                              lower.tail = TRUE)
+                              lower.tail = TRUE) * 2
+        }else{
+          pval.asymp.stat <- xyrankssq.x
+          test.mean <- n.x * mean(xyrankssq)
+          test.var <- n.x * (1 - n.x / (n.xy - 1)) * (var(xyrankssq) *
+                                                        (n.xy - 1) / n.xy)
+          if (alternative == "greater"){
+            pval.asymp <- pnorm((pval.asymp.stat - test.mean) / sqrt(test.var),
+                                lower.tail = FALSE)
+          }else if (alternative == "less"){
+            pval.asymp <- pnorm((pval.asymp.stat - test.mean) / sqrt(test.var),
+                                lower.tail = TRUE)
+          }
         }
+      }else{
+        pval.asymp.stat <- T0
+        pval.asymp <- pchisq(T0, nlevels(y) - 1,lower.tail = FALSE)
       }
     }
 
     #define hypotheses
-    if (alternative == "two.sided"){
+    if (!is.factor(y)){
+      if (alternative == "two.sided"){
+        H0 <- paste0("H0: samples have the same variance\n",
+                     "H1: samples have different variances\n")
+      }else if (alternative == "less"){
+        H0 <- paste0("H0: samples have the same variance\n",
+                     "H1: variance of ", varname1, " is less than variance of ",
+                     varname2, "\n")
+      }else if (alternative == "greater"){
+        H0 <- paste0("H0: samples have the same variance\n",
+                     "H1: variance of ", varname1, " is greater than variance of ",
+                     varname2, "\n")
+      }
+    }else{
       H0 <- paste0("H0: samples have the same variance\n",
                    "H1: samples have different variances\n")
-    }else if (alternative == "less"){
-      H0 <- paste0("H0: samples have the same variance\n",
-                   "H1: variance of ", varname1, " is less than variance of ",
-                   varname2, "\n")
-    }else if (alternative == "greater"){
-      H0 <- paste0("H0: samples have the same variance\n",
-                   "H1: variance of ", varname1, " is greater than variance of ",
-                   varname2, "\n")
     }
 
     #check if message needed
-    if (do.exact && n > max.exact.cases) {
-      test.note <- paste0("NOTE: Number of useful cases greater than current ",
-                          "maximum allowed for exact\n calculations required ",
-                          "(max.exact.cases = ",
-                          sprintf("%1.0f", max.exact.cases), ")")
+    if (do.exact && n.perms > max.exact.perms) {
+      test.note <- paste0("NOTE: Number of permutations required greater than ",
+                          "current maximum allowed\nfor exact calculations ",
+                          "required for exact test (max.exact.perms = ",
+                          sprintf("%1.0f", max.exact.perms), ")\nso Monte ",
+                          "Carlo p-value given")
     }
 
     #return
