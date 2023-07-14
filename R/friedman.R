@@ -1,12 +1,14 @@
 #' @importFrom stats complete.cases pf pchisq
-#' @importFrom utils combn
 friedman <-
-  function(y, groups, blocks, ...,
-           max.exact.cases = 1000, do.asymp = FALSE, do.exact = TRUE) {
+  function(y, groups, blocks, ..., max.exact.perms = 100000, nsims.mc = 100000,
+           seed = NULL, do.asymp = FALSE, do.exact = TRUE) {
     stopifnot(is.vector(y), is.numeric(y), is.factor(groups), is.factor(blocks),
               length(y) == length(groups), length(groups) == length(blocks),
               length(y) == nlevels(groups) * nlevels(blocks),
-              is.numeric(max.exact.cases), length(max.exact.cases) == 1,
+              is.numeric(max.exact.perms), length(max.exact.perms) == 1,
+              is.numeric(nsims.mc), length(nsims.mc) == 1,
+              is.numeric(seed) | is.null(seed),
+              length(seed) == 1 | is.null(seed),
               is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE)
 
     #labels
@@ -31,7 +33,6 @@ friedman <-
     pval.exact.note <- NULL
     pval.mc <- NULL
     pval.mc.stat <- NULL
-    nsims.mc <- NULL
     pval.mc.note <- NULL
     actualCIwidth.exact <- NULL
     CI.exact.lower <- NULL
@@ -47,28 +48,31 @@ friedman <-
 
     #prepare
     y <- y[complete.cases(y)] #remove missing cases
-    n <- length(y)
-    rank.tab <- simplify2array(by(y, blocks, rank, simplify = TRUE))
     b <- nlevels(blocks)
-    t <- nlevels(groups)
+    g <- nlevels(groups)
+    n.perms <- factorial(g) ** (b - 1)
+    rank.tab <- simplify2array(by(y, blocks, rank, simplify = TRUE))
     Sr <- sum(rank.tab ** 2)
     St <- sum(rowSums(rank.tab) ** 2) / b
-    C <- b * t * (t + 1) ** 2 / 4
-    Tstat <- b * (t - 1) * (St - C) / (Sr - C)
+    C <- b * g * (g + 1) ** 2 / 4
+    Tstat <- b * (g - 1) * (St - C) / (Sr - C)
     T1stat <- (b - 1) * (St - C) / (Sr - St)
 
     #check for ties
-    tiesexist = !all(rank(y) == round(rank(y),0)) # TRUE if ties exist
-
-    #give asymptotic output if exact not possible
-    if (do.exact && n > max.exact.cases){
-      do.asymp <- TRUE
-    }
+    tiesexist = !all(rank.tab == round(rank.tab,0)) # TRUE if ties exist in blocks
 
     #exact p-value
-    if(do.exact && n <= max.exact.cases){
+    if(do.exact && n.perms <= max.exact.perms){
+      if (!tiesexist){
+        pval.exact.stat <- Tstat
+      }else{
+        pval.exact.stat <- T1stat
+        pval.exact.note <- paste0("NOTE: Test statistic calculation of Iman ",
+                                  "and Davenport used due to the presence of ",
+                                  "ties")
+      }
       #create combinations for each row
-      for (i in 1:t){
+      for (i in 1:g){
         if (i == 1){
           rowcomb <- matrix(1)
         }else{
@@ -82,31 +86,78 @@ friedman <-
         }
       }
       rowcomb.nrows <- dim(rowcomb)[1]
-      #initialise combins
-      combins <- array(NA, dim = c(b, t, rowcomb.nrows ** (b - 1)))
-      combins[1,,] <- y[blocks == levels(blocks)[1]] #fix first block as arbitrary
-      #update combins
-      for (ib in 2:b){
-          vals <- NULL
-          for (j in 1:rowcomb.nrows){
-            vals <- c(vals, rep(y[blocks == levels(blocks)[ib]][rowcomb[j,]],
-                              rowcomb.nrows ** (b - ib)))
-          }
-          combins[ib,,] <- vals
-      }
-      #cycle through combinations
-      pval.exact.stat <- Tstat
-      combins.n <- dim(combins)[3]
+      #loop around combinations
       pval.exact <- 0
-      for (i in 1:combins.n){
-        y_i <- as.numeric(combins[,,i])
-        blocks_i <- rep(1:b, t)
-        rank.tab_i <- simplify2array(by(y_i, blocks_i, rank, simplify = TRUE))
+      b_i <- b
+      comb_i <- c(rep(1, b - 1), 0)
+      repeat{
+        comb_i[b_i] <- comb_i[b_i] + 1
+        if (comb_i[b_i] > rowcomb.nrows){
+          repeat{
+            if (b_i == 2){break}
+            comb_i[b_i - 1] <- comb_i[b_i - 1] + 1
+            for (i in b_i:b){
+              comb_i[i] <- 1
+            }
+            if (comb_i[b_i - 1] <= rowcomb.nrows){
+              b_i <- b
+              break
+            }else{
+              b_i <- b_i - 1
+            }
+          }
+          if (b_i == 2){break}
+        }
+        tab_i <- NULL
+        for (ib in 1:b){
+          tab_i <- rbind(tab_i, y[blocks == levels(blocks)[ib]][rowcomb[comb_i[ib],]])
+        }
+        rank.tab_i <- apply(tab_i, 1, rank)
         Sr_i <- sum(rank.tab_i ** 2)
         St_i <- sum(rowSums(rank.tab_i) ** 2) / b
-        Tstat_i <- b * (t - 1) * (St_i - C) / (Sr_i - C)
-        if (Tstat_i >= pval.exact.stat){
-          pval.exact <- pval.exact + 1 / combins.n
+        if (!tiesexist){
+          Tstat_i <- b * (g - 1) * (St_i - C) / (Sr_i - C)
+          if (Tstat_i >= pval.exact.stat){
+            pval.exact <- pval.exact + 1 / n.perms
+          }
+        }else{
+          T1stat_i <- (b - 1) * (St_i - C) / (Sr_i - St_i)
+          if (T1stat_i >= pval.exact.stat){
+            pval.exact <- pval.exact + 1 / n.perms
+          }
+        }
+      }
+    }
+
+    #Monte Carlo p-value
+    if (do.exact && n.perms > max.exact.perms){
+      if (!is.null(seed)){set.seed(seed)}
+      if (!tiesexist){
+        pval.mc.stat <- Tstat
+      }else{
+        pval.mc.stat <- T1stat
+        pval.mc.note <- paste0("NOTE: Test statistic calculation of Iman and ",
+                                  "Davenport used due to the presence of ties")
+      }
+      pval.mc <- 0
+      for (i in 1:nsims.mc){
+        tab_i <- NULL
+        for (ib in 1:b){
+          tab_i <- rbind(tab_i, sample(y[blocks == levels(blocks)[ib]], g))
+        }
+        rank.tab_i <- apply(tab_i, 1, rank)
+        Sr_i <- sum(rank.tab_i ** 2)
+        St_i <- sum(rowSums(rank.tab_i) ** 2) / b
+        if (!tiesexist){
+          Tstat_i <- b * (g - 1) * (St_i - C) / (Sr_i - C)
+          if (Tstat_i >= pval.mc.stat){
+            pval.mc <- pval.mc + 1 / nsims.mc
+          }
+        }else{
+          T1stat_i <- (b - 1) * (St_i - C) / (Sr_i - St_i)
+          if (T1stat_i >= pval.mc.stat){
+            pval.mc <- pval.mc + 1 / nsims.mc
+          }
         }
       }
     }
@@ -115,23 +166,25 @@ friedman <-
     if(do.asymp){
       if (!tiesexist){
         pval.asymp.stat <- Tstat
-        pval.asmp <- pchisq(Tstat, t - 1, lower.tail = FALSE)
+        pval.asmp <- pchisq(Tstat, g - 1, lower.tail = FALSE)
       }else{
         pval.asymp.stat <- T1stat
-        pval.asymp <- pf(T1stat, t - 1, (b - 1) * (t - 1), lower.tail = FALSE)
-        pval.asymp.note <- paste0("NOTE: Method of Iman and Davenport used ",
-                                  "due to the presence of ties")
+        pval.asymp <- pf(T1stat, g - 1, (b - 1) * (g - 1), lower.tail = FALSE)
+        pval.asymp.note <- paste0("NOTE: Test statistic calculation of Iman ",
+                                  "and Davenport used due to the presence of ",
+                                  "ties")
       }
     }
 
     #check if message needed
     if (!do.asymp && !do.exact) {
       test.note <- paste("Neither exact nor asymptotic test requested")
-    }else if (do.exact && n > max.exact.cases) {
-      test.note <- paste0("NOTE: Number of useful cases greater than current ",
-                          "maximum allowed for exact calculations\nrequired for ",
-                          "exact test (max.exact.cases = ",
-                          sprintf("%1.0f", max.exact.cases), ")")
+    }else if (do.exact && n.perms > max.exact.perms) {
+      test.note <- paste0("NOTE: Number of permutations required greater than ",
+                          "current maximum allowed for exact calculations\n",
+                          "required for exact test (max.exact.perms = ",
+                          sprintf("%1.0f", max.exact.perms), ") so Monte ",
+                          "Carlo p-value given")
     }
 
     #create hypotheses
