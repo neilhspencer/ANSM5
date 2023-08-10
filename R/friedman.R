@@ -47,7 +47,10 @@ friedman <-
     test.note <- NULL
 
     #prepare
-    y <- y[complete.cases(y)] #remove missing cases
+    complete.cases.ID <- complete.cases(y, groups, blocks)
+    y <- y[complete.cases.ID] #remove missing cases
+    groups <- groups[complete.cases.ID] #remove missing cases
+    blocks <- blocks[complete.cases.ID] #remove missing cases
     b <- nlevels(blocks)
     g <- nlevels(groups)
     n.perms <- factorial(g) ** (b - 1)
