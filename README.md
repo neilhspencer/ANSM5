@@ -1,12 +1,12 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# ANSM
+# ANSM5
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The ANSM package provides a number of functions to accompany the book
+The ANSM5 package provides a number of functions to accompany the book
 “Applied Nonparametric Statistical Methods” (5th edition), the revisions
 from the 4th edition including a move from describing the output from a
 miscellany of statistical software packages to using R. While the output
@@ -18,11 +18,11 @@ statistical importance and not an end product in their own right.
 
 ## Installation
 
-You can install the development version of ANSM like so:
+You can install the development version of ANSM5 like so:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("neilhspencer/ANSM")
+devtools::install_github("neilhspencer/ANSM5")
 ```
 
 ## Example
@@ -30,6 +30,6 @@ devtools::install_github("neilhspencer/ANSM")
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
-library(ANSM)
+library(ANSM5)
 ## basic example code to be added
 ```
