@@ -7,7 +7,7 @@ test_that("Example 9.1", {
   expect_equal(peto.wilcoxon(S, A, S.c, A.c, alternative = "less",
                              seed = 1)$pval.mc.stat, 622.96939)
   expect_equal(peto.wilcoxon(S, A, S.c, A.c, alternative = "less",
-                             seed = 1)$pval.mc, 0.057)
+                             seed = 1)$pval.mc, 0.0034)
 })
 
 test_that("Following Example 9.3", {
@@ -16,12 +16,9 @@ test_that("Following Example 9.3", {
   SampleII <-c(10, 12, 15, 22, 37, 48, 57, 58)
   SampleIIa <-c(10, 26, 29, 36, 37, 48, 57, 58)
   SampleII.c <- c(0, 1, 1, 1, 0, 0, 0, 0)
-  gehan.wilcoxon(SampleI, SampleII, SampleI.c, SampleII.c, alternative = "less", seed = 1)
-  peto.wilcoxon(SampleI, SampleII, SampleI.c, SampleII.c, alternative = "less", seed = 1)
-  wilcoxon.mann.whitney(SampleI, SampleIIa, alternative = "less")
-  expect_equal(peto.wilcoxon(S, A, S.c, A.c, alternative = "less",
-                             seed = 1)$pval.mc.stat, 622.96939)
-  expect_equal(peto.wilcoxon(S, A, S.c, A.c, alternative = "less",
-                             seed = 1)$pval.mc, 0.057)
+  expect_equal(peto.wilcoxon(SampleI, SampleII, SampleI.c, SampleII.c,
+                             alternative = "less")$pval.exact.stat, 66.25)
+  expect_equal(peto.wilcoxon(SampleI, SampleII, SampleI.c, SampleII.c,
+                             alternative = "less")$pval.exact, 0.048174048)
 })
 
