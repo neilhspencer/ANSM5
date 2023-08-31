@@ -62,9 +62,9 @@ peto.wilcoxon <-
     n.perms <- choose(n, min(length(x), length(y)))
     #calculate statistics
     tab <- rbind(c(0, 0), table(xy, xy.c))
-    tab <- cbind(tab, rep(NA, n + 1)) #column 3 of Table 9.4
-    tab <- cbind(tab, rep(NA, n + 1)) #column 4 of Table 9.4
-    tab <- cbind(tab, rep(NA, n + 1)) #column 5 of Table 9.4
+    tab <- cbind(tab, rep(NA, dim(tab)[1])) #column 3 of Table 9.4
+    tab <- cbind(tab, rep(NA, dim(tab)[1])) #column 4 of Table 9.4
+    tab <- cbind(tab, rep(NA, dim(tab)[1])) #column 5 of Table 9.4
     tab[1, 3] <- n
     tab[1, 4] <- 1
     tab[1, 5] <- n
@@ -77,7 +77,7 @@ peto.wilcoxon <-
         tab[i, 5] <- tab[i - 1, 5] - tab[i, 1]
       }
     }
-    tab <- cbind(tab, rep(NA, n + 1)) #column 6 of Table 9.4
+    tab <- cbind(tab, rep(NA, dim(tab)[1])) #column 6 of Table 9.4
     tab[1, 6] <- 1
     prob <- 1
     denom <- n
@@ -118,32 +118,35 @@ peto.wilcoxon <-
       )
       if (any(class(try_result) == "try-error")){
         OverflowState <- TRUE
+      }else{
+        n.combins <- dim(combins)[2]
       }
     }
     if (n.perms > max.exact.perms | OverflowState){
       #use Monte Carlo
       if (!is.null(seed)){set.seed(seed)}
-      combins <- array(0, c(min(length(x), length(y)), nsims.mc))
-      for (i in 1:nsims.mc){
-        combins[,i] <- sample(n, min(length(x), length(y)))
-      }
+      n.combins <- nsims.mc
     }
     #evaluate all combinations
-    n.combins <- dim(combins)[2]
     tmp.pval <- 0
     for (i in 1:n.combins){
       #define data
-      tmp.x <- xy[combins[,i]]
-      tmp.x.c <- xy.c[combins[,i]]
-      tmp.y <- xy[-combins[,i]]
-      tmp.y.c <- xy.c[-combins[,i]]
+      if (n.perms > max.exact.perms | OverflowState){
+        tmp.combins <- sample(n, min(length(x), length(y)))
+      }else{
+        tmp.combins <- combins[,i]
+      }
+      tmp.x <- xy[tmp.combins]
+      tmp.x.c <- xy.c[tmp.combins]
+      tmp.y <- xy[-tmp.combins]
+      tmp.y.c <- xy.c[-tmp.combins]
       tmp.xy <- c(tmp.x, tmp.y)
       tmp.xy.c <- c(tmp.x.c, tmp.y.c)
       #calculate statistics
       tmp.tab <- rbind(c(0, 0), table(tmp.xy, tmp.xy.c))
-      tmp.tab <- cbind(tmp.tab, rep(NA, n)) #column 3 of Table 9.4
-      tmp.tab <- cbind(tmp.tab, rep(NA, n)) #column 4 of Table 9.4
-      tmp.tab <- cbind(tmp.tab, rep(NA, n)) #column 5 of Table 9.4
+      tmp.tab <- cbind(tmp.tab, rep(NA, dim(tmp.tab)[1])) #column 3 of Table 9.4
+      tmp.tab <- cbind(tmp.tab, rep(NA, dim(tmp.tab)[1])) #column 4 of Table 9.4
+      tmp.tab <- cbind(tmp.tab, rep(NA, dim(tmp.tab)[1])) #column 5 of Table 9.4
       tmp.tab[1, 3] <- n
       tmp.tab[1, 4] <- 1
       tmp.tab[1, 5] <- n
@@ -156,7 +159,7 @@ peto.wilcoxon <-
           tmp.tab[i, 5] <- tmp.tab[i - 1, 5] - tmp.tab[i, 1]
         }
       }
-      tmp.tab <- cbind(tmp.tab, rep(NA, n)) #column 6 of Table 9.4
+      tmp.tab <- cbind(tmp.tab, rep(NA, dim(tmp.tab)[1])) #column 6 of Table 9.4
       tmp.tab[1, 6] <- 1
       tmp.prob <- 1
       tmp.denom <- n
@@ -172,12 +175,11 @@ peto.wilcoxon <-
         }
       }
       tmp.R <- array(NA, c(n, 4))
-      tmp.R[, 1] <- tmp.tab[match(xy, row.names(tmp.tab)) - 1, 6]
-      tmp.R[, 2] <- tmp.tab[match(xy, row.names(tmp.tab)), 6]
+      tmp.R[, 1] <- tmp.tab[match(tmp.xy, row.names(tmp.tab)) - 1, 6]
+      tmp.R[, 2] <- tmp.tab[match(tmp.xy, row.names(tmp.tab)), 6]
       tmp.R[, 2][tmp.xy.c == 1] <- 0
       tmp.R[, 3] <- tmp.R[, 1] + tmp.R[, 2]
       tmp.R[, 4] <- tmp.R[, 3] / 2
-      tmp.R
       tmp.W <- n + 0.5 - n * tmp.R[, 4]
       tmp.W.x <- sum(tmp.W[1:n.x])
       tmp.W.y <- sum(tmp.W[(n.x + 1):n])

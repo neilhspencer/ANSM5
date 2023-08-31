@@ -94,25 +94,28 @@ gehan.wilcoxon <-
         )
         if (any(class(try_result) == "try-error")){
           OverflowState <- TRUE
+        }else{
+          n.combins <- dim(combins)[2]
         }
       }
       if (n.perms > max.exact.perms | OverflowState){
         #use Monte Carlo
         if (!is.null(seed)){set.seed(seed)}
-        combins <- array(0, c(min(length(x), length(y)), nsims.mc))
-        for (i in 1:nsims.mc){
-          combins[,i] <- sample(n, min(length(x), length(y)))
-        }
+        n.combins <- nsims.mc
       }
       #evaluate all combinations
-      n.combins <- dim(combins)[2]
       tmp.pval <- 0
       for (i in 1:n.combins){
         #define data
-        tmp.x <- xy[combins[,i]]
-        tmp.x.c <- xy.c[combins[,i]]
-        tmp.y <- xy[-combins[,i]]
-        tmp.y.c <- xy.c[-combins[,i]]
+        if (n.perms > max.exact.perms | OverflowState){
+          tmp.combins <- sample(n, min(length(x), length(y)))
+        }else{
+          tmp.combins <- combins[,i]
+        }
+        tmp.x <- xy[tmp.combins]
+        tmp.x.c <- xy.c[tmp.combins]
+        tmp.y <- xy[-tmp.combins]
+        tmp.y.c <- xy.c[-tmp.combins]
         #calculate test statistics
         tmp.U.x <- 0
         for (i in 1:length(tmp.x)){
