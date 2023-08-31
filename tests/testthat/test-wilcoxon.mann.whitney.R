@@ -114,3 +114,17 @@ test_that("Example 8.9", {
   expect_equal(wilcoxon.mann.whitney(GroupAB.diff, GroupBA.diff2)$pval.exact,
                0.30952381)
 })
+
+test_that("Following Example 9.3", {
+  SampleI <-c(9, 25, 35, 38, 41)
+  SampleIIa <-c(10, 26, 29, 36, 37, 48, 57, 58)
+  expect_equal(wilcoxon.mann.whitney(SampleI, SampleIIa,
+                                     alternative = "less")$pval.exact.stat,
+               paste0("\n","29 (rank sum from SampleI), ",
+                      "62 (rank sum from SampleIIa)", "\n",
+                      "14 (Mann-Whitney U from SampleI), ",
+                      "26 (Mann-Whitney U from SampleIIa)"))
+expect_equal(wilcoxon.mann.whitney(SampleI, SampleIIa,
+                                     alternative = "less")$pval.exact,
+               0.21756022)
+})
