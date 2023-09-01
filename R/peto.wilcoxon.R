@@ -20,7 +20,6 @@ peto.wilcoxon <-
     #unused arguments
     cont.corr <- NULL
     CI.width <- NULL
-    do.asymp <- NULL
     do.asymp <- FALSE
     do.exact <- TRUE
     do.CI <- FALSE
