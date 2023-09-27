@@ -106,6 +106,7 @@ logrank <-
       e.failures <- tot.failures * in.sample / at.risk
       test.stat <- max(colSums(obs.failures) - colSums(e.failures))
     }
+
     #exact p-value
     OverflowState <- FALSE
     if (n.perms <= max.exact.perms && g <= 3){
