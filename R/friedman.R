@@ -51,8 +51,8 @@ friedman <-
     y <- y[complete.cases.ID] #remove missing cases
     groups <- groups[complete.cases.ID] #remove missing cases
     blocks <- blocks[complete.cases.ID] #remove missing cases
-    b <- nlevels(blocks)
     g <- nlevels(groups)
+    b <- nlevels(blocks)
     n.perms <- factorial(g) ** (b - 1)
     rank.tab <- simplify2array(by(y, blocks, rank, simplify = TRUE))
     Sr <- sum(rank.tab ** 2)
@@ -169,7 +169,7 @@ friedman <-
     if(do.asymp){
       if (!tiesexist){
         pval.asymp.stat <- Tstat
-        pval.asmp <- pchisq(Tstat, g - 1, lower.tail = FALSE)
+        pval.asymp <- pchisq(Tstat, g - 1, lower.tail = FALSE)
       }else{
         pval.asymp.stat <- T1stat
         pval.asymp <- pf(T1stat, g - 1, (b - 1) * (g - 1), lower.tail = FALSE)
