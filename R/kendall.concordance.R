@@ -1,6 +1,6 @@
-#' @importFrom stats complete.cases pf pchisq
+#' @importFrom stats complete.cases
 kendall.concordance <-
-  function(y, groups, blocks,  max.exact.perms = 100000, nsims.mc = 100000,
+  function(y, groups, blocks, max.exact.perms = 100000, nsims.mc = 100000,
            seed = NULL, do.asymp = FALSE, do.exact = TRUE) {
     stopifnot(is.vector(y), is.numeric(y), is.factor(groups), is.factor(blocks),
               length(y) == length(groups), length(groups) == length(blocks),
@@ -13,10 +13,11 @@ kendall.concordance <-
 
     #labels
     varname1 <- deparse(substitute(blocks))
+    varname2 <- NULL
+    varname3 <- NULL
 
     #unused arguments
     alternative <- NULL
-    varname2 <- NULL
     cont.corr <- NULL
     CI.width <- NULL
     do.CI <- FALSE
@@ -43,7 +44,7 @@ kendall.concordance <-
     CI.mc.lower <- NULL
     CI.mc.upper <- NULL
     CI.mc.note <- NULL
-    test.note <- NULL
+    stat.note <- NULL
 
     #prepare
     complete.cases.ID <- complete.cases(y, groups, blocks)
@@ -55,11 +56,11 @@ kendall.concordance <-
     n.perms <- factorial(g) ** (b - 1)
     friedman.stat <- friedman(y, groups, blocks, do.asymp = TRUE,
                               do.exact = FALSE)$pval.asymp.stat
-    kendall.concordance.stat <- friedman.stat / (b * (g - 1))
+    stat <- friedman.stat / (b * (g - 1))
+    statlabel <- "Kendall's concordance"
 
     #exact p-value
     if(do.exact && n.perms <= max.exact.perms){
-      pval.exact.stat <- kendall.concordance.stat
       friedman.out <- friedman(y, groups, blocks, do.exact = TRUE)
       pval.exact <- friedman.out$pval.exact
       pval.exact.note <- friedman.out$pval.exact.note
@@ -67,7 +68,6 @@ kendall.concordance <-
 
     #Monte Carlo p-value
     if (do.exact && n.perms > max.exact.perms){
-      pval.mc.stat <- kendall.concordance.stat
       friedman.out <- friedman(y, groups, blocks, seed = seed, do.exact = TRUE)
       pval.mc <- friedman.out$pval.mc
       pval.mc.note <- friedman.out$pval.mc.note
@@ -75,7 +75,6 @@ kendall.concordance <-
 
     #asymptotic p-value
     if(do.asymp){
-      pval.asymp.stat <- kendall.concordance.stat
       friedman.out <- friedman(y, groups, blocks, do.asymp = TRUE,
                                do.exact = FALSE)
       pval.asymp <- friedman.out$pval.asymp
@@ -84,9 +83,9 @@ kendall.concordance <-
 
     #check if message needed
     if (!do.asymp && !do.exact) {
-      test.note <- paste("Neither exact nor asymptotic test requested")
+      stat.note <- paste("Neither exact nor asymptotic test requested")
     }else if (do.exact && n.perms > max.exact.perms) {
-      test.note <- paste0("NOTE: Number of permutations required greater than ",
+      stat.note <- paste0("NOTE: Number of permutations required greater than ",
                           "current maximum allowed for exact calculations\n",
                           "required for exact test (max.exact.perms = ",
                           sprintf("%1.0f", max.exact.perms), ") so Monte ",
@@ -99,8 +98,9 @@ kendall.concordance <-
     H0 <- paste0(H0, "\n")
 
     #return
-    result <- list(title = "Kendall's concordance",
-                   varname1 = varname1, varname2 = varname2, H0 = H0,
+    result <- list(title = "Kendall's concordance", varname1 = varname1,
+                   varname2 = varname2, varname3 = varname3, stat = stat,
+                   statlabel = statlabel, H0 = H0,
                    alternative = alternative, cont.corr = cont.corr, pval = pval,
                    pval.stat = pval.stat, pval.note = pval.note,
                    pval.exact = pval.exact, pval.exact.stat = pval.exact.stat,
@@ -116,7 +116,7 @@ kendall.concordance <-
                    nsims.mc = nsims.mc, pval.mc.note = pval.mc.note,
                    CI.mc.lower = CI.mc.lower, CI.mc.upper = CI.mc.upper,
                    CI.mc.note = CI.mc.note,
-                   test.note = test.note)
-    class(result) <- "ANSMtest"
+                   stat.note = stat.note)
+    class(result) <- "ANSMstat"
     return(result)
   }

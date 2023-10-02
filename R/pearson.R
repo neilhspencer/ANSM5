@@ -15,6 +15,7 @@ pearson <-
     #labels
     varname1 <- deparse(substitute(x))
     varname2 <- deparse(substitute(y))
+    varname3 <- NULL
 
     #unused arguments
     cont.corr <- NULL
@@ -43,13 +44,14 @@ pearson <-
     CI.mc.lower <- NULL
     CI.mc.upper <- NULL
     CI.mc.note <- NULL
-    test.note <- NULL
+    stat.note <- NULL
 
     #prepare
     x <- x[complete.cases(x)] #remove missing cases
     y <- y[complete.cases(y)] #remove missing cases
     n <- length(x)
-    cor.xy <- cor(x, y, method = "pearson")
+    stat <- cor(x, y, method = "pearson")
+    statlabel <- "Pearson correlation"
 
     #give mc output if exact not possible
     if (do.exact && n > max.exact.cases){
@@ -58,22 +60,21 @@ pearson <-
 
     #exact p-value
     if(do.exact && n <= max.exact.cases){
-      pval.exact.stat <- cor.xy
       permutations <- perms(n)
       n.perms <- dim(permutations)[1]
       pval.exact <- 0
       for (i in 1:n.perms){
         cor.tmp <- cor(x[permutations[i,]], y, method = "pearson")
         if (alternative == "two.sided"){
-          if (abs(cor.tmp) >= abs(pval.exact.stat)){
+          if (abs(cor.tmp) >= abs(stat)){
             pval.exact <- pval.exact + 1 / n.perms
           }
         }else if (alternative == "less"){
-          if (cor.tmp <= pval.exact.stat){
+          if (cor.tmp <= stat){
             pval.exact <- pval.exact + 1 / n.perms
           }
         }else if (alternative == "greater"){
-          if (cor.tmp >= pval.exact.stat){
+          if (cor.tmp >= stat){
             pval.exact <- pval.exact + 1 / n.perms
           }
         }
@@ -83,20 +84,19 @@ pearson <-
     #Monte Carlo p-value
     if(do.mc){
       if (!is.null(seed)){set.seed(seed)}
-      pval.mc.stat <- cor.xy
       pval.mc <- 0
       for (i in 1:nsims.mc){
         cor.tmp <- cor(x[sample(n, n, replace = FALSE)], y, method = "pearson")
         if (alternative == "two.sided"){
-          if (abs(cor.tmp) >= abs(pval.mc.stat)){
+          if (abs(cor.tmp) >= abs(stat)){
             pval.mc <- pval.mc + 1 / nsims.mc
           }
         }else if (alternative == "less"){
-          if (cor.tmp <= pval.mc.stat){
+          if (cor.tmp <= stat){
             pval.mc <- pval.mc + 1 / nsims.mc
           }
         }else if (alternative == "greater"){
-          if (cor.tmp >= pval.mc.stat){
+          if (cor.tmp >= stat){
             pval.mc <- pval.mc + 1 / nsims.mc
           }
         }
@@ -105,18 +105,17 @@ pearson <-
 
     #asymptotic p-value
     if(do.asymp){
-      pval.asymp.stat <- cor.xy
-      t <- cor.xy * sqrt((n - 2) / (1 - cor.xy ^ 2))
+      t <- stat * sqrt((n - 2) / (1 - stat ^ 2))
       if (alternative == "two.sided"){
         pval.asymp <- pt(t, n - 2, lower.tail = FALSE) * 2
       }else if (alternative == "less"){
-        if (cor.xy > 0){
+        if (stat > 0){
           pval.asymp <- 1
         }else{
           pval.asymp <- pt(abs(t), n - 2, lower.tail = FALSE)
         }
       }else if (alternative == "greater"){
-        if (cor.xy < 0){
+        if (stat < 0){
           pval.asymp <- 1
         }else{
           pval.asymp <- pt(t, n - 2, lower.tail = FALSE)
@@ -126,10 +125,10 @@ pearson <-
 
     #check if message needed
     if (!do.asymp && !do.exact && !do.mc) {
-      test.note <- paste("Neither exact, Monte Carlo nor asymptotic test",
+      stat.note <- paste("Neither exact, Monte Carlo nor asymptotic test",
                          "requested")
     }else if (do.exact && n > max.exact.cases) {
-      test.note <- paste0("NOTE: Number of useful cases greater than current ",
+      stat.note <- paste0("NOTE: Number of useful cases greater than current ",
                           "maximum allowed for exact calculations\nrequired for ",
                           "exact test (max.exact.cases = ",
                           sprintf("%1.0f", max.exact.cases), ") so Monte ",
@@ -152,8 +151,9 @@ pearson <-
     H0 <- paste0(H0, "\n")
 
     #return
-    result <- list(title = "Pearson correlation",
-                   varname1 = varname1, varname2 = varname2, H0 = H0,
+    result <- list(title = "Pearson correlation", varname1 = varname1,
+                   varname2 = varname2, varname3 = varname3, stat = stat,
+                   statlabel = statlabel, H0 = H0,
                    alternative = alternative, cont.corr = cont.corr, pval = pval,
                    pval.stat = pval.stat, pval.note = pval.note,
                    pval.exact = pval.exact, pval.exact.stat = pval.exact.stat,
@@ -169,7 +169,7 @@ pearson <-
                    nsims.mc = nsims.mc, pval.mc.note = pval.mc.note,
                    CI.mc.lower = CI.mc.lower, CI.mc.upper = CI.mc.upper,
                    CI.mc.note = CI.mc.note,
-                   test.note = test.note)
-    class(result) <- "ANSMtest"
+                   stat.note = stat.note)
+    class(result) <- "ANSMstat"
     return(result)
   }
