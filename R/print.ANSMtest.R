@@ -179,8 +179,10 @@ print.ANSMtest <- function(x, ...) {
                  "% Confidence Interval cannot be calculated"), "\n")
     }else{
       cat(paste0("Monte Carlo ", 100 * round(x$targetCIwidth, 5),
-                 "% Confidence Interval (", x$nsims.mc, " simulations)"), "\n")
-      cat(paste0("(", x$CI.mc.lower, ", ", x$CI.mc.upper, ")"), "\n")
+                 "% Confidence Interval (", sprintf("%1$d",x$nsims.mc),
+                 " simulations)"), "\n")
+      cat(paste0("(", sprintf("%.5f", x$CI.mc.lower), ", ",
+                 sprintf("%.5f", x$CI.mc.upper), ")"), "\n")
     }
   }
   if (!is.null(x$CI.mc.note)){cat(x$CI.mc.note, "\n")}
