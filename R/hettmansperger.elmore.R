@@ -1,4 +1,4 @@
-#' @importFrom stats complete.cases aov, anova, medpolish, pchisq
+#' @importFrom stats complete.cases aov anova medpolish pchisq
 hettmansperger.elmore <-
   function(y, factor.a, factor.b, nsims.mc = 1000, seed = NULL,
            do.asymp = TRUE, do.mc = FALSE, median.polish = FALSE) {
