@@ -1,15 +1,15 @@
 #' @importFrom stats complete.cases median
 fisher.test.ANSM <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
-           CI.width = 0.95, max.exact.cases = 1000,
-           do.exact = TRUE, do.CI = TRUE) {
-    stopifnot(is.vector(x), is.numeric(x), is.vector(y), is.numeric(y),
+           max.exact.cases = 1000, do.exact = TRUE) {
+    stopifnot((is.vector(x) && is.numeric(x) | is.factor(x)),
+              (is.vector(y) && is.numeric(y) | is.factor(y)),
               ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
               is.numeric(max.exact.cases), length(max.exact.cases) == 1,
-              CI.width > 0, CI.width < 1,
-              is.logical(do.exact) == TRUE,
-              is.logical(do.CI) == TRUE)
+              is.logical(do.exact) == TRUE)
     alternative <- match.arg(alternative)
+    stopifnot((is.numeric(x) && is.numeric(y)) |
+                (is.factor(x) | is.factor(y)) && alternative == "two.sided")
 
     #labels
     varname1 <- deparse(substitute(x))
@@ -32,6 +32,7 @@ fisher.test.ANSM <-
     nsims.mc <- NULL
     pval.mc.note <- NULL
     actualCIwidth.exact <- NULL
+    CI.width <- NULL
     CI.exact.lower <- NULL
     CI.exact.upper <- NULL
     CI.exact.note <- NULL
@@ -44,61 +45,77 @@ fisher.test.ANSM <-
     test.note <- NULL
 
     #prepare
-    x <- x[complete.cases(x)] #remove missing cases
-    y <- y[complete.cases(y)] #remove missing cases
-    if (!is.null(H0)) {
-      xy <- c(x - H0, y)
-      varname1 <- paste0(varname1, " - ", H0)
+    if (!is.factor(x) && !is.factor(y)){
+      x <- x[complete.cases(x)] #remove missing cases
+      y <- y[complete.cases(y)] #remove missing cases
     }else{
-      H0 <- 0
-      xy <- c(x, y)
+      complete.cases.id <- complete.cases(x, y)
+      x <- x[complete.cases.id] #remove missing cases
+      y <- y[complete.cases.id] #remove missing cases
     }
-    med <-median(xy)
-    x.gt <- sum(x > med)
-    y.gt <- sum(y > med)
-    nx <- x.gt + sum(x < med) #ignoring x == med
-    ny <- y.gt + sum(y < med) #ignoring y == med
-    x.mat <- matrix(c(x.gt, nx - x.gt, y.gt, ny - y.gt), nrow = 2, ncol = 2)
+
+    if (!is.factor(x) && !is.factor(y)){
+      if (!is.null(H0)) {
+        xy <- c(x - H0, y)
+        varname1 <- paste0(varname1, " - ", H0)
+      }else{
+        H0 <- 0
+        xy <- c(x, y)
+      }
+      med <-median(xy)
+      x.gt <- sum(x > med)
+      y.gt <- sum(y > med)
+      nx <- x.gt + sum(x < med) #ignoring x == med
+      ny <- y.gt + sum(y < med) #ignoring y == med
+      n <- nx + ny
+      x.mat <- matrix(c(x.gt, nx - x.gt, y.gt, ny - y.gt), nrow = 2, ncol = 2)
+    }else{
+      x.mat <- table(x, y)
+      n <- sum(x.mat)
+    }
 
     #Exact test
-    if (do.exact && nx + ny <= max.exact.cases){
+    if (do.exact && n <= max.exact.cases){
       pval.exact <- fisher.test(x.mat)$p.value
     }
 
     #check if message needed
     if (!do.exact) {
-      test.note <- paste("Exact test/confidence interval not requested")
-    }else if (nx + ny > max.exact.cases) {
-      affected <- NULL
-      if (do.exact && do.CI){
-        affected <- "exact test and confidence interval"
-      }else if (do.exact) {
-        affected <- "exact test"
-      }
-      if (!is.null(affected)){
+      test.note <- paste("Exact test not requested")
+    }else if (n > max.exact.cases) {
+      if (do.exact){
         test.note <- paste0("NOTE: Number of useful cases greater than ",
                             "current maximum allowed for exact\ncalculations ",
-                            "required for ", affected, " (max.exact.cases = ",
+                            "required for exact test (max.exact.cases = ",
                             sprintf("%1.0f", max.exact.cases), ")")
       }
     }
 
     #define hypotheses
-    if (alternative == "two.sided"){
-      H0 <- paste0("H0: samples are from populations with the same median\n",
-                   "H1: samples are from populations with different medians\n")
-    }else if (alternative == "less"){
-      H0 <- paste0("H0: samples are from populations with the same median\n",
-                   "H1: median of ", varname1, " is less than median of ",
-                   varname2, "\n")
-    }else if (alternative == "greater"){
-      H0 <- paste0("H0: samples are from populations with the same median\n",
-                   "H1: median of ", varname1, " is greater than median of ",
-                   varname2, "\n")
+    if (!is.factor(x) && !is.factor(y)){
+      if (alternative == "two.sided"){
+        H0 <- paste0("H0: samples are from populations with the same median\n",
+                     "H1: samples are from populations with different medians\n")
+      }else if (alternative == "less"){
+        H0 <- paste0("H0: samples are from populations with the same median\n",
+                     "H1: median of ", varname1, " is less than median of ",
+                     varname2, "\n")
+      }else if (alternative == "greater"){
+        H0 <- paste0("H0: samples are from populations with the same median\n",
+                     "H1: median of ", varname1, " is greater than median of ",
+                     varname2, "\n")
+      }
+    }else{
+      H0 <- paste0("H0: ", varname1, " and ", varname2, " are independent\n",
+                   "H1: ", varname1, " and ", varname2, " are not independent\n")
     }
 
     #create title
-    title <- "Fisher exact test for median"
+    if (!is.factor(x) && !is.factor(y)){
+      title <- "Fisher exact test for median"
+    }else{
+      title <- "Fisher exact test"
+    }
 
     #return
     result <- list(title = title, varname1 = varname1,
