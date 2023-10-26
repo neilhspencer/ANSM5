@@ -1,17 +1,12 @@
-#' @importFrom stats complete.cases lm median pnorm quantile
+#' @importFrom stats model.frame model.response model.matrix complete.cases lm median pnorm quantile
 theil.kendall <-
-  function(yx.formula, H0 = NULL,
+  function(formula, data, H0 = NULL, do.abbreviated = FALSE, do.alpha = FALSE,
            alternative = c("two.sided", "less", "greater"), CI.width = 0.95,
            max.exact.cases = 10, nsims.mc = 100000, seed = NULL,
            do.asymp = FALSE, do.exact = TRUE, do.CI = FALSE, do.mc = FALSE) {
-    stopifnot(inherits(yx.formula,"formula"), length(all.vars(yx.formula)) == 2,
-              exists(all.vars(yx.formula)[1]), exists(all.vars(yx.formula)[2]),
-              is.vector(get(all.vars(yx.formula)[1])),
-              is.numeric(get(all.vars(yx.formula)[1])),
-              is.vector(get(all.vars(yx.formula)[2])),
-              is.numeric(get(all.vars(yx.formula)[2])),
-              length(get(all.vars(yx.formula)[1])) == length(get(all.vars(yx.formula)[2])),
+    stopifnot(inherits(formula,"formula"), length(all.vars(formula)) == 2,
               ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
+              is.logical(do.abbreviated) == TRUE, is.logical(do.alpha) == TRUE,
               is.numeric(CI.width), length(CI.width) == 1,
               CI.width > 0, CI.width < 1,
               is.numeric(max.exact.cases), length(max.exact.cases) == 1,
@@ -22,7 +17,7 @@ theil.kendall <-
     alternative <- match.arg(alternative)
 
     #labels
-    varname1 <- Reduce(paste, deparse(yx.formula))
+    varname1 <- Reduce(paste, deparse(formula))
     varname2 <- NULL
     varname3 <- NULL
 
@@ -54,23 +49,43 @@ theil.kendall <-
     stat.note <- NULL
 
     #prepare
-    model <- lm(yx.formula)
-    y <- model$model[, 1]
-    x <- model$model[, 2]
-    x <- x - median(x)
-    y <- y[complete.cases(y)] #remove missing cases
-    x <- x[complete.cases(x)] #remove missing cases
+    mf <- match.call(expand.dots = FALSE)
+    m <- match(c("formula", "data"), names(mf), 0L)
+    mf <- mf[c(1L, m)]
+    mf[[1L]] <- quote(stats::model.frame)
+    mf <- eval(mf, parent.frame())
+    y <- model.response(mf, "numeric")
+    mt <- attr(mf, "terms")
+    x <- model.matrix(mt, mf)[, -1]
+    complete.cases.id <- complete.cases(x, y)
+    y <- y[complete.cases.id] #remove missing cases
+    x <- x[complete.cases.id] #remove missing cases
+    x.c <- x - median(x)
     n <- length(y)
 
     #calculate estimate of beta
     outer.y <- outer(y, y, "-")
-    outer.x <- outer(x, x, "-")
+    outer.x <- outer(x.c, x.c, "-")
     bvals <- outer.y / outer.x
-    bvals <- bvals[upper.tri(bvals)]
-    stat <- median(bvals)
+    if (do.abbreviated){
+      bvals2 <- NULL
+      if (n %% 2 == 0){ #even
+        for (i in 1:(n / 2)){
+          bvals2 <- c(bvals2, bvals[i, i + (n / 2)])
+        }
+      }else{ #odd
+        for (i in 1:((n - 1) / 2)){
+          bvals2 <- c(bvals2, bvals[i, i + ((n +1) / 2)])
+        }
+      }
+    }else{
+      bvals2 <- bvals[upper.tri(bvals)]
+    }
+    #is.finite used to ignore tied x values giving infinite slopes
+    stat <- median(bvals2[is.finite(bvals2)])
     statlabel <- "Theil-Kendall beta"
     if (!is.null(H0)){
-      Tt <- diff(table(sign(bvals - H0)))[[1]]
+      Tt <- diff(table(sign(bvals2 - H0)))[[1]]
     }
 
     #give mc output if exact not possible
@@ -85,10 +100,24 @@ theil.kendall <-
       n.perms <- dim(permutations)[1]
       pval.exact <- 0
       for (i in 1:n.perms){
-        outer.x <- outer(x[permutations[i,]], x[permutations[i,]], "-")
+        outer.x <- outer(x.c[permutations[i,]], x.c[permutations[i,]], "-")
         bvals <- outer.y / outer.x
-        bvals <- bvals[upper.tri(bvals)]
-        beta.tmp <- median(bvals)
+        if (do.abbreviated){
+          bvals2 <- NULL
+          if (n %% 2 == 0){ #even
+            for (i in 1:(n / 2)){
+              bvals2 <- c(bvals2, bvals[i, i + (n / 2)])
+            }
+          }else{ #odd
+            for (i in 1:((n - 1) / 2)){
+              bvals2 <- c(bvals2, bvals[i, i + ((n +1) / 2)])
+            }
+          }
+        }else{
+          bvals2 <- bvals[upper.tri(bvals)]
+        }
+        #is.finite used to ignore tied x values giving infinite slopes
+        beta.tmp <- median(bvals2[is.finite(bvals2)])
         if (alternative == "two.sided"){
           if (abs(beta.tmp) >= abs(stat)){
             pval.exact <- pval.exact + 1 / n.perms
@@ -111,11 +140,25 @@ theil.kendall <-
       outer.y <- outer(y, y, "-")
       pval.mc <- 0
       for (i in 1:nsims.mc){
-        x.tmp <- x[sample(n, n, replace = FALSE)]
+        x.tmp <- x.c[sample(n, n, replace = FALSE)]
         outer.x <- outer(x.tmp, x.tmp, "-")
         bvals <- outer.y / outer.x
-        bvals <- bvals[upper.tri(bvals)]
-        beta.tmp <- median(bvals)
+        if (do.abbreviated){
+          bvals2 <- NULL
+          if (n %% 2 == 0){ #even
+            for (i in 1:(n / 2)){
+              bvals2 <- c(bvals2, bvals[i, i + (n / 2)])
+            }
+          }else{ #odd
+            for (i in 1:((n - 1) / 2)){
+              bvals2 <- c(bvals2, bvals[i, i + ((n +1) / 2)])
+            }
+          }
+        }else{
+          bvals2 <- bvals[upper.tri(bvals)]
+        }
+        #is.finite used to ignore tied x values giving infinite slopes
+        beta.tmp <- median(bvals2[is.finite(bvals2)])
         if (alternative == "two.sided"){
           if (abs(beta.tmp) >= abs(stat)){
             pval.mc <- pval.mc + 1 / nsims.mc
@@ -133,7 +176,7 @@ theil.kendall <-
     }
 
     #asymptotic p-value
-    if(do.asymp && !is.null(H0)){
+    if(do.asymp && !do.abbreviated && !is.null(H0)){
       var <- n * (n - 1) * (2 * n + 5) / 18
       z <- Tt / sqrt(var)
       if (alternative == "two.sided"){
@@ -164,39 +207,89 @@ theil.kendall <-
         outer.y <- outer(y.sample, y.sample, "-")
         outer.x <- outer(x.sample, x.sample, "-")
         bvals <- outer.y / outer.x
-        bvals <- sort(bvals[upper.tri(bvals)])
-        beta.mc[i] <- median(bvals)
+        if (do.abbreviated){
+          bvals2 <- NULL
+          if (n %% 2 == 0){ #even
+            for (j in 1:(n / 2)){
+              bvals2 <- c(bvals2, bvals[j, j + (n / 2)])
+            }
+          }else{ #odd
+            for (j in 1:((n - 1) / 2)){
+              bvals2 <- c(bvals2, bvals[j, j + ((n +1) / 2)])
+            }
+          }
+        }else{
+          bvals2 <- bvals[upper.tri(bvals)]
+        }
+        #is.finite used to ignore tied x values giving infinite slopes
+        beta.mc[i] <- median(bvals2[is.finite(bvals2)])
       }
       CI.mc.lower <- quantile(beta.mc, (1 - CI.width) / 2, na.rm = TRUE)[[1]]
       CI.mc.upper <- quantile(beta.mc, 1 - (1 - CI.width) / 2, na.rm = TRUE)[[1]]
     }
 
+    #create estimates of alpha to report in note
+    if (do.alpha){
+      d <- y - stat * x
+      alpha1 <- median(d)
+      Walsh.averages <- NULL
+      for (i in 1:length(d)){
+        for (j in i:length(d)){
+          Walsh.averages <- c(Walsh.averages, (d[i] + d[j]) / 2)
+        }
+      }
+      alpha2 <- median(Walsh.averages)
+    }
+
     #check if message needed
+    if (do.alpha){
+      stat.note <- paste0("Estimate of alpha using median of d_i: ",
+                          sprintf("%.5f", alpha1))
+      stat.note <- paste0(stat.note, "\n")
+      stat.note <- paste0(stat.note, "Hodges–Lehmann estimator of alpha: ",
+                          sprintf("%.5f", alpha2))
+      stat.note <- paste0(stat.note, "\n")
+    }
     if ((!do.asymp && !do.exact && !do.mc) | is.null(H0)) {
-      stat.note <- paste("Neither exact, asymptotic nor Monte Carlo test requested")
+      if (!is.null(stat.note)){
+        stat.note <- paste0(stat.note, "\n")
+      }
+      stat.note <- paste0(stat.note,
+                         "Neither exact, asymptotic nor Monte Carlo test requested")
     }else if (do.exact && n > max.exact.cases) {
-      stat.note <- paste0("NOTE: Number of cases greater than current maximum ",
+      if (!is.null(stat.note)){
+        stat.note <- paste0(stat.note, "\n")
+      }
+      stat.note <- paste0(stat.note,
+                          "NOTE: Number of cases greater than current maximum ",
                           "allowed for exact calculations\n",
                           "required for exact test (max.exact.cases = ",
                           sprintf("%1.0f", max.exact.cases), ") so Monte ",
                           "Carlo p-value given")
+    }
+    if (do.asymp && do.abbreviated && !is.null(H0)){
+      if (!is.null(stat.note)){
+        stat.note <- paste0(stat.note, "\n")
+      }
+      stat.note <- paste0(stat.note, "NOTE: Asymptotic test not available ",
+                          "when abbreviated Theil procedure requested")
     }
 
     #create hypotheses
     if (!is.null(H0)){
       H0val <- H0
       H0 <- paste0("H0: Theil-Kendall beta for ",
-                   Reduce(paste, deparse(yx.formula)), " is ", H0val)
+                   Reduce(paste, deparse(formula)), " is ", H0val)
       if (alternative == "two.sided"){
         H0 <- paste0(H0, "\nH1: Theil-Kendall beta for ",
-                     Reduce(paste, deparse(yx.formula)), " is not ", H0val)
+                     Reduce(paste, deparse(formula)), " is not ", H0val)
       }else if(alternative == "greater"){
         H0 <- paste0(H0, "\nH1: Theil-Kendall beta for ",
-                     Reduce(paste, deparse(yx.formula)), " is greater than ",
+                     Reduce(paste, deparse(formula)), " is greater than ",
                      H0val)
       }else{
         H0 <- paste0(H0, "\nH1: Theil-Kendall beta for ",
-                     Reduce(paste, deparse(yx.formula)), " is less than ",
+                     Reduce(paste, deparse(formula)), " is less than ",
                      H0val)
       }
       H0 <- paste0(H0, "\n")
