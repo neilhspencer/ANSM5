@@ -1,16 +1,10 @@
-#' @importFrom stats complete.cases lm quantile
+#' @importFrom stats model.frame model.response model.matrix complete.cases lm quantile
 pearson.beta <-
-  function(yx.formula, H0 = NULL,
+  function(formula, data, H0 = NULL,
            alternative = c("two.sided", "less", "greater"), CI.width = 0.95,
            max.exact.cases = 10, nsims.mc = 100000, seed = NULL,
            do.asymp = FALSE, do.exact = TRUE, do.CI = FALSE, do.mc = FALSE) {
-    stopifnot(inherits(yx.formula,"formula"), length(all.vars(yx.formula)) == 2,
-              exists(all.vars(yx.formula)[1]), exists(all.vars(yx.formula)[2]),
-              is.vector(get(all.vars(yx.formula)[1])),
-              is.numeric(get(all.vars(yx.formula)[1])),
-              is.vector(get(all.vars(yx.formula)[2])),
-              is.numeric(get(all.vars(yx.formula)[2])),
-              length(get(all.vars(yx.formula)[1])) == length(get(all.vars(yx.formula)[2])),
+    stopifnot(inherits(formula,"formula"), length(all.vars(formula)) == 2,
               ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
               is.numeric(CI.width), length(CI.width) == 1,
               CI.width > 0, CI.width < 1,
@@ -22,7 +16,7 @@ pearson.beta <-
     alternative <- match.arg(alternative)
 
     #labels
-    varname1 <- Reduce(paste, deparse(yx.formula))
+    varname1 <- Reduce(paste, deparse(formula))
     varname2 <- NULL
     varname3 <- NULL
 
@@ -54,11 +48,12 @@ pearson.beta <-
     stat.note <- NULL
 
     #prepare
-    model <- lm(yx.formula)
+    model <- lm(formula, data)
     y <- model$model[, 1]
     x <- model$model[, 2]
-    y <- y[complete.cases(y)] #remove missing cases
-    x <- x[complete.cases(x)] #remove missing cases
+    complete.cases.id <- complete.cases(x, y)
+    y <- y[complete.cases.id] #remove missing cases
+    x <- x[complete.cases.id] #remove missing cases
     n <- length(y)
     stat <- model$coefficients[2][[1]]
     statlabel <- "Pearson beta"
@@ -101,18 +96,18 @@ pearson.beta <-
     #create hypotheses
     if (!is.null(H0)){
       H0val <- H0
-      H0 <- paste0("H0: Pearson beta for ", Reduce(paste, deparse(yx.formula)),
+      H0 <- paste0("H0: Pearson beta for ", Reduce(paste, deparse(formula)),
                    " is ", H0val)
       if (alternative == "two.sided"){
         H0 <- paste0(H0, "\nH1: Pearson beta for ",
-                     Reduce(paste, deparse(yx.formula)), " is not ", H0val)
+                     Reduce(paste, deparse(formula)), " is not ", H0val)
       }else if(alternative == "greater"){
         H0 <- paste0(H0, "\nH1: Pearson beta for ",
-                     Reduce(paste, deparse(yx.formula)), " is greater than ",
+                     Reduce(paste, deparse(formula)), " is greater than ",
                      H0val)
       }else{
         H0 <- paste0(H0, "\nH1: Pearson beta for ",
-                     Reduce(paste, deparse(yx.formula)), " is less than ",
+                     Reduce(paste, deparse(formula)), " is less than ",
                      H0val)
       }
       H0 <- paste0(H0, "\n")
