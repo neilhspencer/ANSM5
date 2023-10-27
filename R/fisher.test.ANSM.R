@@ -2,8 +2,8 @@
 fisher.test.ANSM <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            max.exact.cases = 1000, do.exact = TRUE) {
-    stopifnot((is.vector(x) && is.numeric(x) | is.factor(x)),
-              (is.vector(y) && is.numeric(y) | is.factor(y)),
+    stopifnot((is.vector(x) && is.numeric(x) | is.factor(x) && nlevels(x) > 1),
+              (is.vector(y) && is.numeric(y) | is.factor(y) && nlevels(y) > 1),
               ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
               is.numeric(max.exact.cases), length(max.exact.cases) == 1,
               is.logical(do.exact) == TRUE)
@@ -48,6 +48,8 @@ fisher.test.ANSM <-
     if (!is.factor(x) && !is.factor(y)){
       x <- x[complete.cases(x)] #remove missing cases
       y <- y[complete.cases(y)] #remove missing cases
+      x <- droplevels(x)
+      y <- droplevels(y)
     }else{
       complete.cases.id <- complete.cases(x, y)
       x <- x[complete.cases.id] #remove missing cases
