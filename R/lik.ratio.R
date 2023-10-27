@@ -1,4 +1,4 @@
-#' @importFrom stats complete.cases chisq.test pchisq
+#' @importFrom stats complete.cases chisq.test r2dtable pchisq
 lik.ratio <-
   function(x, y, max.exact.cases = 10, nsims.mc = 100000,
            seed = NULL, do.exact = TRUE, do.asymp = FALSE, do.mc = FALSE) {
@@ -54,6 +54,8 @@ lik.ratio <-
     y <- droplevels(y)
     n <- length(x)
     tab.n <- nlevels(x) * nlevels(y)
+    rtots <- table(x)
+    ctots <- table(y)
     suppressWarnings({
       chisq.test.out <- chisq.test(x, y, correct = FALSE)
     })
@@ -96,11 +98,9 @@ lik.ratio <-
       probs <- as.vector(t(exp / n))
       pval.mc <- 0
       for (i in 1:nsims.mc){
-        sim.tmp <- sample.int(tab.n, n, replace = TRUE, prob = probs)
-        obs.tmp <- table(factor(sim.tmp, levels = 1:tab.n))
+        obs.tmp <- r2dtable(1, rtots, ctots)[[1]]
         G2.tmp <- 2 * sum(obs.tmp[obs.tmp != 0] *
-                            log(obs.tmp[obs.tmp != 0] /
-                                  as.vector(t(exp))[obs.tmp != 0]))
+                            log(obs.tmp[obs.tmp != 0] / exp[obs.tmp != 0]))
         if (G2.tmp >= pval.mc.stat){
           pval.mc <- pval.mc + 1 / nsims.mc
         }

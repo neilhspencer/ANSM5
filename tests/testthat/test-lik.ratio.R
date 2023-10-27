@@ -8,5 +8,5 @@ test_that("Example 12.2", {
                          do.asymp = TRUE)$pval.asymp.stat, 17.3344364)
   expect_equal(lik.ratio(site, district, do.exact = FALSE,
                          do.asymp = TRUE)$pval.asymp, 0.06728363)
-  expect_equal(lik.ratio(site, district, seed = 1, nsims.mc = 100)$pval.mc, XXX)
+  expect_equal(lik.ratio(site, district, seed = 1)$pval.mc, 0.04813)
 })
