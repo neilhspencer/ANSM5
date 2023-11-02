@@ -2,14 +2,16 @@
 #' @importFrom utils combn
 jonckheere.terpstra <-
   function(x, g, max.exact.cases = 15, nsims.mc = 10000, seed = NULL,
-           do.asymp = FALSE, do.exact = TRUE) {
+           do.asymp = FALSE, do.exact = TRUE, do.mc = FALSE,
+           do.asymp.ties.adjust = TRUE) {
     stopifnot(is.vector(x), is.numeric(x), is.factor(g), length(x) == length(g),
               length(x[complete.cases(x)]) == length(g[complete.cases(g)]),
               is.numeric(max.exact.cases), length(max.exact.cases) == 1,
               is.numeric(nsims.mc), length(nsims.mc) == 1,
               is.numeric(seed) | is.null(seed),
               length(seed) == 1 | is.null(seed),
-              is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE)
+              is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE,
+              is.logical(do.mc), is.logical(do.asymp.ties.adjust))
 
     #labels
     varname1 <- deparse(substitute(x))
@@ -52,6 +54,11 @@ jonckheere.terpstra <-
     n <- length(x)
     table_g <- table(g)
 
+    #give MC output if exact not possible
+    if (do.exact && n > max.exact.cases){
+      do.mc <- TRUE
+    }
+
     #check for ties
     tiesexist = !all(rank(x) == round(rank(x),0)) # TRUE if ties exist
 
@@ -61,6 +68,7 @@ jonckheere.terpstra <-
       for (j in (i + 1):nlevels(g)){
         x1 <- x[g == levels(g)[i]]
         x2 <- x[g == levels(g)[j]]
+        sum(sapply(x1, function(z) sum(x2 > z) + 0.5 * sum(x2 == z)))
         U <- U + sum(sapply(x1, function(z) sum(x2 > z) + 0.5 * sum(x2 == z)))
       }
     }
@@ -108,7 +116,7 @@ jonckheere.terpstra <-
     }
 
     #Monte Carlo p-value
-    if (do.exact && n > max.exact.cases){
+    if (do.mc){
       if (!is.null(seed)){set.seed(seed)}
       U.sim <- NULL
       for (i in 1:nsims.mc){
@@ -131,7 +139,21 @@ jonckheere.terpstra <-
     #asymptotic p-value
     if (do.asymp){
       U.Exp <- (n ** 2 - sum(table_g ** 2)) / 4
-      U.Var <- (n ** 2 * (2 * n + 3) - sum(table_g ** 2 * (2 * table_g + 3))) / 72
+      if (do.asymp.ties.adjust){
+        table_gx <- table(g, x)
+        rowSums.gx <- rowSums(table_gx)
+        colSums.gx <- colSums(table_gx)
+        U1 <- n * (n - 1) * (2 * n + 5) -
+          sum(rowSums.gx * (rowSums.gx - 1) * (2 * rowSums.gx + 5)) -
+          sum(colSums.gx * (colSums.gx - 1) * (2 * colSums.gx + 5))
+        U2 <- sum(rowSums.gx * (rowSums.gx - 1) * (rowSums.gx - 2)) *
+          sum(colSums.gx * (colSums.gx - 1) * (colSums.gx - 2))
+        U3 <- sum(rowSums.gx * (rowSums.gx - 1)) *
+          sum(colSums.gx * (colSums.gx - 1))
+        U.Var <- U1 / 72 + U2 / (36 * n * (n - 1) * (n - 2)) + U3 / (8 * n * (n - 1))
+      }else{
+        U.Var <- (n ** 2 * (2 * n + 3) - sum(table_g ** 2 * (2 * table_g + 3))) / 72
+      }
       pval.asymp.stat <- (U - U.Exp) / sqrt(U.Var)
       pval.asymp <- pnorm(pval.asymp.stat)
     }
@@ -139,7 +161,7 @@ jonckheere.terpstra <-
     #check if message needed
     if (!do.asymp && !do.exact) {
       test.note <- paste("Neither exact nor asymptotic test requested")
-    }else if (n > max.exact.cases) {
+    }else if (do.exact && n > max.exact.cases) {
       test.note <- paste0("NOTE: Number of useful cases greater than current ",
                           "maximum allowed for exact\ncalculations required ",
                           "for exact test (max.exact.cases = ",
@@ -150,8 +172,13 @@ jonckheere.terpstra <-
       if (!is.null(test.note)){
         test.note <- paste0(test.note, "\n")
       }
-      test.note <- paste0(test.note, "NOTE: Asymptotic p-value not adjusted ",
-                          "for ties in data")
+      if (do.asymp.ties.adjust){
+        test.note <- paste0(test.note, "NOTE: Asymptotic p-value adjusted ",
+                            "for ties in data")
+      }else{
+        test.note <- paste0(test.note, "NOTE: Asymptotic p-value not adjusted ",
+                            "for ties in data")
+      }
     }
 
     #define hypotheses
