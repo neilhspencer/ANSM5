@@ -1,9 +1,15 @@
-#' @importFrom stats complete.cases chisq.test pchisq
+#' @importFrom stats complete.cases chisq.test
 chisq.test.ANSM <-
-  function(x, y, cont.corr = TRUE, max.exact.cases = 10, nsims.mc = 1000000,
-           seed = NULL, do.exact = TRUE, do.asymp = FALSE, do.mc = FALSE) {
-    stopifnot(is.factor(x), is.factor(y),  nlevels(x) > 1, nlevels(y) > 1,
-              length(x) == length(y), is.logical(cont.corr),
+  function(x, y = NULL, p = NULL, cont.corr = TRUE, max.exact.cases = 10,
+           nsims.mc = 100000, seed = NULL, do.exact = TRUE, do.asymp = FALSE,
+           do.mc = FALSE) {
+    stopifnot((is.factor(x) && nlevels(x) > 1 | is.table(x)),
+              (is.factor(y) | (is.table(x) && is.null(y))),
+              (nlevels(y) > 1 | (is.table(x) && is.null(y))),
+              (length(x) == length(y) | is.null(y)),
+              ((is.table(x) && is.null(y) && is.numeric(p) &&
+                  length(p) == length(x) && sum(p) == 1) | is.null(p)),
+              is.logical(cont.corr),
               is.numeric(max.exact.cases), length(max.exact.cases) == 1,
               is.numeric(nsims.mc), length(nsims.mc) == 1,
               is.numeric(seed) | is.null(seed),
@@ -13,7 +19,15 @@ chisq.test.ANSM <-
 
     #labels
     varname1 <- deparse(substitute(x))
-    varname2 <- deparse(substitute(y))
+    if (!is.table(x)){
+      varname2 <- deparse(substitute(y))
+    }else{
+      if (is.null(p)){
+        varname2 <- NULL
+      }else{
+        varname2 <- deparse(substitute(p))
+      }
+    }
 
     #unused arguments
     H0 <- NULL
@@ -46,18 +60,28 @@ chisq.test.ANSM <-
     test.note <- NULL
 
     #prepare
-    complete.cases.id <- complete.cases(x, y)
-    x <- x[complete.cases.id] #remove missing cases
-    y <- y[complete.cases.id] #remove missing cases
-    x <- droplevels(x)
-    y <- droplevels(y)
-    n <- length(x)
+    if (is.table(x)){
+      y <- NULL
+      n <- sum(x)
+    }else{
+      complete.cases.id <- complete.cases(x, y)
+      x <- x[complete.cases.id] #remove missing cases
+      x <- droplevels(x)
+      y <- y[complete.cases.id] #remove missing cases
+      y <- droplevels(y)
+      n <- length(x)
+    }
+    if (is.null(p)){
+      probs <- rep(1/length(x), length(x))
+    }else{
+      probs <- p
+    }
     suppressWarnings({
-      chisq.test.out <- chisq.test(x, y, correct = cont.corr)
+      chisq.test.out <- chisq.test(x, y, correct = cont.corr, p = probs)
     })
     stat <- chisq.test.out$statistic[[1]]
 
-    #give mc output if exact not possible
+    #give Monte Carlo output if exact not possible
     if (do.exact && n > max.exact.cases){
       do.mc <- TRUE
     }
@@ -67,12 +91,28 @@ chisq.test.ANSM <-
       pval.exact.stat <- stat
       permutations <- perms(n)
       n.perms <- dim(permutations)[1]
+      if (is.table(x)){
+        x.vec <- NULL
+        for (i in 1:length(x)){
+          x.vec <- c(x.vec, rep(names(x)[i], x[i]))
+        }
+        x.vec <- factor(x.vec, levels = names(x))
+      }else{
+        x.vec <- x
+      }
       pval.exact <- 0
       for (i in 1:n.perms){
-        suppressWarnings({
-          chisq.tmp <- chisq.test(x[permutations[i,]], y,
-                                  correct = cont.corr)$statistic[[1]]
-        })
+        if (is.table(x)){
+          suppressWarnings({
+            chisq.tmp <- chisq.test(table(x.vec[permutations[i,]]), y,
+                                    correct = cont.corr, p = probs)$statistic[[1]]
+          })
+        }else{
+          suppressWarnings({
+            chisq.tmp <- chisq.test(x[permutations[i,]], y,
+                                    correct = cont.corr, p = probs)$statistic[[1]]
+          })
+        }
         if (chisq.tmp >= pval.exact.stat){
           pval.exact <- pval.exact + 1 / n.perms
         }
@@ -84,7 +124,7 @@ chisq.test.ANSM <-
       pval.mc.stat <- stat
       if (!is.null(seed)){set.seed(seed)}
       suppressWarnings({
-        pval.mc <- chisq.test(x, y, correct = cont.corr,
+        pval.mc <- chisq.test(x, y, correct = cont.corr, p = probs,
                               simulate.p.value = TRUE, B = nsims.mc)$p.value
       })
     }
@@ -107,8 +147,20 @@ chisq.test.ANSM <-
     }
 
     #define hypotheses
-    H0 <- paste0("H0: ", varname1, " and ", varname2, " are independent\n",
-                 "H1: ", varname1, " and ", varname2, " are not independent\n")
+    if (is.table(x)){
+      if (is.null(p)){
+        H0 <- paste0("H0: ", varname1, " follows a uniform distribution\n",
+                     "H1: ", varname1, " does not follow a uniform distribution\n")
+      }else{
+        H0 <- paste0("H0: ", varname1, " follows the distribution defined by ",
+                     varname2, "\n",
+                     "H1: ", varname1, " does not follow the distribution ",
+                     "defined by ", varname2, "\n")
+      }
+    }else{
+      H0 <- paste0("H0: ", varname1, " and ", varname2, " are independent\n",
+                   "H1: ", varname1, " and ", varname2, " are not independent\n")
+    }
 
     #return
     result <- list(title = "Chi-squared test", varname1 = varname1,
