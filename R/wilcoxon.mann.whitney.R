@@ -3,10 +3,13 @@
 wilcoxon.mann.whitney <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000,
-           do.asymp = FALSE, do.exact = TRUE, do.CI = TRUE) {
+           nsims.mc = 100000, seed = NULL, do.asymp = FALSE, do.exact = TRUE,
+           do.mc = FALSE, do.CI = TRUE) {
     stopifnot(is.vector(x), is.numeric(x), is.vector(y), is.numeric(y),
               ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
               is.numeric(max.exact.cases), length(max.exact.cases) == 1,
+              is.numeric(nsims.mc), length(nsims.mc) == 1,
+              is.numeric(seed) | is.null(seed),
               is.logical(cont.corr) == TRUE, CI.width > 0, CI.width < 1,
               is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE,
               is.logical(do.CI) == TRUE)
@@ -28,7 +31,6 @@ wilcoxon.mann.whitney <-
     pval.exact.note <- NULL
     pval.mc <- NULL
     pval.mc.stat <- NULL
-    nsims.mc <- NULL
     pval.mc.note <- NULL
     actualCIwidth.exact <- NULL
     CI.exact.lower <- NULL
@@ -45,7 +47,9 @@ wilcoxon.mann.whitney <-
     #prepare
     x <- x[complete.cases(x)] #remove missing cases
     y <- y[complete.cases(y)] #remove missing cases
-    n <- length(x) + length(y)
+    n.x <- length(x)
+    n.y <- length(y)
+    n <- n.x + n.y
     if (!is.null(H0)) {
       xy <- c(x - H0, y)
       varname1 <- paste0(varname1, " - ", H0)
@@ -63,9 +67,9 @@ wilcoxon.mann.whitney <-
                    " (Mann-Whitney U from ", varname1, "), ", mannwhitneyuy,
                    " (Mann-Whitney U from ", varname2, ")")
 
-    #give asymptotic output if exact not possible
+    #give MC output if exact not possible
     if (do.exact && n > max.exact.cases){
-      do.asymp <- TRUE
+      do.mc <- TRUE
     }
 
     #check for ties
@@ -81,7 +85,7 @@ wilcoxon.mann.whitney <-
         OverflowState <- TRUE
       }
       if (OverflowState){
-        do.asymp <- TRUE
+        do.mc <- TRUE
       }
     }
     if (do.exact && ((!tiesexist && n <= max.exact.cases) |
@@ -161,6 +165,36 @@ wilcoxon.mann.whitney <-
       }
     }
 
+    #Monte Carlo p-value
+    if(do.mc){
+      pval.mc.stat <- stat
+      stat.mc <-  wilcox.test(x, y, exact = FALSE, correct = cont.corr,
+                              conf.int = FALSE)$statistic
+      if (!is.null(seed)){set.seed(seed)}
+      pval.mc <- 0
+      for (i in 1:nsims.mc){
+        xy.tmp <- sample(n, n, replace = FALSE)
+        x.tmp <- xy[xy.tmp[1:n.x]]
+        y.tmp <- xy[xy.tmp[(n.x + 1):n]]
+        stat.tmp <-  wilcox.test(x.tmp, y.tmp, exact = FALSE,
+                                 correct = cont.corr, conf.int = FALSE)$statistic
+        if (alternative == "two.sided"){
+          if (stat.tmp >= stat.mc){
+            pval.mc <- pval.mc + 2 / nsims.mc
+          }
+        }else if (alternative == "less"){
+          if (stat.tmp <= stat.mc){
+            pval.mc <- pval.mc + 1 / nsims.mc
+          }
+        }else if (alternative == "greater"){
+          if (stat.tmp >= stat.mc){
+            pval.mc <- pval.mc + 1 / nsims.mc
+          }
+        }
+      }
+      if (pval.mc > 1) {pval.mc <- 1}
+    }
+
     #check if message needed
     if (!do.asymp && !do.exact) {
       test.note <- paste("Neither exact nor asymptotic test/confidence interval ",
@@ -179,7 +213,7 @@ wilcoxon.mann.whitney <-
                             sprintf("%1.0f", max.exact.cases), ")")
       }
     }
-    if (tiesexist && OverflowState){
+    if (tiesexist && (n > max.exact.cases | OverflowState)){
       if (!is.null(test.note)){
         test.note <- paste0(test.note, "\n")
       }
