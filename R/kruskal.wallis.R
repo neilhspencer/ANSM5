@@ -2,14 +2,15 @@
 #' @importFrom utils combn
 kruskal.wallis <-
   function(x, g, max.exact.cases = 15, nsims.mc = 10000, seed = NULL,
-           do.asymp = FALSE, do.exact = TRUE) {
+           do.asymp = FALSE, do.exact = TRUE, do.mc = FALSE) {
     stopifnot(is.vector(x), is.numeric(x), is.factor(g), length(x) == length(g),
               length(x[complete.cases(x)]) == length(g[complete.cases(g)]),
               is.numeric(max.exact.cases), length(max.exact.cases) == 1,
               is.numeric(nsims.mc), length(nsims.mc) == 1,
               is.numeric(seed) | is.null(seed),
               length(seed) == 1 | is.null(seed),
-              is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE)
+              is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE,
+              is.logical(do.mc) == TRUE)
 
     #labels
     varname1 <- deparse(substitute(x))
@@ -56,6 +57,11 @@ kruskal.wallis <-
     subtract <- 3 * (n + 1)
     c <- (n * ((n + 1) ** 2)) / 4
     sr <- sum(rank.x ** 2)
+
+    #give MC output if exact not possible
+    if (do.exact && n > max.exact.cases){
+      do.mc <- TRUE
+    }
 
     #check for ties
     tiesexist = !all(rank.x == round(rank.x,0)) # TRUE if ties exist
@@ -110,7 +116,7 @@ kruskal.wallis <-
     }
 
     #Monte Carlo p-value
-    if (do.exact && n > max.exact.cases){
+    if (do.mc){
       if (!is.null(seed)){set.seed(seed)}
       T.sim <- NULL
       for (i in 1:nsims.mc){
