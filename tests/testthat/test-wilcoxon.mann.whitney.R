@@ -128,3 +128,35 @@ expect_equal(wilcoxon.mann.whitney(SampleI, SampleIIa,
                                      alternative = "less")$pval.exact,
                0.21756022)
 })
+
+test_that("Example 12.5", {
+  drug <- factor(c(rep("Drug A", 45), rep("Drug B", 54)),
+                 levels = c("Drug A", "Drug B"))
+  side.effect.level <- factor(c(rep("None", 23), rep("Slight", 8),
+                                rep("Moderate", 9), rep("Severe", 3),
+                                rep("Fatal", 2), rep("None", 42),
+                                rep("Slight", 8), rep("Moderate", 4),
+                                rep("Severe", 0)),
+                              levels = c("None", "Slight", "Moderate", "Severe",
+                                         "Fatal"))
+  side.effect.level.A <- as.numeric(side.effect.level[drug == "Drug A"])
+  side.effect.level.B <- as.numeric(side.effect.level[drug == "Drug B"])
+  wmw.out <- wilcoxon.mann.whitney(side.effect.level.A, side.effect.level.B,
+                                   do.CI = FALSE, seed = 1,
+                                   nsims.mc = 1000000)
+  expect_equal(wmw.out$pval.mc.stat,
+               paste0("\n","2624 (rank sum from side.effect.level.A), ",
+                       "2326 (rank sum from side.effect.level.B)", "\n",
+                       "1589 (Mann-Whitney U from side.effect.level.A), ",
+                       "841 (Mann-Whitney U from side.effect.level.B)"))
+  expect_equal(wmw.out$pval.mc, 0.001872)
+  wmw.out <- wilcoxon.mann.whitney(side.effect.level.A, side.effect.level.B,
+                                   do.CI = FALSE, do.exact = FALSE,
+                                   do.asymp = TRUE)
+  expect_equal(wmw.out$pval.asymp.stat,
+               paste0("\n","2624 (rank sum from side.effect.level.A), ",
+                      "2326 (rank sum from side.effect.level.B)", "\n",
+                      "1589 (Mann-Whitney U from side.effect.level.A), ",
+                      "841 (Mann-Whitney U from side.effect.level.B)"))
+  expect_equal(wmw.out$pval.asymp, 0.00184697407)
+})

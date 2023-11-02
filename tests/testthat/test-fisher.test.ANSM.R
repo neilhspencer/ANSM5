@@ -13,3 +13,17 @@ test_that("Example 12.2", {
                        rep("F", 2)))
   expect_equal(fisher.test.ANSM(site, district)$pval.exact, 0.026133508)
 })
+
+test_that("Example 12.5", {
+  drug <- factor(c(rep("Drug A", 45), rep("Drug B", 54)),
+                 levels = c("Drug A", "Drug B"))
+  side.effect.level <- factor(c(rep("None", 23), rep("Slight", 8),
+                                rep("Moderate", 9), rep("Severe", 3),
+                                rep("Fatal", 2), rep("None", 42),
+                                rep("Slight", 8), rep("Moderate", 4),
+                                rep("Severe", 0)),
+                              levels = c("None", "Slight", "Moderate", "Severe",
+                                         "Fatal"))
+  expect_equal(fisher.test.ANSM(drug, side.effect.level)$pval.exact,
+               0.0127213014)
+})

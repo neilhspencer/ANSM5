@@ -38,3 +38,19 @@ test_that("Example 12.4", {
                                do.exact = FALSE,
                                do.asymp = TRUE)$pval.asymp.stat, 14.9466695)
 })
+
+test_that("Example 12.5", {
+  drug <- factor(c(rep("Drug A", 45), rep("Drug B", 54)),
+                 levels = c("Drug A", "Drug B"))
+  side.effect.level <- factor(c(rep("None", 23), rep("Slight", 8),
+                                rep("Moderate", 9), rep("Severe", 3),
+                                rep("Fatal", 2), rep("None", 42),
+                                rep("Slight", 8), rep("Moderate", 4),
+                                rep("Severe", 0)),
+                              levels = c("None", "Slight", "Moderate", "Severe",
+                                         "Fatal"))
+  expect_equal(chisq.test.ANSM(drug, side.effect.level, do.exact = FALSE,
+                               do.asymp = TRUE)$pval.asymp.stat, 11.7558974)
+  expect_equal(chisq.test.ANSM(drug, side.effect.level, do.exact = FALSE,
+                               do.asymp = TRUE)$pval.asymp, 0.0192618608)
+})
