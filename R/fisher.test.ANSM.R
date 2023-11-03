@@ -1,7 +1,7 @@
 #' @importFrom stats complete.cases median
 fisher.test.ANSM <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
-           max.exact.cases = 1000, do.exact = TRUE) {
+           max.exact.cases = 10000, do.exact = TRUE) {
     stopifnot((is.vector(x) && is.numeric(x) | is.factor(x) && nlevels(x) > 1),
               (is.vector(y) && is.numeric(y) | is.factor(y) && nlevels(y) > 1),
               ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
@@ -48,12 +48,12 @@ fisher.test.ANSM <-
     if (!is.factor(x) && !is.factor(y)){
       x <- x[complete.cases(x)] #remove missing cases
       y <- y[complete.cases(y)] #remove missing cases
-      x <- droplevels(x)
-      y <- droplevels(y)
     }else{
       complete.cases.id <- complete.cases(x, y)
       x <- x[complete.cases.id] #remove missing cases
       y <- y[complete.cases.id] #remove missing cases
+      if (is.factor(x)){x <- droplevels(x)}
+      if (is.factor(y)){y <- droplevels(y)}
     }
 
     if (!is.factor(x) && !is.factor(y)){
