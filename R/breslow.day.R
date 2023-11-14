@@ -1,4 +1,4 @@
-#' @importFrom stats complete.cases r2dtable pchisq qnorm
+#' @importFrom stats complete.cases pchisq qnorm
 breslow.day <-
   function(x, y, z, CI.width = 0.95, do.asymp = TRUE, do.CI = TRUE) {
     stopifnot(is.factor(x), is.factor(y), is.factor(z),
@@ -129,13 +129,13 @@ breslow.day <-
     }
 
     #define hypotheses
-    H0 <- paste0("H0: Odds ratios for tables of ", varname1, " and ", varname2,
-                 " by level of ", varname3, " are equal\n",
-                 "H1: Odds ratios for tables of ", varname1, " and ", varname2,
-                 " by level of ", varname3, " are not equal\n")
+    H0 <- paste0("H0: Odds ratio for ", varname1, " by ", varname2,
+                 " is the same for all levels of ", varname3, "\n",
+                 "H1: Odds ratio for ", varname1, " by ", varname2,
+                 " is not the same for all levels of ", varname3, "\n")
 
     #return
-    result <- list(title = "Breslow and Day test for difference in odds ratios",
+    result <- list(title = "Breslow and Day test",
                    varname1 = varname1, varname2 = varname2, H0 = H0,
                    alternative = alternative, cont.corr = cont.corr, pval = pval,
                    pval.stat = pval.stat, pval.note = pval.note,
