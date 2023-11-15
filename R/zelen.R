@@ -1,13 +1,11 @@
 #' @importFrom stats complete.cases dhyper
 zelen <-
-  function(x, y, z, CI.width = 0.95, max.exact.perms = 1000000, do.exact = TRUE,
-           do.CI = TRUE) {
+  function(x, y, z, max.exact.perms = 1000000, do.exact = TRUE) {
     stopifnot(is.factor(x), is.factor(y), is.factor(z),
               nlevels(x) == 2, nlevels(y) == 2, nlevels(z) > 1,
               length(x) == length(y), length(y) == length(z),
-              length(CI.width) == 1, CI.width > 0, CI.width < 1,
               is.numeric(max.exact.perms), length(max.exact.perms) == 1,
-              is.logical(do.exact) == TRUE, is.logical(do.CI) == TRUE)
+              is.logical(do.exact) == TRUE)
 
     #labels
     varname1 <- deparse(substitute(x))
@@ -20,6 +18,7 @@ zelen <-
     alternative <- NULL
     do.mc <- FALSE
     do.asymp <- FALSE
+    do.CI <- FALSE
     nsims.mc <- NULL
     #default outputs
     pval <- NULL
@@ -34,6 +33,7 @@ zelen <-
     pval.mc <- NULL
     pval.mc.stat <- NULL
     pval.mc.note <- NULL
+    CI.width <- NULL
     actualCIwidth.exact <- NULL
     CI.exact.lower <- NULL
     CI.exact.upper <- NULL
@@ -56,8 +56,6 @@ zelen <-
     z <- droplevels(z)
     nlevels.z <- nlevels(z)
     tab.zall <- table(x, y)
-    rtot.zall <- rowSums(tab.zall)
-    ctot.zall <- colSums(tab.zall)
     tab.z <- array(0, dim = c(nlevels.z, 2, 2))
     rtot.z <- array(rep(NA, 2), dim = c(nlevels.z, 2))
     ctot.z <- array(rep(NA, 2), dim = c(nlevels.z, 2))
@@ -99,8 +97,6 @@ zelen <-
       }
       tab.tmp <- array(0, dim = c(nlevels.z, 2, 2))
       probs <- NULL
-      n11plus.Gart <- NULL
-      probs.Gart <- NULL
       zperm.pos <- rep(0, nlevels.z)
       id <- nlevels.z
       repeat{
@@ -113,7 +109,6 @@ zelen <-
           tab.tmp[k, 3 - zperm.row[k], 3 - zperm.col[k]] <-
             rtot.z[k, 3- zperm.row[k]] - tab.tmp[k, 3 - zperm.row[k], zperm.col[k]]
         }
-        n11plus.Gart <- c(n11plus.Gart, sum(tab.tmp[, 1, 1]))
         #calculate probabilities
         dhyper.tmp <- NULL
         for (k in 1:nlevels.z){
@@ -124,7 +119,6 @@ zelen <-
         if (sum(tab.tmp[, 1, 1]) == tab.zall[1, 1]){
           probs <- c(probs, prod(dhyper.tmp))
         }
-        probs.Gart <- c(probs.Gart, prod(dhyper.tmp))
         #update
         for (i in nlevels.z:1){
           zperm.pos[i] <- zperm.pos[i] + 1
@@ -142,50 +136,12 @@ zelen <-
         probs <- probs / sum(probs)
         pval.exact <- sum(probs[probs <= pval.exact.stat])
       }
-      #confidence interval
-      if (do.CI){
-        actualCIwidth.exact <- 1
-        probs.Gart2 <- cumsum(probs.Gart[order(n11plus.Gart)])
-        n11plus.Gart2 <- sort(n11plus.Gart)
-        i <- 1
-        repeat{
-          if (probs.Gart2[i] <= (1 - CI.width) / 2 &&
-              probs.Gart2[i + 1] > (1 - CI.width) / 2) {
-            n12plus.Gart <- rtot.zall[1] - n11plus.Gart2[i]
-            n21plus.Gart <- ctot.zall[1] - n11plus.Gart2[i]
-            n22plus.Gart <- rtot.zall[2] - n21plus.Gart
-            CI.exact.lower <-
-              (n11plus.Gart2[i] * n22plus.Gart) / (n12plus.Gart * n21plus.Gart)
-            actualCIwidth.exact <- actualCIwidth.exact - probs.Gart2[i]
-            break
-          }
-          i <- i + 1
-        }
-        probs.Gart2 <- cumsum(probs.Gart[order(n11plus.Gart, decreasing = TRUE)])
-        n11plus.Gart2 <- sort(n11plus.Gart, decreasing = TRUE)
-        i <- 1
-        repeat{
-          if (probs.Gart2[i] <= (1 - CI.width) / 2 &&
-              probs.Gart2[i + 1] > (1 - CI.width) / 2) {
-            n12plus.Gart <- rtot.zall[1] - n11plus.Gart2[i]
-            n21plus.Gart <- ctot.zall[1] - n11plus.Gart2[i]
-            n22plus.Gart <- rtot.zall[2] - n21plus.Gart
-            CI.exact.upper <-
-              (n11plus.Gart2[i] * n22plus.Gart) / (n12plus.Gart * n21plus.Gart)
-            actualCIwidth.exact <- actualCIwidth.exact - probs.Gart2[i]
-            break
-          }
-          i <- i + 1
-        }
-      }
     }
 
     #check if message needed
-    if (!do.exact && !do.CI) {
-      test.note <- paste("Exact test and confidence interval not requested")
-    }else if (!do.exact){
+    if (!do.exact){
       test.note <- paste("Exact test not requested")
-    }else if ((do.exact | do.CI) && n.perms > max.exact.perms) {
+    }else if (do.exact && n.perms > max.exact.perms) {
       test.note <- paste0("NOTE: Number of permutations required greater than ",
                           "current maximum allowed for exact calculations\n",
                           "required for exact test (max.exact.perms = ",
