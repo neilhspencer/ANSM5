@@ -113,7 +113,7 @@ zelen <-
         dhyper.tmp <- NULL
         for (k in 1:nlevels.z){
           dhyper.tmp <- c(dhyper.tmp,
-                          dhyper(x = tab.tmp[k, 1, 1],m = ctot.z[k, 1],
+                          dhyper(x = tab.tmp[k, 1, 1], m = ctot.z[k, 1],
                                  n = ctot.z[k, 2], k = rtot.z[k, 1]))
         }
         if (sum(tab.tmp[, 1, 1]) == tab.zall[1, 1]){
