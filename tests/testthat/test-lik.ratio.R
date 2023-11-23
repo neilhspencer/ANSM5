@@ -29,3 +29,52 @@ test_that("Example 13.1", {
                          tv.viewing[gender == "Girl"], seed = 1)$pval.mc,
                0.00607)
 })
+
+test_that("Example 13.12", {
+  drug <- factor(c(rep("A", 9 + 4 + 16 + 31), rep("B", 3 + 16 + 2 + 19)),
+                 levels = c("A", "B"))
+  side.effect <- factor(c(rep("Hair loss", 9), rep("Visual impairment", 4),
+                          rep("Hair loss & Visual impairment", 16),
+                          rep("None", 31),
+                          rep("Hair loss", 3), rep("Visual impairment", 16),
+                          rep("Hair loss & Visual impairment", 2),
+                          rep("None", 19)),
+                        levels = c("Hair loss", "Visual impairment",
+                                   "Hair loss & Visual impairment", "None"))
+  side.effect.2 <- side.effect
+  levels(side.effect.2) <- list("Hair loss or Visual impairment" = c("Hair loss", "Visual impairment"),
+                                "Hair loss & Visual impairment" = "Hair loss & Visual impairment",
+                                "None" = "None")
+  side.effect.3 <- side.effect
+  levels(side.effect.3) <-
+    list("Side-effect" = c("Hair loss", "Visual impairment",
+                           "Hair loss & Visual impairment"), "None" = "None")
+  expect_equal(lik.ratio(drug, side.effect, seed = 1)$pval.mc, 0.00010)
+  expect_equal(lik.ratio(drug, side.effect, do.exact = FALSE,
+                         do.asymp = TRUE)$pval.asymp, 0.000061414559)
+  expect_equal(lik.ratio(drug[side.effect == "Hair loss" |
+                                side.effect == "Visual impairment"],
+                         side.effect[side.effect == "Hair loss" |
+                                       side.effect == "Visual impairment"],
+                         seed = 1)$pval.mc, 0.00337)
+  expect_equal(lik.ratio(drug[side.effect == "Hair loss" |
+                                side.effect == "Visual impairment"],
+                         side.effect[side.effect == "Hair loss" |
+                                       side.effect == "Visual impairment"],
+                         do.exact = FALSE, do.asymp = TRUE)$pval.asymp,
+               0.00182512405)
+  expect_equal(lik.ratio(drug[side.effect.2 == "Hair loss or Visual impairment" |
+                                side.effect.2 == "Hair loss & Visual impairment"],
+                         side.effect.2[side.effect.2 == "Hair loss or Visual impairment" |
+                                         side.effect.2 == "Hair loss & Visual impairment"],
+                         seed = 1)$pval.mc, 0.00086)
+  expect_equal(lik.ratio(drug[side.effect.2 == "Hair loss or Visual impairment" |
+                                side.effect.2 == "Hair loss & Visual impairment"],
+                         side.effect.2[side.effect.2 == "Hair loss or Visual impairment" |
+                                side.effect.2 == "Hair loss & Visual impairment"],
+                         do.exact = FALSE, do.asymp = TRUE)$pval.asymp,
+               0.00046737958)
+  expect_equal(lik.ratio(drug, side.effect.3, seed = 1)$pval.mc, 0.83606)
+  expect_equal(lik.ratio(drug, side.effect.3, do.exact = FALSE,
+                         do.asymp = TRUE)$pval.asymp, 0.6830428)
+})

@@ -133,3 +133,8 @@ test_that("Example 5.7", {
   expect_equal(binom(8, 10, 0.8244, alternative = "greater")$pval.exact, 0.74991752)
   expect_equal(binom(9, 10, 0.8244, alternative = "greater")$pval.exact, 0.45386729)
 })
+
+test_that("Section 13.4", {
+  expect_equal(binom.test(32, 100, 0.4)$p.value, 0.125293086)
+  expect_equal(binom.test(48, 100, 0.4)$p.value, 0.10363706)
+})
