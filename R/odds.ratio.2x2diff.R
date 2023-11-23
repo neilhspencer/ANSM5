@@ -215,11 +215,9 @@ odds.ratio.2x2diff <-
         #create z1 stat
         phi.star.tmp1 <- log((tab.tmp1[1, 1] * tab.tmp1[2, 2]) /
                                (tab.tmp1[1, 2] * tab.tmp1[2, 1]))
-        var.phi.star.tmp1 <- sum(1 / tab.tmp1)
         #create z2 stat
         phi.star.tmp2 <- log((tab.tmp2[1, 1] * tab.tmp2[2, 2]) /
                                (tab.tmp2[1, 2] * tab.tmp2[2, 1]))
-        var.phi.star.tmp2 <- sum(1 / tab.tmp2)
         #compare with observed statistic
         stat.tmp[i] <- phi.star.tmp1 - phi.star.tmp2
         if (alternative == "less" && stat.tmp[i] <= pval.mc.stat){
