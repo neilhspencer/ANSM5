@@ -48,3 +48,43 @@ test_that("Example 13.1", {
                0.0059470492)
 })
 
+test_that("Section 13.3.1", {
+  medicine <- factor(c(rep("Standard", 498 + 103 + 339 + 341),
+                       rep("New", 1042 + 367 + 125 + 190)),
+                     levels = c("Standard", "New"))
+  response <- factor(c(rep("No effect", 498), rep("Cure", 103),
+                       rep("No effect", 339), rep("Cure", 341),
+                       rep("No effect", 1042), rep("Cure", 367),
+                       rep("No effect", 125), rep("Cure", 190)),
+                     levels = c("No effect", "Cure"))
+  location <- factor(c(rep("Urban", 498 + 103), rep("Rural", 339 + 341),
+                       rep("Urban", 1042 + 367), rep("Rural", 125 + 190)),
+                     levels = c("Urban", "Rural"))
+  expect_equal(fisher.test.ANSM(medicine[location == "Urban"],
+                                response[location == "Urban"],
+                                alternative = "greater")$pval.exact,
+               0.0000068532897)
+  expect_equal(fisher.test.ANSM(medicine[location == "Rural"],
+                                response[location == "Rural"],
+                                alternative = "greater")$pval.exact,
+               0.00169314846)
+  expect_equal(fisher.test.ANSM(medicine, response,
+                                alternative = "less")$pval.exact, 0.094564075)
+})
+
+test_that("Section 13.4", {
+  group <- factor(c(rep("Minority", 1 + 31 + 2 + 46),
+                    rep("Majority", 10 + 58 + 9 + 43)),
+                  levels = c("Minority", "Majority"))
+  promoted <- factor(c(rep("Yes", 1), rep("No", 31),
+                       rep("Yes", 2), rep("No", 46),
+                       rep("Yes", 10), rep("No", 58),
+                       rep("Yes", 9), rep("No", 43)), levels = c("Yes", "No"))
+  company <- factor(c(rep("A", 32), rep("B", 48), rep("A", 68), rep("B", 52)),
+                    levels = c("A", "B"))
+  expect_equal(fisher.test.ANSM(group[company == "A"], promoted[company == "A"],
+                                alternative = "less")$pval.exact, 0.076517329)
+  expect_equal(fisher.test.ANSM(group[company == "B"], promoted[company == "B"],
+                                alternative = "less")$pval.exact, 0.035089803)
+  expect_equal(fisher.test.ANSM(group, company)$pval.exact, 0.030086355)
+})

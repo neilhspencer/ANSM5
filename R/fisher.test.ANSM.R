@@ -8,8 +8,6 @@ fisher.test.ANSM <-
               is.numeric(max.exact.cases), length(max.exact.cases) == 1,
               is.logical(do.exact) == TRUE)
     alternative <- match.arg(alternative)
-    stopifnot((is.numeric(x) && is.numeric(y)) |
-                (is.factor(x) | is.factor(y)) && alternative == "two.sided")
 
     #labels
     varname1 <- deparse(substitute(x))
@@ -78,7 +76,7 @@ fisher.test.ANSM <-
 
     #Exact test
     if (do.exact && n <= max.exact.cases){
-      pval.exact <- fisher.test(x.mat)$p.value
+      pval.exact <- fisher.test(x.mat, alternative = alternative)$p.value
     }
 
     #check if message needed
@@ -108,8 +106,16 @@ fisher.test.ANSM <-
                      varname2, "\n")
       }
     }else{
-      H0 <- paste0("H0: ", varname1, " and ", varname2, " are independent\n",
-                   "H1: ", varname1, " and ", varname2, " are not independent\n")
+      if (alternative == "two.sided" | nlevels(x) > 2 | nlevels(y) > 2){
+        H0 <- paste0("H0: ", varname1, " and ", varname2, " are independent\n",
+                     "H1: ", varname1, " and ", varname2, " are not independent\n")
+      }else if (alternative == "less"){
+        H0 <- paste0("H0: odds ratio = 0\n",
+                     "H1: odds ratio < 0\n")
+      }else if (alternative == "greater"){
+        H0 <- paste0("H0: odds ratio = 0\n",
+                     "H1: odds ratio > 0\n")
+      }
     }
 
     #create title
