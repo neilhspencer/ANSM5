@@ -1,12 +1,12 @@
 test_that("Example 4.15", {
-  births <- c("A", "A", "A", "A", "B", "A", "C", "C", "A", "A", "A", "A", "A",
-              "D", "D", "A", "A")
-  expect_equal(runs.ncat(births, alternative = "less",
-                         cont.corr = TRUE)$pval.asymp.stat, -1.15433076)
-  expect_equal(runs.ncat(births, alternative = "less",
-                         cont.corr = TRUE)$pval.asymp, 0.124182295)
-  expect_equal(runs.ncat(births, alternative = "less", do.mc = TRUE,
-                         nsims.mc = 100000, seed = 1)$pval.mc, 0.09714)
+  expect_equal(runs.ncat(ch4data$births, alternative = "less")$pval.asymp.stat,
+               -1.15433076)
+  expect_equal(runs.ncat(ch4data$births, alternative = "less",
+                         cont.corr = FALSE)$pval.asymp, 0.061889005)
+  expect_equal(runs.ncat(ch4data$births, alternative = "less")$pval.asymp,
+               0.124182295)
+  expect_equal(runs.ncat(ch4data$births, alternative = "less", do.mc = TRUE,
+                         seed = 1)$pval.mc, 0.09714)
 })
 
 test_that("Example 7.10", {
