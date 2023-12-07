@@ -1,7 +1,7 @@
 #' @importFrom stats complete.cases pnorm
 runs.ncat <-
   function(x,  alternative=c("two.sided", "less", "greater"), cont.corr = TRUE,
-           nsims.mc = 10000, seed = NULL, do.asymp = TRUE, do.mc = FALSE) {
+           nsims.mc = 100000, seed = NULL, do.asymp = TRUE, do.mc = FALSE) {
     stopifnot(is.vector(x), is.logical(cont.corr) == TRUE,
               is.numeric(nsims.mc), length(nsims.mc) == 1,
               is.numeric(seed) | is.null(seed),
