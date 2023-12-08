@@ -60,7 +60,7 @@ sign.test <-
     pval.exact.less <- pbinom(pluses, n, 0.5)
     pval.exact.greater <- pbinom(n-pluses, n, 0.5)
     if (alternative=="two.sided"){
-      pval.exact <- min(pval.exact.less, pval.exact.greater) * 2
+      pval.exact <- min(1, min(pval.exact.less, pval.exact.greater) * 2)
     }else if (alternative == "less"){
       pval.exact <- pval.exact.less
     }else if (alternative == "greater"){
