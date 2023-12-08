@@ -2,6 +2,15 @@ test_that("Example 4.4", {
   expect_equal(shapiro.test.ANSM(ch4data$ages)$pval.asymp, 0.00117134809)
 })
 
+test_that("Exercise 4.1", {
+  expect_equal(shapiro.test.ANSM(ch4data$McGamma)$pval.asymp, 0.00039674968)
+})
+
+test_that("Exercise 4.3", {
+  expect_equal(shapiro.test.ANSM(ch4data$visiting.supporters)$pval.asymp,
+               0.0011657189)
+})
+
 test_that("Example 5.1", {
   diffs <- c(-1, 2, 7, 14, 16, 16, 19, 20, 20, 22, 30, 33)
   expect_equal(shapiro.test.ANSM(diffs)$pval.asymp, 0.7289256)

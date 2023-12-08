@@ -89,6 +89,23 @@ test_that("Example 4.12", {
   expect_equal(binom(13, 32)$CI.exact.upper, 0.59356)
 })
 
+test_that("Exercise 4.5", {
+  expect_equal(binom(3, 100, 0.01, alternative="greater")$pval.exact, 0.079373202)
+  expect_equal(binom(5, 200, 0.01, alternative="greater")$pval.exact, 0.051746264)
+  expect_equal(binom(6, 300, 0.01, alternative="greater")$pval.exact, 0.082903563)
+  expect_equal(binom(8, 400, 0.01, alternative="greater")$pval.exact, 0.050237416)
+  expect_equal(binom(9, 500, 0.01, alternative="greater")$pval.exact, 0.06711016)
+  expect_equal(binom(3, 100, 0.03, alternative="greater")$pval.exact, 0.58022492)
+  expect_equal(binom(5, 200, 0.03, alternative="greater")$pval.exact, 0.71902044)
+  expect_equal(binom(6, 300, 0.03, alternative="greater")$pval.exact, 0.88797997)
+  expect_equal(binom(8, 400, 0.03, alternative="greater")$pval.exact, 0.91378872)
+  expect_equal(binom(9, 500, 0.03, alternative="greater")$pval.exact, 0.9645875)
+  expect_equal(binom(8, 450, 0.01, alternative="greater")$pval.exact, 0.08555122)
+  expect_equal(binom(8, 450, 0.03, alternative="greater")$pval.exact, 0.96067824)
+  expect_equal(binom(8, 436, 0.01, alternative="greater")$pval.exact, 0.07449773)
+  expect_equal(binom(8, 436, 0.03, alternative="greater")$pval.exact, 0.9506539)
+})
+
 test_that("Example 5.4", {
   expect_equal(binom(14, 23, 0.5)$pval.exact, 0.4048729)
 })

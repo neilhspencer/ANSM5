@@ -1,7 +1,6 @@
 test_that("Example 4.16", {
-  times_as_degrees <- c(15, 45, 65, 75, 85, 95, 100, 105, 145, 165, 180, 260)
-  expect_equal(hodges.ajne(times_as_degrees)$pval.stat, 1)
-  expect_equal(hodges.ajne(times_as_degrees)$pval, 0.05859375)
+  expect_equal(hodges.ajne(ch4data$times_as_degrees)$pval.stat, 1)
+  expect_equal(hodges.ajne(ch4data$times_as_degrees)$pval, 0.05859375)
 })
 
 test_that("Test overly-uniform data", {
