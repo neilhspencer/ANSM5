@@ -106,6 +106,20 @@ test_that("Exercise 4.5", {
   expect_equal(binom(8, 436, 0.03, alternative="greater")$pval.exact, 0.9506539)
 })
 
+test_that("Exercise 4.6", {
+  expect_equal(binom(26, 72)$CI.exact.lower, 0.25116)
+  expect_equal(binom(26, 72)$CI.exact.upper, 0.48288)
+})
+
+test_that("Exercise 4.7", {
+  expect_equal(binom(6, 18, 0.5)$pval.exact, 0.23788452)
+  expect_equal(binom(75, 225, 0.5)$pval.exact, 6.433102e-07)
+  expect_equal(binom(6, 18)$CI.exact.lower, 0.13342)
+  expect_equal(binom(6, 18)$CI.exact.upper, 0.59008)
+  expect_equal(binom(75, 225)$CI.exact.lower, 0.27208)
+  expect_equal(binom(75, 225)$CI.exact.upper, 0.39905)
+})
+
 test_that("Example 5.4", {
   expect_equal(binom(14, 23, 0.5)$pval.exact, 0.4048729)
 })

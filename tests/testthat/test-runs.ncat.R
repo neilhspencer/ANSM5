@@ -9,6 +9,15 @@ test_that("Example 4.15", {
                          seed = 1)$pval.mc, 0.09714)
 })
 
+test_that("Exercise 4.17", {
+  expect_equal(runs.ncat(ch4data$football.results, alternative = "less",
+                         cont.corr = FALSE)$pval.asymp, 0.017170837)
+  expect_equal(runs.ncat(ch4data$football.results,
+                         alternative = "less")$pval.asymp, 0.03603851)
+  expect_equal(runs.ncat(ch4data$football.results, alternative = "less",
+                         do.mc = TRUE, seed = 1)$pval.mc, 0.02543)
+})
+
 test_that("Example 7.10", {
   Consultants <- c(97, 157, 181, 215, 216, 520, 527, 540, 566, 580)
   Registrars <- c(305, 320, 345, 350, 356, 454, 456, 471, 485, 489)

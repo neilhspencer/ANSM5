@@ -133,6 +133,11 @@ test_that("Exercise 3.17", {
   expect_equal(wilcoxon.signedrank(ch3data$sampleII, 110, do.asymp = TRUE)$pval.asymp, 0.019622174)
 })
 
+test_that("Exercise 4.15", {
+  expect_equal(wilcoxon.signedrank(ch4data$arrow.angles, 145)$pval.exact,
+               0.048828125)
+})
+
 test_that("Example 5.1", {
   diffs <- c(-1, 2, 7, 14, 16, 16, 19, 20, 20, 22, 30, 33)
   expect_equal(wilcoxon.signedrank(diffs, 0)$pval.exact, 0.0009765625)

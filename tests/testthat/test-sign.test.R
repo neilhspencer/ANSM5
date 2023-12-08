@@ -103,6 +103,10 @@ test_that("Exercise 3.17", {
   expect_equal(sign.test(ch3data$sampleII, 110, do.asymp = TRUE)$pval.asymp, 0.044171345)
 })
 
+test_that("Exercise 4.15", {
+  expect_equal(sign.test(ch4data$arrow.angles, 145)$pval.exact, 0.109375)
+})
+
 test_that("Example 5.1", {
   diffs <- c(-1, 2, 7, 14, 16, 16, 19, 20, 20, 22, 30, 33)
   expect_equal(sign.test(diffs, 0)$pval.exact, 0.0063476563)

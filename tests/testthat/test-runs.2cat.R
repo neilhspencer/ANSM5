@@ -19,6 +19,23 @@ test_that("Example 4.14", {
                0.45748648)
 })
 
+test_that("Exercise 4.10", {
+  expect_equal(runs.2cat(
+    sign(ch4data$points - median(ch4data$points)))$pval.exact, 0.063403263)
+})
+
+test_that("Exercise 4.11", {
+  expect_equal(runs.2cat(
+    sign(ch4data$rainfall.DRC - median(ch4data$rainfall.DRC)))$pval.exact,
+    0.063403263)
+})
+
+test_that("Exercise 4.12", {
+  expect_equal(runs.2cat(
+    sign(ch4data$piped.water.DRC - median(ch4data$piped.water.DRC)))$pval.exact,
+    0.42890443)
+})
+
 test_that("Example 5.10", {
   yr0910 <- c(4282, 5233, 4306, 3408, 4177, 2986, 3872, 3739, 2095, 3735, 3028,
               2691)
