@@ -1,8 +1,7 @@
 #' @importFrom stats complete.cases
 hodges.ajne <-
-  function(x, H0 = 0, alternative = c("two.sided"), minx = 0, maxx = 360) {
-    stopifnot(is.vector(x), is.numeric(x), length(x) > 1,
-              is.numeric(H0), length(H0) == 1, H0 >= minx, H0 <= maxx)
+  function(x, alternative = c("two.sided"), minx = 0, maxx = 360) {
+    stopifnot(is.vector(x), is.numeric(x), length(x) > 1)
     alternative <- match.arg(alternative)
 
     #labels
@@ -40,8 +39,6 @@ hodges.ajne <-
     #prepare
     x <- x[complete.cases(x)] #remove missing cases
     n <- length(x)
-    x <- x - H0 #redefine centre point
-    x[x < minx] <- maxx + x[x < minx] #move negatives to before origin
     x <- (x + minx) #make smallest possible number zero
     x <- x * (360 / maxx) #make largest possible number 360
     x <- sort(x)

@@ -4,5 +4,5 @@ test_that("Example 4.17", {
 })
 
 test_that("Exercise 4.13", {
-  expect_equal(range.test(ch4data$accident.bearings - 90)$pval, 0.0074382381)
+  expect_equal(range.test(ch4data$accident.bearings)$pval, 0.0074382381)
 })

@@ -4,7 +4,7 @@ test_that("Example 4.16", {
 })
 
 test_that("Exercise 4.13", {
-  expect_equal(hodges.ajne(ch4data$accident.bearings - 90)$pval, 0.109375)
+  expect_equal(hodges.ajne(ch4data$accident.bearings)$pval, 0.109375)
 })
 
 test_that("Exercise 4.14", {
