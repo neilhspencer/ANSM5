@@ -139,26 +139,72 @@ test_that("Exercise 4.15", {
 })
 
 test_that("Example 5.1", {
-  diffs <- c(-1, 2, 7, 14, 16, 16, 19, 20, 20, 22, 30, 33)
-  expect_equal(wilcoxon.signedrank(diffs, 0)$pval.exact, 0.0009765625)
-  expect_equal(wilcoxon.signedrank(diffs)$CI.exact.lower, 9.5)
-  expect_equal(wilcoxon.signedrank(diffs)$CI.exact.upper, 23.5)
+  expect_equal(wilcoxon.signedrank(ch5data$LVF - ch5data$RVF, 0)$pval.exact,
+               0.0009765625)
+  expect_equal(wilcoxon.signedrank(ch5data$LVF - ch5data$RVF)$CI.exact.lower,
+               9.5)
+  expect_equal(wilcoxon.signedrank(ch5data$LVF - ch5data$RVF)$CI.exact.upper,
+               23.5)
 })
 
 test_that("Example 5.2", {
-  arithmetic <- c(8, 6, 14, 5, 10, 2, 9, 19, 11, 4, 5)
-  expect_equal(wilcoxon.signedrank(arithmetic, 10)$pval.exact, 0.248046875)
-  expect_equal(wilcoxon.signedrank(arithmetic, 10, do.asymp = TRUE)$pval.asymp,
+  expect_equal(wilcoxon.signedrank(ch5data$arithmetic, 10)$pval.exact,
+               0.248046875)
+  expect_equal(wilcoxon.signedrank(ch5data$arithmetic, 10,
+                                   do.asymp = TRUE)$pval.asymp,
                0.22887085)
-  expect_equal(wilcoxon.signedrank(arithmetic, 10, do.asymp = TRUE)$CI.asymp.lower, 5)
-  expect_equal(wilcoxon.signedrank(arithmetic, 10, do.asymp = TRUE)$CI.asymp.upper, 12)
+  expect_equal(wilcoxon.signedrank(ch5data$arithmetic, 10,
+                                   do.asymp = TRUE)$CI.asymp.lower, 5)
+  expect_equal(wilcoxon.signedrank(ch5data$arithmetic, 10,
+                                   do.asymp = TRUE)$CI.asymp.upper, 12)
 })
 
 test_that("Example 5.3", {
-  bp1 <- c(-5, -5, 0, 2, 10, 15, 15, 15, 18, 20, 20, 20, 20, 22, 30, 30, 34, 40, 40, 40, 41, 47, 80, 85)
-  expect_equal(wilcoxon.signedrank(bp1)$CI.exact.lower, 17.5)
-  expect_equal(wilcoxon.signedrank(bp1)$CI.exact.upper, 33.5)
-  bp2<- c(-5, -103, 0, 2, 10, 15, 15, 15, 18, 20, 20, 20, 20, 22, 30, 30, 34, 40, 40, 40, 41, 47, 80, 85)
-  expect_equal(wilcoxon.signedrank(bp2)$CI.exact.lower, 16)
-  expect_equal(wilcoxon.signedrank(bp2)$CI.exact.upper, 32.5)
+  expect_equal(wilcoxon.signedrank(ch5data$bp)$CI.exact.lower, 17.5)
+  expect_equal(wilcoxon.signedrank(ch5data$bp)$CI.exact.upper, 33.5)
+  expect_equal(wilcoxon.signedrank(ch5data$bp.incorrect)$CI.exact.lower, 16)
+  expect_equal(wilcoxon.signedrank(ch5data$bp.incorrect)$CI.exact.upper, 32.5)
+})
+
+test_that("Exercise 5.1", {
+  expect_equal(wilcoxon.signedrank(ch5data$bp.diff, 0)$pval.exact, 0.025390625)
+})
+
+test_that("Exercise 5.2", {
+  expect_equal(wilcoxon.signedrank(ch5data$LabI - ch5data$LabII, 0)$pval.exact,
+               0.044921875)
+  expect_equal(wilcoxon.signedrank(
+    ch5data$LabI - ch5data$LabII, 0)$CI.exact.lower, 0.05)
+  expect_equal(wilcoxon.signedrank(
+    ch5data$LabI - ch5data$LabII, 0)$CI.exact.upper, 0.85)
+  expect_equal(wilcoxon.signedrank(ch5data$LabI - ch5data$LabII, 0,
+                                   CI.width = 0.99)$CI.exact.lower, -0.25)
+  expect_equal(wilcoxon.signedrank(ch5data$LabI - ch5data$LabII, 0,
+                                   CI.width = 0.99)$CI.exact.upper, 1.05)
+})
+
+test_that("Exercise 5.5", {
+  expect_equal(wilcoxon.signedrank(ch5data$online - ch5data$lectures,
+                                   0)$pval.exact, 0.07421875)
+})
+
+test_that("Exercise 5.9", {
+  expect_equal(wilcoxon.signedrank(ch5data$additiveA - ch5data$additiveB,
+                                   0)$pval.exact, 0.12890625)
+})
+
+test_that("Exercise 5.10", {
+  expect_equal(wilcoxon.signedrank(ch5data$round3 - ch5data$round2, 3,
+                                   alternative = "greater")$pval.exact,
+               0.0283203125)
+})
+
+test_that("Exercise 5.11", {
+  expect_equal(wilcoxon.signedrank(ch5data$pollA - ch5data$pollB,
+                                   0)$pval.exact, 0.27056885)
+})
+
+test_that("Exercise 5.12", {
+  expect_equal(wilcoxon.signedrank(ch5data$kHz0.125 - ch5data$kHz0.25,
+                                   0)$pval.exact, 0.03125)
 })

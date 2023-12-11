@@ -96,11 +96,15 @@ test_that("Exercise 3.16", {
 
 test_that("Exercise 3.17", {
   expect_equal(sign.test(ch3data$sampleI, 110)$pval.exact, 0.109375)
-  expect_equal(sign.test(ch3data$sampleI, 110, do.asymp = TRUE, cont.corr = FALSE)$pval.asymp, 0.057779571)
-  expect_equal(sign.test(ch3data$sampleI, 110, do.asymp = TRUE)$pval.asymp, 0.113846298)
+  expect_equal(sign.test(ch3data$sampleI, 110, do.asymp = TRUE,
+                         cont.corr = FALSE)$pval.asymp, 0.057779571)
+  expect_equal(sign.test(ch3data$sampleI, 110, do.asymp = TRUE)$pval.asymp,
+               0.113846298)
   expect_equal(sign.test(ch3data$sampleII, 110)$pval.exact, 0.041389465)
-  expect_equal(sign.test(ch3data$sampleII, 110, do.asymp = TRUE, cont.corr = FALSE)$pval.asymp, 0.025347319)
-  expect_equal(sign.test(ch3data$sampleII, 110, do.asymp = TRUE)$pval.asymp, 0.044171345)
+  expect_equal(sign.test(ch3data$sampleII, 110, do.asymp = TRUE,
+                         cont.corr = FALSE)$pval.asymp, 0.025347319)
+  expect_equal(sign.test(ch3data$sampleII, 110, do.asymp = TRUE)$pval.asymp,
+               0.044171345)
 })
 
 test_that("Exercise 4.15", {
@@ -108,19 +112,16 @@ test_that("Exercise 4.15", {
 })
 
 test_that("Example 5.1", {
-  diffs <- c(-1, 2, 7, 14, 16, 16, 19, 20, 20, 22, 30, 33)
-  expect_equal(sign.test(diffs, 0)$pval.exact, 0.0063476563)
-  expect_equal(sign.test(diffs)$CI.exact.lower, 7)
-  expect_equal(sign.test(diffs)$CI.exact.upper, 22)
+  expect_equal(sign.test(ch5data$LVF - ch5data$RVF, 0)$pval.exact, 0.0063476563)
+  expect_equal(sign.test(ch5data$LVF - ch5data$RVF)$CI.exact.lower, 7)
+  expect_equal(sign.test(ch5data$LVF - ch5data$RVF)$CI.exact.upper, 22)
 })
 
 test_that("Example 5.3", {
-  bp1 <- c(-5, -5, 0, 2, 10, 15, 15, 15, 18, 20, 20, 20, 20, 22, 30, 30, 34, 40, 40, 40, 41, 47, 80, 85)
-  expect_equal(sign.test(bp1)$CI.exact.lower, 15)
-  expect_equal(sign.test(bp1)$CI.exact.upper, 40)
-  bp2<- c(-5, -103, 0, 2, 10, 15, 15, 15, 18, 20, 20, 20, 20, 22, 30, 30, 34, 40, 40, 40, 41, 47, 80, 85)
-  expect_equal(sign.test(bp2)$CI.exact.lower, 15)
-  expect_equal(sign.test(bp2)$CI.exact.upper, 40)
+  expect_equal(sign.test(ch5data$bp)$CI.exact.lower, 15)
+  expect_equal(sign.test(ch5data$bp)$CI.exact.upper, 40)
+  expect_equal(sign.test(ch5data$bp.incorrect)$CI.exact.lower, 15)
+  expect_equal(sign.test(ch5data$bp.incorrect)$CI.exact.upper, 40)
 })
 
 test_that("Example 5.4", {
@@ -129,4 +130,17 @@ test_that("Example 5.4", {
                0.4042485)
   expect_equal(sign.test(c(rep(0, 14), rep(1, 9)), 0.5, do.asymp = TRUE,
                          cont.corr = FALSE)$pval.asymp, 0.29714653)
+})
+
+test_that("Exercise 5.1", {
+  expect_equal(sign.test(ch5data$bp.diff, 0)$pval.exact, 0.2265625)
+})
+
+test_that("Exercise 5.4", {
+  expect_equal(sign.test(ch5data$parent)$pval.exact, 0.049041748)
+})
+
+test_that("Exercise 5.6", {
+  expect_equal(sign.test(c(rep(0, 27), rep(1, 16)), 0.5)$pval.exact,
+               0.126289474)
 })

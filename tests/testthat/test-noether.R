@@ -13,3 +13,8 @@ test_that("Example 5.9", {
   expect_equal(pnorm(-1 / sqrt(2), lower.tail = FALSE), 0.76024994)
   expect_equal(noether(p1 = 0.7602, alpha = 0.05, power = 0.8), 22.829351)
 })
+
+test_that("Exercise 5.16", {
+  expect_equal(noether(p1 = 0.8, alpha = 0.05, power = 0.9), 23.788465)
+  expect_equal(noether(p1 = 0.8, alpha = 0.025, power = 0.9), 29.187286)
+})
