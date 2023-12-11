@@ -3,7 +3,8 @@ sign.test <-
   function(x, H0 = NULL, alternative = c("two.sided", "less", "greater"),
            cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000000,
            do.asymp = FALSE, do.exact = TRUE, do.CI = TRUE) {
-  stopifnot(is.vector(x), is.numeric(x),
+  stopifnot((is.vector(x) && is.numeric(x) | is.factor(x)),
+            if(is.factor(x)){is.null(H0) && nlevels(x) == 2}else{TRUE},
             ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
             is.numeric(max.exact.cases), length(max.exact.cases) == 1,
             is.logical(cont.corr) == TRUE, is.numeric(CI.width),
@@ -44,9 +45,17 @@ sign.test <-
 
   #statistics
   x <- x[complete.cases(x)] #remove missing cases
-  if (!is.null(H0)) {
-    x <- x[x != H0] #remove cases equal to H0
-    pluses <- sum(x > H0)
+  if (is.factor(x)){
+    pluses <- sum(as.numeric(x) > 1.5)
+    H0 <- paste0("H0: there are no differences between the levels of ",
+                 varname1, "\n",
+                 "H1: there is a difference between the levels of ", varname1,
+                 "\n")
+  }else{
+    if (!is.null(H0)) {
+      x <- x[x != H0] #remove cases equal to H0
+      pluses <- sum(x > H0)
+    }
   }
   n <- length(x)
 
