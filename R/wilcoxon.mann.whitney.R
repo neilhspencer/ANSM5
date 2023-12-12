@@ -5,7 +5,9 @@ wilcoxon.mann.whitney <-
            cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000,
            nsims.mc = 100000, seed = NULL, do.asymp = FALSE, do.exact = TRUE,
            do.mc = FALSE, do.CI = TRUE) {
-    stopifnot(is.vector(x), is.numeric(x), is.vector(y), is.numeric(y),
+    stopifnot((is.vector(x) && is.numeric(x) && is.vector(y) && is.numeric(y)) |
+                (is.factor(x) && is.factor(y) && all(levels(x) == levels(y)) &&
+                   is.null(H0)),
               ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
               is.numeric(max.exact.cases), length(max.exact.cases) == 1,
               is.numeric(nsims.mc), length(nsims.mc) == 1,
@@ -50,6 +52,10 @@ wilcoxon.mann.whitney <-
     n.x <- length(x)
     n.y <- length(y)
     n <- n.x + n.y
+    if (is.factor(x) && is.factor(y)){
+      x <- as.numeric(x)
+      y <- as.numeric(y)
+    }
     if (!is.null(H0)) {
       xy <- c(x - H0, y)
       varname1 <- paste0(varname1, " - ", H0)
