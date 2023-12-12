@@ -1,6 +1,6 @@
 test_that("Example 4.16", {
-  expect_equal(hodges.ajne(ch4data$times_as_degrees)$pval.stat, 1)
-  expect_equal(hodges.ajne(ch4data$times_as_degrees)$pval, 0.05859375)
+  expect_equal(hodges.ajne(ch4data$times.as.degrees)$pval.stat, 1)
+  expect_equal(hodges.ajne(ch4data$times.as.degrees)$pval, 0.05859375)
 })
 
 test_that("Exercise 4.13", {

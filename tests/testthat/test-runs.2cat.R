@@ -42,10 +42,8 @@ test_that("Example 5.10", {
 })
 
 test_that("Example 6.17", {
-  GroupA <- c(23, 18, 17, 25, 22, 19, 31, 26, 29, 33)
-  GroupB <- c(21, 28, 32, 30, 41, 24, 35, 34, 27, 39, 36)
-  code <- c(rep(0, length(GroupA)), rep(1, length(GroupB)))
-  ranked_code <- code[order(c(GroupA, GroupB))]
+  code <- c(rep(0, length(ch6data$groupA)), rep(1, length(ch6data$groupB)))
+  ranked_code <- code[order(c(ch6data$groupA, ch6data$groupB))]
   expect_equal(runs.2cat(ranked_code, alternative = "less")$pval.exact.stat,
                12)
   expect_equal(runs.2cat(ranked_code, alternative = "less")$pval.exact,
@@ -53,8 +51,8 @@ test_that("Example 6.17", {
 })
 
 test_that("Example 6.18", {
-  sex <- c("M", "F", "F", "F", "M", "M", "F", "F", "F", "F", "M", "M")
-  expect_equal(runs.2cat(sex, alternative = "less")$pval.exact.stat, 5)
-  expect_equal(runs.2cat(sex, alternative = "less")$pval.exact, 0.196969697)
+  expect_equal(runs.2cat(ch6data$sex, alternative = "less")$pval.exact.stat, 5)
+  expect_equal(runs.2cat(ch6data$sex, alternative = "less")$pval.exact,
+               0.196969697)
 })
 
