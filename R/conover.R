@@ -3,7 +3,7 @@
 conover <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            max.exact.perms = 5000000, nsims.mc = 10000, seed = NULL,
-           do.asymp = FALSE, do.exact = TRUE) {
+           do.asymp = FALSE, do.exact = TRUE, do.mc = FALSE) {
     stopifnot(is.vector(x), is.numeric(x), (is.vector(y) && is.numeric(y)) |
               (is.factor(y) && length(x) == length(y) &&
                  length(x[complete.cases(x)]) == length(y[complete.cases(y)])),
@@ -12,7 +12,8 @@ conover <-
               is.numeric(nsims.mc), length(nsims.mc) == 1,
               is.numeric(seed) | is.null(seed),
               length(seed) == 1 | is.null(seed),
-              is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE)
+              is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE,
+              is.logical(do.mc) == TRUE)
     alternative <- match.arg(alternative)
 
     #labels
@@ -97,6 +98,11 @@ conover <-
       T0 <- (n.x - 1) * (Sk - C) / (Sr - C)
     }
 
+    #give mc output if exact not possible
+    if (do.exact && n.perms > max.exact.perms){
+      do.mc <- TRUE
+    }
+
     #exact p-value
     if (do.exact && n.perms <= max.exact.perms){
       if (!is.factor(y)){
@@ -171,7 +177,7 @@ conover <-
     }
 
     #Monte Carlo p-value
-#    if (do.exact && n.perms > max.exact.perms){
+    if (do.mc){
       if (!is.null(seed)){set.seed(seed)}
       if (!is.factor(y)){
         pval.mc.stat <- xyrankssq.s
@@ -211,7 +217,7 @@ conover <-
           }
         }
       }
-#    }
+    }
 
     #asymptotic p-value (https://stat.ethz.ch/pipermail/r-help/2004-March/047190.html)
     if (do.asymp){
