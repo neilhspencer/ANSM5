@@ -84,7 +84,7 @@ hodges.ajne <-
 
     #calculate m
     pval.stat <- length(x) + 1
-    for (i in 1:(length(angles) - 1)){
+    for (i in 1:length(angles)){
       m.a1 <- sum(x - angles[i] + 360 * (x - angles[i] < 0) > 180)
       m.a2 <- sum(x - angles[i] + 360 * (x - angles[i] < 0) < 180)
       if (m.a1 < pval.stat){pval.stat <- m.a1}
