@@ -140,7 +140,7 @@ mood <-
     }
 
     #check if message needed
-    if (do.exact && n > max.exact.cases) {
+    if (do.exact && n.xy > max.exact.cases) {
       test.note <- paste0("NOTE: Number of useful cases greater than current ",
                           "maximum allowed for exact\n calculations required ",
                           "(max.exact.cases = ",
