@@ -144,3 +144,7 @@ test_that("Exercise 5.6", {
   expect_equal(sign.test(c(rep(0, 27), rep(1, 16)), 0.5)$pval.exact,
                0.126289474)
 })
+
+test_that("Exercise 6.2", {
+  expect_equal(sign.test(ch5data$LVF - ch5data$RVF, 0)$pval.exact, 0.0063476563)
+})

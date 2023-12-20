@@ -82,6 +82,71 @@ test_that("Example 6.17", {
                0.015871126)
 })
 
+
+test_that("Exercise 6.1", {
+  expect_equal(wilcoxon.mann.whitney(ch6data$temp.H, ch6data$temp.L)$pval.exact,
+               0.054895105)
+})
+
+test_that("Exercise 6.2", {
+  expect_equal(wilcoxon.mann.whitney(ch5data$LVF, ch5data$RVF)$pval.exact,
+               0.271898515)
+})
+
+test_that("Exercise 6.3", {
+  expect_equal(
+    wilcoxon.mann.whitney(ch6data$DMF.M, ch6data$DMF.F, do.exact = FALSE,
+                          do.asymp = TRUE)$pval.asymp, 0.004461907)
+  expect_equal(wilcoxon.mann.whitney(ch6data$DMF.M, ch6data$DMF.F,
+                                     seed = 1)$pval.mc, 0.00408)
+})
+
+test_that("Exercise 6.4", {
+  expect_equal(wilcoxon.mann.whitney(ch6data$weight.diabetic,
+                                     ch6data$weight.normal)$pval.exact,
+               0.00016895687)
+})
+
+test_that("Exercise 6.5", {
+  expect_equal(
+    wilcoxon.mann.whitney(ch6data$cooling.time.standard,
+                          ch6data$cooling.time.cheap)$pval.exact, 0.13879062)
+  expect_equal(
+    wilcoxon.mann.whitney(ch6data$cooling.time.standard,
+                          ch6data$cooling.time.cheap)$CI.exact.lower, -0.2)
+  expect_equal(
+    wilcoxon.mann.whitney(ch6data$cooling.time.standard,
+                          ch6data$cooling.time.cheap)$CI.exact.upper, 1.9)
+})
+
+test_that("Exercise 6.6", {
+  expect_equal(
+    wilcoxon.mann.whitney(ch6data$wait.1979, ch6data$wait.1983,
+                          do.exact = FALSE, do.asymp = TRUE)$pval.asymp,
+    0.0040175478)
+})
+
+test_that("Exercise 6.7", {
+  expect_equal(
+    wilcoxon.mann.whitney(ch6data$activity.boys, ch6data$activity.girls,
+                          do.exact = FALSE, do.asymp = TRUE)$pval.asymp,
+    3.139189e-22)
+})
+
+test_that("Exercise 6.15", {
+  expect_equal(wilcoxon.mann.whitney(ch6data$doseI, ch6data$doseII)$pval.exact,
+               0.0106129165)
+  expect_equal(wilcoxon.mann.whitney(ch6data$doseI,
+                                     ch6data$doseII)$CI.exact.lower, -17.42)
+  expect_equal(wilcoxon.mann.whitney(ch6data$doseI,
+                                     ch6data$doseII)$CI.exact.upper, -2.4)
+})
+
+test_that("Exercise 6.16", {
+  expect_equal(wilcoxon.mann.whitney(ch6data$travel,
+                                     ch6data$politics)$pval.exact, 0.254519474)
+})
+
 test_that("Example 8.9", {
   Sequence <- c("AB", "AB", "AB", "AB", "AB", "BA", "BA", "BA", "BA", "BA")
   PeriodI <- c(1.75, 0.3, 0.35, 0.2, 0.3, 7.2, 7.1, 0.75, 2.15, 3.35)

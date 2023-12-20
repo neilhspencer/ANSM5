@@ -27,3 +27,8 @@ test_that("Example 5.3", {
                0.2071137)
   expect_equal(lilliefors(ch5data$bp.incorrect, seed = 1)$pval.mc, 0.0093)
 })
+
+test_that("Exercise 6.15", {
+  expect_equal(lilliefors(ch6data$doseI.2, seed = 1)$pval.mc, 0.0074)
+})
+

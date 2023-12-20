@@ -37,3 +37,20 @@ test_that("Example 6.15", {
   expect_equal(ks.test.ANSM(ch6data$salivaF, ch6data$salivaM,
                             alternative = "two.sided")$pval.exact, 0.092958008)
 })
+
+test_that("Exercise 6.13", {
+  expect_equal(ks.test.ANSM(ch6data$time.withoutLD,
+                            ch6data$time.withLD)$pval.exact, 0.055944056)
+  expect_equal(ks.test.ANSM(ch6data$time.withoutLD, ch6data$time.withLD,
+                            alternative = "greater")$pval.exact, 0.027972028)
+})
+
+test_that("Exercise 6.15", {
+  expect_equal(ks.test.ANSM(ch6data$doseI, ch6data$doseII)$pval.exact,
+               0.033566434)
+})
+
+test_that("Exercise 6.16", {
+  expect_equal(ks.test.ANSM(ch6data$travel, ch6data$politics)$pval.exact,
+               0.0104786854)
+})

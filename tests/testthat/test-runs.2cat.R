@@ -56,3 +56,7 @@ test_that("Example 6.18", {
                0.196969697)
 })
 
+test_that("Exercise 6.17", {
+  expect_equal(runs.2cat(ch6data$twins, alternative = "greater")$pval.exact,
+               0.66408669)
+})

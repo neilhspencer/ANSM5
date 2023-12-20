@@ -10,6 +10,11 @@ test_that("Example 6.10", {
                                   do.asymp = TRUE)$pval.asymp, 0.010654119)
 })
 
+test_that("Exercise 6.15", {
+  expect_equal(normal.scores.test(ch6data$doseI, ch6data$doseII)$pval.exact,
+               0.0080213904)
+})
+
 test_that("Example 8.9", {
   Sequence <- c("AB", "AB", "AB", "AB", "AB", "BA", "BA", "BA", "BA", "BA")
   PeriodI <- c(1.75, 0.3, 0.35, 0.2, 0.3, 7.2, 7.1, 0.75, 2.15, 3.35)
