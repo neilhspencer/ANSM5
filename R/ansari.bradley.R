@@ -107,6 +107,7 @@ ansari.bradley <-
         }
       }
       pval.exact <- count / dim(all.combn)[2]
+      if (pval.exact > 1){pval.exact <- 1}
     }
 
     #asymptotic p-value

@@ -185,7 +185,7 @@ wilcoxon.mann.whitney <-
         stat.tmp <-  wilcox.test(x.tmp, y.tmp, exact = FALSE,
                                  correct = cont.corr, conf.int = FALSE)$statistic
         if (alternative == "two.sided"){
-          if (stat.tmp >= stat.mc){
+          if (stat.tmp <= stat.mc){
             pval.mc <- pval.mc + 2 / nsims.mc
           }
         }else if (alternative == "less"){
