@@ -1,13 +1,13 @@
 #' @importFrom stats complete.cases median
 siegel.tukey <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
-           cont.corr = TRUE, max.exact.cases = 1000, do.asymp = FALSE,
-           do.exact = TRUE) {
+           mean.shift = FALSE, cont.corr = TRUE, max.exact.cases = 1000,
+           do.asymp = FALSE, do.exact = TRUE) {
     stopifnot(is.vector(x), is.numeric(x), is.vector(y), is.numeric(y),
               ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
               is.numeric(max.exact.cases), length(max.exact.cases) == 1,
-              is.logical(cont.corr) == TRUE, is.logical(do.asymp) == TRUE,
-              is.logical(do.exact) == TRUE)
+              is.logical(mean.shift) == TRUE, is.logical(cont.corr) == TRUE,
+              is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE)
     alternative <- match.arg(alternative)
 
     #labels
@@ -46,8 +46,12 @@ siegel.tukey <-
     #prepare
     x <- x[complete.cases(x)] #remove missing cases
     y <- y[complete.cases(y)] #remove missing cases
-    #equalise medians
-    x <- x + (median(y) - median(x))
+    #equalise medians/means
+    if (mean.shift){
+      x <- x + (mean(y) - mean(x))
+    }else{
+      x <- x + (median(y) - median(x))
+    }
     n.x <- length(x)
     if (!is.null(H0)) {
       xy <- c(x - H0, y)
@@ -140,8 +144,14 @@ siegel.tukey <-
                    varname2, "\n")
     }
 
+    if (mean.shift){
+      title <- "Siegel-Tukey test using mean shift"
+    }else{
+      title <- "Siegel-Tukey test using median shift"
+    }
+
     #return
-    result <- list(title = "Siegel-Tukey test", varname1 = varname1,
+    result <- list(title = title, varname1 = varname1,
                    varname2 = varname2, H0 = H0,
                    alternative = alternative, cont.corr = cont.corr, pval = pval,
                    pval.stat = pval.stat, pval.note = pval.note,

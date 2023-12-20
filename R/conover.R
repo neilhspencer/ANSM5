@@ -2,12 +2,13 @@
 #' @importFrom utils combn
 conover <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
-           max.exact.perms = 5000000, nsims.mc = 10000, seed = NULL,
-           do.asymp = FALSE, do.exact = TRUE, do.mc = FALSE) {
+           abs.ranks = FALSE, max.exact.perms = 5000000, nsims.mc = 10000,
+           seed = NULL, do.asymp = FALSE, do.exact = TRUE, do.mc = FALSE) {
     stopifnot(is.vector(x), is.numeric(x), (is.vector(y) && is.numeric(y)) |
               (is.factor(y) && length(x) == length(y) &&
                  length(x[complete.cases(x)]) == length(y[complete.cases(y)])),
               ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
+              is.logical(abs.ranks) == TRUE,
               is.numeric(max.exact.perms), length(max.exact.perms) == 1,
               is.numeric(nsims.mc), length(nsims.mc) == 1,
               is.numeric(seed) | is.null(seed),
@@ -67,15 +68,19 @@ conover <-
       dev.x <- abs(x - mean.x)
       dev.y <- abs(y - mean.y)
       dev.xy <- c(dev.x, dev.y)
-      xyrankssq <- rank(dev.xy, ties.method = "average") ** 2
-      xyrankssq.x <- sum(xyrankssq[1:n.x])
-      xyrankssq.y <- sum(xyrankssq[(n.x + 1):n.xy])
-      if (xyrankssq.x < xyrankssq.y){
+      if (abs.ranks){
+        xyranks <- rank(dev.xy, ties.method = "average")
+      }else{
+        xyranks <- rank(dev.xy, ties.method = "average") ** 2
+      }
+      xyranks.x <- sum(xyranks[1:n.x])
+      xyranks.y <- sum(xyranks[(n.x + 1):n.xy])
+      if (xyranks.x < xyranks.y){
         n.s <- n.x
-        xyrankssq.s <- xyrankssq.x
+        xyranks.s <- xyranks.x
       }else{
         n.s <- n.y
-        xyrankssq.s <- xyrankssq.y
+        xyranks.s <- xyranks.y
       }
       n.perms <- choose(n.xy, n.s)
     }else{
@@ -107,29 +112,29 @@ conover <-
     if (do.exact && n.perms <= max.exact.perms){
       if (!is.factor(y)){
         if (alternative == "two.sided"){
-          pval.exact.stat <- xyrankssq.s
+          pval.exact.stat <- xyranks.s
           all.combn <- combn(n.xy, n.s)
           count <- 0
           for (i in 1:dim(all.combn)[2]){
-            if (sum(xyrankssq[all.combn[,i]]) <= pval.exact.stat) {
+            if (sum(xyranks[all.combn[,i]]) <= pval.exact.stat) {
               count <- count + 2
             }
           }
         }else if (alternative == "less"){
-          pval.exact.stat <- xyrankssq.x
+          pval.exact.stat <- xyranks.x
           all.combn <- combn(n.xy, n.x)
           count <- 0
           for (i in 1:dim(all.combn)[2]){
-            if (sum(xyrankssq[all.combn[,i]]) <= pval.exact.stat) {
+            if (sum(xyranks[all.combn[,i]]) <= pval.exact.stat) {
               count <- count + 1
             }
           }
         }else if (alternative == "greater"){
-          pval.exact.stat <- xyrankssq.x
+          pval.exact.stat <- xyranks.x
           all.combn <- combn(n.xy, n.x)
           count <- 0
           for (i in 1:dim(all.combn)[2]){
-            if (sum(xyrankssq[all.combn[,i]]) >= pval.exact.stat) {
+            if (sum(xyranks[all.combn[,i]]) >= pval.exact.stat) {
               count <- count + 1
             }
           }
@@ -180,7 +185,7 @@ conover <-
     if (do.mc){
       if (!is.null(seed)){set.seed(seed)}
       if (!is.factor(y)){
-        pval.mc.stat <- xyrankssq.s
+        pval.mc.stat <- xyranks.s
         pval.mc <- 0
         for (i in 1:nsims.mc){
           xy.sim <- sample(c(x, y), n.xy, replace = FALSE)
@@ -191,11 +196,11 @@ conover <-
           dev.x.sim <- abs(x.sim - mean.x.sim)
           dev.y.sim <- abs(y.sim - mean.y.sim)
           dev.xy.sim <- c(dev.x.sim, dev.y.sim)
-          xyrankssq.sim <- rank(dev.xy.sim, ties.method = "average") ** 2
-          xyrankssq.x.sim <- sum(xyrankssq.sim[1:n.x])
-          xyrankssq.y.sim <- sum(xyrankssq.sim[(n.x + 1):n.xy])
-          xyrankssq.s.sim <- min(xyrankssq.x.sim, xyrankssq.y.sim)
-          if (xyrankssq.s.sim <= pval.mc.stat){
+          xyranks.sim <- rank(dev.xy.sim, ties.method = "average") ** 2
+          xyranks.x.sim <- sum(xyranks.sim[1:n.x])
+          xyranks.y.sim <- sum(xyranks.sim[(n.x + 1):n.xy])
+          xyranks.s.sim <- min(xyranks.x.sim, xyranks.y.sim)
+          if (xyranks.s.sim <= pval.mc.stat){
             pval.mc <- pval.mc + 1 / nsims.mc
           }
         }
@@ -223,16 +228,16 @@ conover <-
     if (do.asymp){
       if (!is.factor(y)){
         if (alternative == "two.sided"){
-          pval.asymp.stat <- xyrankssq.s
-          test.mean <- n.s * mean(xyrankssq)
-          test.var <- n.s * (1 - n.s / (n.xy - 1)) * (var(xyrankssq) *
+          pval.asymp.stat <- xyranks.s
+          test.mean <- n.s * mean(xyranks)
+          test.var <- n.s * (1 - n.s / (n.xy - 1)) * (var(xyranks) *
                                                         (n.xy - 1) / n.xy)
           pval.asymp <- pnorm((pval.asymp.stat - test.mean) / sqrt(test.var),
                               lower.tail = TRUE) * 2
         }else{
-          pval.asymp.stat <- xyrankssq.x
-          test.mean <- n.x * mean(xyrankssq)
-          test.var <- n.x * (1 - n.x / (n.xy - 1)) * (var(xyrankssq) *
+          pval.asymp.stat <- xyranks.x
+          test.mean <- n.x * mean(xyranks)
+          test.var <- n.x * (1 - n.x / (n.xy - 1)) * (var(xyranks) *
                                                         (n.xy - 1) / n.xy)
           if (alternative == "greater"){
             pval.asymp <- pnorm((pval.asymp.stat - test.mean) / sqrt(test.var),
@@ -276,8 +281,14 @@ conover <-
                           "Carlo p-value given")
     }
 
+    if (abs.ranks){
+      title <- "Conover test using standard ranks"
+    }else{
+      title <- "Conover test using squared ranks"
+    }
+
     #return
-    result <- list(title = "Conover test", varname1 = varname1,
+    result <- list(title = title, varname1 = varname1,
                    varname2 = varname2, H0 = H0,
                    alternative = alternative, cont.corr = cont.corr, pval = pval,
                    pval.stat = pval.stat, pval.note = pval.note,
