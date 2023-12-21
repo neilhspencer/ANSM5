@@ -1,7 +1,8 @@
 #' @importFrom stats complete.cases
 #' @importFrom utils combn
 jonckheere.terpstra <-
-  function(x, g, max.exact.cases = 15, nsims.mc = 10000, seed = NULL,
+  function(x, g, alternative = c("less", "greater"),
+           max.exact.cases = 15, nsims.mc = 10000, seed = NULL,
            do.asymp = FALSE, do.exact = TRUE, do.mc = FALSE,
            do.asymp.ties.adjust = TRUE) {
     stopifnot(is.vector(x), is.numeric(x), is.factor(g), length(x) == length(g),
@@ -12,13 +13,13 @@ jonckheere.terpstra <-
               length(seed) == 1 | is.null(seed),
               is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE,
               is.logical(do.mc), is.logical(do.asymp.ties.adjust))
+    alternative <- match.arg(alternative)
 
     #labels
     varname1 <- deparse(substitute(x))
     varname2 <- deparse(substitute(g))
 
     #unused arguments
-    alternative <- NULL
     cont.corr <- NULL
     CI.width <- NULL
     do.CI <- FALSE
@@ -104,14 +105,24 @@ jonckheere.terpstra <-
       for (i in 1:(nlevels(g) - 1)){
         for (j in (i + 1):nlevels(g)){
           x1 <- combins[,g == levels(g)[i]]
+          if (table_g[i] == 1){
+            x1 <- matrix(x1, ncol = 1)
+          }
           x2 <- combins[,g == levels(g)[j]]
-          for (k in 1:length(x1)){
+          if (table_g[j] == 1){
+            x2 <- matrix(x2, ncol = 1)
+          }
+          for (k in 1:dim(x1)[2]){
             combins.U <- combins.U +
-              rowSums(x2 > x1[,k]) + 0.5 * rowSums(x2 == x1[,k])
+              rowSums(x2 > x1[, k]) + 0.5 * rowSums(x2 == x1[, k])
           }
         }
       }
-      pval.exact <- sum(combins.U <= U) / dim(combins)[1]
+      if (alternative == "less"){
+        pval.exact <- sum(combins.U >= U) / dim(combins)[1]
+      }else if (alternative == "greater"){
+        pval.exact <- sum(combins.U <= U) / dim(combins)[1]
+      }
       pval.exact.stat <- U
     }
 
@@ -132,7 +143,11 @@ jonckheere.terpstra <-
         }
         U.sim <- c(U.sim, Ui)
       }
-      pval.mc <- sum(U.sim <= U) / nsims.mc
+      if (alternative == "less"){
+        pval.mc <- sum(U.sim >= U) / nsims.mc
+      }else if (alternative == "greater"){
+        pval.mc <- sum(U.sim <= U) / nsims.mc
+      }
       pval.mc.stat <- U
     }
 
@@ -154,7 +169,11 @@ jonckheere.terpstra <-
       }else{
         U.Var <- (n ** 2 * (2 * n + 3) - sum(table_g ** 2 * (2 * table_g + 3))) / 72
       }
-      pval.asymp.stat <- (U - U.Exp) / sqrt(U.Var)
+      if (alternative == "less"){
+        pval.asymp.stat <- (U.Exp - U) / sqrt(U.Var)
+      }else if (alternative == "greater"){
+        pval.asymp.stat <- (U - U.Exp) / sqrt(U.Var)
+      }
       pval.asymp <- pnorm(pval.asymp.stat)
     }
 
@@ -182,10 +201,18 @@ jonckheere.terpstra <-
     }
 
     #define hypotheses
-    H0 <- paste0("H0: samples are from the same population\n",
-                 "H1: samples differ with median of '", levels(g)[1], "'\n")
-    for (i in 2:nlevels(g)){
-      H0 <- paste0(H0, "    > median of '", levels(g)[i], "'\n")
+    if (alternative == "less"){
+      H0 <- paste0("H0: samples are from the same population\n",
+                   "H1: samples differ with median of '", levels(g)[1], "'\n")
+      for (i in 2:nlevels(g)){
+        H0 <- paste0(H0, "    < median of '", levels(g)[i], "'\n")
+      }
+    }else if (alternative == "greater"){
+      H0 <- paste0("H0: samples are from the same population\n",
+                   "H1: samples differ with median of '", levels(g)[1], "'\n")
+      for (i in 2:nlevels(g)){
+        H0 <- paste0(H0, "    > median of '", levels(g)[i], "'\n")
+      }
     }
 
     #return
