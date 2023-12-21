@@ -1,39 +1,39 @@
 test_that("Example 7.6", {
-  pulse <- c(72, 96, 88, 92, 74, 76, 82, 120, 120, 132, 120, 101, 96, 112, 76,
-             95, 104, 96, 84, 72, 76)
-  student <- as.factor(c("A", "B", "C", "D", "E", "F", "G", "A", "B", "C", "D",
-                         "E", "F", "G", "A", "B", "C", "D", "E", "F", "G"))
-  time_period <- as.factor(c("I", "I", "I", "I", "I", "I", "I", "II", "II",
-                             "II", "II", "II", "II", "II", "III", "III", "III",
-                             "III", "III", "III", "III"))
-  expect_equal(friedman(pulse, time_period, student)$pval.exact.stat, 10.5714286)
-  expect_equal(friedman(pulse, time_period, student)$pval.exact, 0.00272205075)
-  expect_equal(friedman(pulse, time_period, student, do.exact = FALSE,
-                                  do.asymp = TRUE)$pval.asymp.stat, 10.5714286)
-  expect_equal(friedman(pulse, time_period, student, do.exact = FALSE,
-                                  do.asymp = TRUE)$pval.asymp, 0.0050634142)
+  expect_equal(friedman(ch7data$pulse, ch7data$time.period,
+                        ch7data$student)$pval.exact.stat, 10.5714286)
+  expect_equal(friedman(ch7data$pulse, ch7data$time.period,
+                        ch7data$student)$pval.exact, 0.00272205075)
+  expect_equal(friedman(ch7data$pulse, ch7data$time.period, ch7data$student,
+                        do.exact = FALSE, do.asymp = TRUE)$pval.asymp.stat,
+               10.5714286)
+  expect_equal(friedman(ch7data$pulse, ch7data$time.period, ch7data$student,
+                        do.exact = FALSE, do.asymp = TRUE)$pval.asymp,
+               0.0050634142)
 })
 
 test_that("Example 7.7", {
-  nodes <- c(60, 65, 63, 64, 62, 61, 62, 65, 61, 67, 65, 62, 61, 68, 61, 63, 62,
-             62, 60, 65, 60, 61, 64, 65)
-  treatment <- as.factor(c("Control", "Gibberellic acid", "Kinetin",
-                           "Indole acetic acid", "Adenine sulphate",
-                           "Maleic hydrazide", "Control", "Gibberellic acid",
-                           "Kinetin", "Indole acetic acid", "Adenine sulphate",
-                           "Maleic hydrazide", "Control", "Gibberellic acid",
-                           "Kinetin", "Indole acetic acid", "Adenine sulphate",
-                           "Maleic hydrazide", "Control", "Gibberellic acid",
-                           "Kinetin", "Indole acetic acid", "Adenine sulphate",
-                           "Maleic hydrazide"))
-  blocks <- as.factor(c("I", "I", "I", "I", "I", "I", "II", "II", "II", "II",
-                        "II", "II", "III", "III", "III", "III", "III", "III",
-                        "IV", "IV", "IV", "IV", "IV", "IV"))
-  expect_equal(friedman(nodes, treatment, blocks, seed = 1)$pval.mc.stat,
+  expect_equal(friedman(ch7data$nodes, ch7data$treatment, ch7data$block,
+                        seed = 1)$pval.mc.stat, 6.4035088)
+  expect_equal(friedman(ch7data$nodes, ch7data$treatment, ch7data$block,
+                        seed = 1)$pval.mc, 0.00482)
+  expect_equal(friedman(ch7data$nodes, ch7data$treatment, ch7data$block,
+                        do.exact = FALSE, do.asymp = TRUE)$pval.asymp.stat,
                6.4035088)
-  expect_equal(friedman(nodes, treatment, blocks, seed = 1)$pval.mc, 0.00482)
-  expect_equal(friedman(nodes, treatment, blocks, do.exact = FALSE,
-                                  do.asymp = TRUE)$pval.asymp.stat, 6.4035088)
-  expect_equal(friedman(nodes, treatment, blocks, do.exact = FALSE,
-                                  do.asymp = TRUE)$pval.asymp, 0.0022524635)
+  expect_equal(friedman(ch7data$nodes, ch7data$treatment, ch7data$block,
+                        do.exact = FALSE, do.asymp = TRUE)$pval.asymp,
+               0.0022524635)
+})
+
+test_that("Exercise 7.7", {
+  expect_equal(friedman(ch7data$liver.weight, ch7data$dose, ch7data$house,
+                        seed = 1)$pval.mc.stat, 13)
+  expect_equal(friedman(ch7data$liver.weight, ch7data$dose, ch7data$house,
+                        seed = 1)$pval.mc, 0.00025)
+})
+
+test_that("Exercise 7.8", {
+  expect_equal(friedman(ch7data$mark, ch7data$scheme, ch7data$candidate,
+                        seed = 1)$pval.mc.stat, 3.0994475)
+  expect_equal(friedman(ch7data$liver.weight, ch7data$dose, ch7data$house,
+                        seed = 1)$pval.mc, 0.04407)
 })
