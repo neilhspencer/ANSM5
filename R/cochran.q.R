@@ -101,8 +101,8 @@ cochran.q <-
         for (ib in 1:b){
           tab_i <- rbind(tab_i, y[blocks == levels(blocks)[ib]][rowcomb[comb_i[ib],]])
         }
-        T_i <- apply(tab_i, 1, sum)
-        B_i <- apply(tab_i, 2, sum)
+        B_i <- apply(tab_i, 1, sum)
+        T_i <- apply(tab_i, 2, sum)
         Q_i <- (g * (g - 1) * sum(T_i ** 2) - (g - 1) * N ** 2) /
           (g * N - sum(B_i ** 2))
         if (Q_i >= pval.exact.stat){
@@ -121,8 +121,8 @@ cochran.q <-
         for (ib in 1:b){
           tab_i <- rbind(tab_i, sample(y[blocks == levels(blocks)[ib]], g))
         }
-        T_i <- apply(tab_i, 1, sum)
-        B_i <- apply(tab_i, 2, sum)
+        B_i <- apply(tab_i, 1, sum)
+        T_i <- apply(tab_i, 2, sum)
         Q_i <- (g * (g - 1) * sum(T_i ** 2) - (g - 1) * N ** 2) /
           (g * N - sum(B_i ** 2))
         if (Q_i >= pval.mc.stat){
