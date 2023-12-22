@@ -19,8 +19,8 @@ test_that("Exercise 4.17", {
 })
 
 test_that("Example 7.10", {
-  expect_equal(runs.ncat(team.member[order(procedure.time)], alternative = "less",
-                         do.mc = TRUE, seed = 1)$pval.mc,
+  expect_equal(runs.ncat(ch7data$team.member[order(ch7data$procedure.time)],
+                         alternative = "less", do.mc = TRUE, seed = 1)$pval.mc,
                0.00003)
   expect_equal(runs.ncat(ch7data$team.member[order(ch7data$procedure.time)],
                          alternative = "less",
@@ -31,4 +31,11 @@ test_that("Example 7.10", {
                          cont.corr = TRUE)$pval.asymp.stat, -4.0666325)
   expect_equal(runs.ncat(ch7data$team.member[order(ch7data$procedure.time)], alternative = "less",
                          cont.corr = TRUE)$pval.asymp, 0.000023848684)
+})
+
+test_that("Exercise 7.16", {
+  expect_equal(runs.ncat(ch7data$regions[order(ch7data$affordability)],
+                         alternative = "less")$pval.asymp.stat, -1.41710858)
+  expect_equal(runs.ncat(ch7data$regions[order(ch7data$affordability)],
+                         alternative = "less")$pval.asymp, 0.078225593)
 })

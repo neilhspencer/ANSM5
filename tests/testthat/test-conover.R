@@ -34,3 +34,8 @@ test_that("Example 7.9", {
   expect_equal(conover(ch7data$dementia.age, ch7data$features, do.exact = FALSE,
                        do.asymp = TRUE)$pval.asymp, 0.39470367)
 })
+
+test_that("Exercise 7.15", {
+  expect_equal(conover(ch7data$braking.distance.2, ch7data$initial.speed, do.exact = FALSE,
+                       do.asymp = TRUE)$pval.asymp, 0.0455638507)
+})

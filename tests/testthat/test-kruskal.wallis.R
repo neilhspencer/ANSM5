@@ -42,6 +42,11 @@ test_that("Exercise 7.4", {
                0.10882766)
 })
 
+test_that("Exercise 7.16", {
+  expect_equal(kruskal.wallis(ch7data$affordability,
+                              ch7data$regions)$pval.exact, 0.01)
+})
+
 test_that("Example 12.6", {
   time <- factor(c(
     rep("<100", 2), rep("100-199", 6), rep("200-299", 9), rep("300+", 0),
