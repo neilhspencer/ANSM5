@@ -72,9 +72,8 @@ friedman <-
         pval.exact.stat <- Tstat
       }else{
         pval.exact.stat <- T1stat
-        pval.exact.note <- paste0("NOTE: Test statistic calculation of Iman ",
-                                  "and Davenport used due to the presence of ",
-                                  "ties")
+        pval.asymp.note <- paste0("NOTE: Iman and Davenport approximation for ",
+                                  "ties used")
       }
       #create combinations for each row
       for (i in 1:g){
@@ -141,8 +140,8 @@ friedman <-
         pval.mc.stat <- Tstat
       }else{
         pval.mc.stat <- T1stat
-        pval.mc.note <- paste0("NOTE: Test statistic calculation of Iman and ",
-                                  "Davenport used due to the presence of ties")
+        pval.asymp.note <- paste0("NOTE: Iman and Davenport approximation for ",
+                                  "ties used")
       }
       pval.mc <- 0
       for (i in 1:nsims.mc){
@@ -175,9 +174,8 @@ friedman <-
       }else{
         pval.asymp.stat <- T1stat
         pval.asymp <- pf(T1stat, g - 1, (b - 1) * (g - 1), lower.tail = FALSE)
-        pval.asymp.note <- paste0("NOTE: Test statistic calculation of Iman ",
-                                  "and Davenport used due to the presence of ",
-                                  "ties")
+        pval.asymp.note <- paste0("NOTE: Iman and Davenport approximation for ",
+                                  "ties used")
       }
     }
 
