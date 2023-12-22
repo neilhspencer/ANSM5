@@ -2,7 +2,7 @@
 runs.ncat <-
   function(x,  alternative=c("two.sided", "less", "greater"), cont.corr = TRUE,
            nsims.mc = 100000, seed = NULL, do.asymp = TRUE, do.mc = FALSE) {
-    stopifnot(is.vector(x), is.logical(cont.corr) == TRUE,
+    stopifnot(is.vector(x) | is.factor(x), is.logical(cont.corr) == TRUE,
               is.numeric(nsims.mc), length(nsims.mc) == 1,
               is.numeric(seed) | is.null(seed),
               length(seed) == 1 | is.null(seed),
@@ -41,6 +41,7 @@ runs.ncat <-
 
     #statistics
     x <- x[complete.cases(x)] #remove missing cases
+    if (is.factor(x)){x <- as.vector(x)}
     n <- length(x)
     k <- length(unique(x))
     pri <- rep(NA, k)
