@@ -1,10 +1,12 @@
 #' @importFrom stats complete.cases pf pchisq
 friedman <-
-  function(y, groups, blocks, ..., max.exact.perms = 100000, nsims.mc = 100000,
-           seed = NULL, do.asymp = FALSE, do.exact = TRUE) {
+  function(y, groups, blocks, ..., use.Iman.Davenport = FALSE,
+           max.exact.perms = 100000, nsims.mc = 100000, seed = NULL,
+           do.asymp = FALSE, do.exact = TRUE) {
     stopifnot(is.vector(y), is.numeric(y), is.factor(groups), is.factor(blocks),
               length(y) == length(groups), length(groups) == length(blocks),
               length(y) == nlevels(groups) * nlevels(blocks),
+              is.logical(use.Iman.Davenport) == TRUE,
               is.numeric(max.exact.perms), length(max.exact.perms) == 1,
               is.numeric(nsims.mc), length(nsims.mc) == 1,
               is.numeric(seed) | is.null(seed),
@@ -66,7 +68,7 @@ friedman <-
 
     #exact p-value
     if(do.exact && n.perms <= max.exact.perms){
-      if (!tiesexist){
+      if (!tiesexist | !use.Iman.Davenport){
         pval.exact.stat <- Tstat
       }else{
         pval.exact.stat <- T1stat
@@ -135,7 +137,7 @@ friedman <-
     #Monte Carlo p-value
     if (do.exact && n.perms > max.exact.perms){
       if (!is.null(seed)){set.seed(seed)}
-      if (!tiesexist){
+      if (!tiesexist | !use.Iman.Davenport){
         pval.mc.stat <- Tstat
       }else{
         pval.mc.stat <- T1stat
@@ -151,7 +153,7 @@ friedman <-
         rank.tab_i <- apply(tab_i, 1, rank)
         Sr_i <- sum(rank.tab_i ** 2)
         St_i <- sum(rowSums(rank.tab_i) ** 2) / b
-        if (!tiesexist){
+        if (!tiesexist | !use.Iman.Davenport){
           Tstat_i <- b * (g - 1) * (St_i - C) / (Sr_i - C)
           if (Tstat_i >= pval.mc.stat){
             pval.mc <- pval.mc + 1 / nsims.mc
@@ -167,7 +169,7 @@ friedman <-
 
     #asymptotic p-value
     if(do.asymp){
-      if (!tiesexist){
+      if (!tiesexist | !use.Iman.Davenport){
         pval.asymp.stat <- Tstat
         pval.asymp <- pchisq(Tstat, g - 1, lower.tail = FALSE)
       }else{
