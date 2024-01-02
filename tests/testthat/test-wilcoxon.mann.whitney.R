@@ -148,34 +148,31 @@ test_that("Exercise 6.16", {
 })
 
 test_that("Example 8.9", {
-  Sequence <- c("AB", "AB", "AB", "AB", "AB", "BA", "BA", "BA", "BA", "BA")
-  PeriodI <- c(1.75, 0.3, 0.35, 0.2, 0.3, 7.2, 7.1, 0.75, 2.15, 3.35)
-  PeriodII <- c(0.55, 1.05, 0.63, 1.55, 8.2, 0.35, 1.55, 0.25, 0.35, 1.5)
-  GroupAB.sum <- (PeriodI + PeriodII)[Sequence == "AB"]
-  GroupBA.sum <- (PeriodI + PeriodII)[Sequence == "BA"]
-  GroupAB.diff <- (PeriodI - PeriodII)[Sequence == "AB"]
-  GroupBA.diff <- (PeriodI - PeriodII)[Sequence == "BA"]
-  GroupBA.diff2 <- (PeriodII - PeriodI)[Sequence == "BA"]
-  expect_equal(wilcoxon.mann.whitney(GroupAB.sum, GroupBA.sum)$pval.exact.stat,
-               paste0("\n","22 (rank sum from GroupAB.sum), ",
-                      "33 (rank sum from GroupBA.sum)", "\n",
-                      "7 (Mann-Whitney U from GroupAB.sum), ",
-                      "18 (Mann-Whitney U from GroupBA.sum)"))
-  expect_equal(wilcoxon.mann.whitney(GroupAB.sum, GroupBA.sum)$pval.exact,
+  groupAB.sum <- (ch8$periodI + ch8$periodII)[ch8$sequence == "AB"]
+  groupBA.sum <- (ch8$periodI + ch8$periodII)[ch8$sequence == "BA"]
+  groupAB.diff <- (ch8$periodI - ch8$periodII)[ch8$sequence == "AB"]
+  groupBA.diff <- (ch8$periodI - ch8$periodII)[ch8$sequence == "BA"]
+  groupBA.diff2 <- (ch8$periodII - ch8$periodI)[ch8$sequence == "BA"]
+  expect_equal(wilcoxon.mann.whitney(groupAB.sum, groupBA.sum)$pval.exact.stat,
+               paste0("\n","22 (rank sum from groupAB.sum), ",
+                      "33 (rank sum from groupBA.sum)", "\n",
+                      "7 (Mann-Whitney U from groupAB.sum), ",
+                      "18 (Mann-Whitney U from groupBA.sum)"))
+  expect_equal(wilcoxon.mann.whitney(groupAB.sum, groupBA.sum)$pval.exact,
                0.30952381)
-  expect_equal(wilcoxon.mann.whitney(GroupAB.diff, GroupBA.diff)$pval.exact.stat,
-               paste0("\n","16 (rank sum from GroupAB.diff), ",
-                      "39 (rank sum from GroupBA.diff)", "\n",
-                      "1 (Mann-Whitney U from GroupAB.diff), ",
-                      "24 (Mann-Whitney U from GroupBA.diff)"))
-  expect_equal(wilcoxon.mann.whitney(GroupAB.diff, GroupBA.diff)$pval.exact,
+  expect_equal(wilcoxon.mann.whitney(groupAB.diff, groupBA.diff)$pval.exact.stat,
+               paste0("\n","16 (rank sum from groupAB.diff), ",
+                      "39 (rank sum from groupBA.diff)", "\n",
+                      "1 (Mann-Whitney U from groupAB.diff), ",
+                      "24 (Mann-Whitney U from groupBA.diff)"))
+  expect_equal(wilcoxon.mann.whitney(groupAB.diff, groupBA.diff)$pval.exact,
                0.015873016)
-  expect_equal(wilcoxon.mann.whitney(GroupAB.diff, GroupBA.diff2)$pval.exact.stat,
-               paste0("\n","33 (rank sum from GroupAB.diff), ",
-                      "22 (rank sum from GroupBA.diff2)", "\n",
-                      "18 (Mann-Whitney U from GroupAB.diff), ",
-                      "7 (Mann-Whitney U from GroupBA.diff2)"))
-  expect_equal(wilcoxon.mann.whitney(GroupAB.diff, GroupBA.diff2)$pval.exact,
+  expect_equal(wilcoxon.mann.whitney(groupAB.diff, groupBA.diff2)$pval.exact.stat,
+               paste0("\n","33 (rank sum from groupAB.diff), ",
+                      "22 (rank sum from groupBA.diff2)", "\n",
+                      "18 (Mann-Whitney U from groupAB.diff), ",
+                      "7 (Mann-Whitney U from groupBA.diff2)"))
+  expect_equal(wilcoxon.mann.whitney(groupAB.diff, groupBA.diff2)$pval.exact,
                0.30952381)
 })
 
