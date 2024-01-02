@@ -72,7 +72,7 @@ kruskal.wallis.lsd <-
 
     #calculate lsd test statistic and asymptotic p-value
     pval.asymp.stat <- abs(mean.rank1 - mean.rank2) /
-      sqrt((sr - c) * (n - 1 - t) * (n1 + n2) / (n1 * n2 * (n - t) * (n - 1)))
+      sqrt((sr - c) * (n - 1 - T) * (n1 + n2) / (n1 * n2 * (n - t) * (n - 1)))
     pval.asymp <- pt(pval.asymp.stat, n - t, lower.tail = FALSE)
 
     #check if message needed
