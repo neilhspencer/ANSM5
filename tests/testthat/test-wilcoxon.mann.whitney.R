@@ -1,28 +1,28 @@
 test_that("Examples 6.1 and 6.2", {
   expect_equal(
-    wilcoxon.mann.whitney(ch6data$groupA, ch6data$groupB)$pval.exact.stat,
-    paste0("\n","76 (rank sum from ch6data$groupA), ",
-           "155 (rank sum from ch6data$groupB)", "\n",
-           "21 (Mann-Whitney U from ch6data$groupA), ",
-           "89 (Mann-Whitney U from ch6data$groupB)"))
-  expect_equal(wilcoxon.mann.whitney(ch6data$groupA, ch6data$groupB)$pval.exact,
+    wilcoxon.mann.whitney(ch6$groupA, ch6$groupB)$pval.exact.stat,
+    paste0("\n","76 (rank sum from ch6$groupA), ",
+           "155 (rank sum from ch6$groupB)", "\n",
+           "21 (Mann-Whitney U from ch6$groupA), ",
+           "89 (Mann-Whitney U from ch6$groupB)"))
+  expect_equal(wilcoxon.mann.whitney(ch6$groupA, ch6$groupB)$pval.exact,
                0.015871126)
 })
 
 test_that("Example 6.3", {
   expect_equal(
-    wilcoxon.mann.whitney(ch6data$groupA, ch6data$groupB)$CI.exact.lower, -13)
+    wilcoxon.mann.whitney(ch6$groupA, ch6$groupB)$CI.exact.lower, -13)
   expect_equal(
-    wilcoxon.mann.whitney(ch6data$groupA, ch6data$groupB)$CI.exact.upper, -2)
-  expect_equal(wilcoxon.mann.whitney(ch6data$groupA, ch6data$groupB,
+    wilcoxon.mann.whitney(ch6$groupA, ch6$groupB)$CI.exact.upper, -2)
+  expect_equal(wilcoxon.mann.whitney(ch6$groupA, ch6$groupB,
                                      CI.width = 0.99)$CI.exact.lower, -16)
-  expect_equal(wilcoxon.mann.whitney(ch6data$groupA, ch6data$groupB,
+  expect_equal(wilcoxon.mann.whitney(ch6$groupA, ch6$groupB,
                                      CI.width = 0.99)$CI.exact.upper, 1)
 })
 
 test_that("Example 6.4", {
   expect_equal(
-    wilcoxon.mann.whitney(ch6data$groupA.sch2, ch6data$groupB.sch2)$pval.exact,
+    wilcoxon.mann.whitney(ch6$groupA.sch2, ch6$groupB.sch2)$pval.exact,
     0.03586652)
 })
 
@@ -33,118 +33,118 @@ test_that("Example 6.5", {
 })
 
 test_that("Example 6.6", {
-  expect_equal(wilcoxon.mann.whitney(ch6data$McGamma, ch6data$McBeta,
+  expect_equal(wilcoxon.mann.whitney(ch6$McGamma, ch6$McBeta,
                                      do.exact = FALSE, do.asymp = TRUE,
                                      cont.corr = FALSE)$pval.asymp, 0.41896844)
-  expect_equal(wilcoxon.mann.whitney(ch6data$McGamma, ch6data$McBeta,
+  expect_equal(wilcoxon.mann.whitney(ch6$McGamma, ch6$McBeta,
                                      do.exact = FALSE,
                                      do.asymp = TRUE)$pval.asymp, 0.425550392)
   set.seed(1)
   expect_equal(mean(
     sapply(1:10000, function(x){
       wilcoxon.mann.whitney(
-        jitter(ch6data$McGamma),jitter(ch6data$McBeta))$pval.exact})),
+        jitter(ch6$McGamma),jitter(ch6$McBeta))$pval.exact})),
     0.42960798)
 })
 
 test_that("Example 6.7", {
-  expect_equal(wilcoxon.mann.whitney(ch6data$males, ch6data$females)$pval.exact,
+  expect_equal(wilcoxon.mann.whitney(ch6$males, ch6$females)$pval.exact,
                0.12812405)
 })
 
 test_that("Example 6.8", {
-  expect_equal(wilcoxon.mann.whitney(ch6data$males, ch6data$females,
+  expect_equal(wilcoxon.mann.whitney(ch6$males, ch6$females,
                                      do.asymp = TRUE)$CI.asymp.lower,
                -1.00002198)
-  expect_equal(wilcoxon.mann.whitney(ch6data$males, ch6data$females,
+  expect_equal(wilcoxon.mann.whitney(ch6$males, ch6$females,
                                      do.asymp = TRUE)$CI.asymp.upper, 11.99999)
 })
 
 test_that("Example 6.11", {
   expect_equal(
-    wilcoxon.mann.whitney(ch6data$typeA, ch6data$typeB)$pval.exact.stat,
-               paste0("\n","112.5 (rank sum from ch6data$typeA), ",
-                      "97.5 (rank sum from ch6data$typeB)", "\n",
-                      "76.5 (Mann-Whitney U from ch6data$typeA), ",
-                      "19.5 (Mann-Whitney U from ch6data$typeB)"))
-  expect_equal(wilcoxon.mann.whitney(ch6data$typeA, ch6data$typeB)$pval.exact,
+    wilcoxon.mann.whitney(ch6$typeA, ch6$typeB)$pval.exact.stat,
+               paste0("\n","112.5 (rank sum from ch6$typeA), ",
+                      "97.5 (rank sum from ch6$typeB)", "\n",
+                      "76.5 (Mann-Whitney U from ch6$typeA), ",
+                      "19.5 (Mann-Whitney U from ch6$typeB)"))
+  expect_equal(wilcoxon.mann.whitney(ch6$typeA, ch6$typeB)$pval.exact,
                0.026768278)
 })
 
 test_that("Example 6.17", {
   expect_equal(
-    wilcoxon.mann.whitney(ch6data$groupA, ch6data$groupB)$pval.exact.stat,
-               paste0("\n","76 (rank sum from ch6data$groupA), ",
-                      "155 (rank sum from ch6data$groupB)", "\n",
-                      "21 (Mann-Whitney U from ch6data$groupA), ",
-                      "89 (Mann-Whitney U from ch6data$groupB)"))
-  expect_equal(wilcoxon.mann.whitney(ch6data$groupA, ch6data$groupB)$pval.exact,
+    wilcoxon.mann.whitney(ch6$groupA, ch6$groupB)$pval.exact.stat,
+               paste0("\n","76 (rank sum from ch6$groupA), ",
+                      "155 (rank sum from ch6$groupB)", "\n",
+                      "21 (Mann-Whitney U from ch6$groupA), ",
+                      "89 (Mann-Whitney U from ch6$groupB)"))
+  expect_equal(wilcoxon.mann.whitney(ch6$groupA, ch6$groupB)$pval.exact,
                0.015871126)
 })
 
 
 test_that("Exercise 6.1", {
-  expect_equal(wilcoxon.mann.whitney(ch6data$temp.H, ch6data$temp.L)$pval.exact,
+  expect_equal(wilcoxon.mann.whitney(ch6$temp.H, ch6$temp.L)$pval.exact,
                0.054895105)
 })
 
 test_that("Exercise 6.2", {
-  expect_equal(wilcoxon.mann.whitney(ch5data$LVF, ch5data$RVF)$pval.exact,
+  expect_equal(wilcoxon.mann.whitney(ch5$LVF, ch5$RVF)$pval.exact,
                0.271898515)
 })
 
 test_that("Exercise 6.3", {
   expect_equal(
-    wilcoxon.mann.whitney(ch6data$DMF.M, ch6data$DMF.F, do.exact = FALSE,
+    wilcoxon.mann.whitney(ch6$DMF.M, ch6$DMF.F, do.exact = FALSE,
                           do.asymp = TRUE)$pval.asymp, 0.004461907)
-  expect_equal(wilcoxon.mann.whitney(ch6data$DMF.M, ch6data$DMF.F,
+  expect_equal(wilcoxon.mann.whitney(ch6$DMF.M, ch6$DMF.F,
                                      seed = 1)$pval.mc, 0.00408)
 })
 
 test_that("Exercise 6.4", {
-  expect_equal(wilcoxon.mann.whitney(ch6data$weight.diabetic,
-                                     ch6data$weight.normal)$pval.exact,
+  expect_equal(wilcoxon.mann.whitney(ch6$weight.diabetic,
+                                     ch6$weight.normal)$pval.exact,
                0.00016895687)
 })
 
 test_that("Exercise 6.5", {
   expect_equal(
-    wilcoxon.mann.whitney(ch6data$cooling.time.standard,
-                          ch6data$cooling.time.cheap)$pval.exact, 0.13879062)
+    wilcoxon.mann.whitney(ch6$cooling.time.standard,
+                          ch6$cooling.time.cheap)$pval.exact, 0.13879062)
   expect_equal(
-    wilcoxon.mann.whitney(ch6data$cooling.time.standard,
-                          ch6data$cooling.time.cheap)$CI.exact.lower, -0.2)
+    wilcoxon.mann.whitney(ch6$cooling.time.standard,
+                          ch6$cooling.time.cheap)$CI.exact.lower, -0.2)
   expect_equal(
-    wilcoxon.mann.whitney(ch6data$cooling.time.standard,
-                          ch6data$cooling.time.cheap)$CI.exact.upper, 1.9)
+    wilcoxon.mann.whitney(ch6$cooling.time.standard,
+                          ch6$cooling.time.cheap)$CI.exact.upper, 1.9)
 })
 
 test_that("Exercise 6.6", {
   expect_equal(
-    wilcoxon.mann.whitney(ch6data$wait.1979, ch6data$wait.1983,
+    wilcoxon.mann.whitney(ch6$wait.1979, ch6$wait.1983,
                           do.exact = FALSE, do.asymp = TRUE)$pval.asymp,
     0.0040175478)
 })
 
 test_that("Exercise 6.7", {
   expect_equal(
-    wilcoxon.mann.whitney(ch6data$activity.boys, ch6data$activity.girls,
+    wilcoxon.mann.whitney(ch6$activity.boys, ch6$activity.girls,
                           do.exact = FALSE, do.asymp = TRUE)$pval.asymp,
     3.139189e-22)
 })
 
 test_that("Exercise 6.15", {
-  expect_equal(wilcoxon.mann.whitney(ch6data$doseI, ch6data$doseII)$pval.exact,
+  expect_equal(wilcoxon.mann.whitney(ch6$doseI, ch6$doseII)$pval.exact,
                0.0106129165)
-  expect_equal(wilcoxon.mann.whitney(ch6data$doseI,
-                                     ch6data$doseII)$CI.exact.lower, -17.42)
-  expect_equal(wilcoxon.mann.whitney(ch6data$doseI,
-                                     ch6data$doseII)$CI.exact.upper, -2.4)
+  expect_equal(wilcoxon.mann.whitney(ch6$doseI,
+                                     ch6$doseII)$CI.exact.lower, -17.42)
+  expect_equal(wilcoxon.mann.whitney(ch6$doseI,
+                                     ch6$doseII)$CI.exact.upper, -2.4)
 })
 
 test_that("Exercise 6.16", {
-  expect_equal(wilcoxon.mann.whitney(ch6data$travel,
-                                     ch6data$politics)$pval.exact, 0.254519474)
+  expect_equal(wilcoxon.mann.whitney(ch6$travel,
+                                     ch6$politics)$pval.exact, 0.254519474)
 })
 
 test_that("Example 8.9", {
@@ -174,6 +174,39 @@ test_that("Example 8.9", {
                       "7 (Mann-Whitney U from groupBA.diff2)"))
   expect_equal(wilcoxon.mann.whitney(groupAB.diff, groupBA.diff2)$pval.exact,
                0.30952381)
+})
+
+test_that("Exercise 8.6", {
+  expect_equal(wilcoxon.mann.whitney(
+    ch8$periodI.mistakes.AB + ch8$periodII.mistakes.AB,
+    ch8$periodI.mistakes.BA + ch8$periodII.mistakes.BA)$pval.exact, 0.74125874)
+  expect_equal(wilcoxon.mann.whitney(
+    ch8$periodI.mistakes.AB - ch8$periodII.mistakes.AB,
+    ch8$periodI.mistakes.BA - ch8$periodII.mistakes.BA)$pval.exact, 0.21037296)
+  expect_equal(wilcoxon.mann.whitney(
+    ch8$periodI.mistakes.AB - ch8$periodII.mistakes.AB,
+    ch8$periodII.mistakes.BA - ch8$periodI.mistakes.BA)$pval.exact, 0.47086247)
+})
+
+test_that("Exercise 8.7", {
+  expect_equal(wilcoxon.mann.whitney(ch8$periodI.time.AB + ch8$periodII.time.AB,
+    ch8$periodI.time.BA + ch8$periodII.time.BA)$pval.exact, 0.82362082)
+  expect_equal(wilcoxon.mann.whitney(ch8$periodI.time.AB - ch8$periodII.time.AB,
+    ch8$periodI.time.BA - ch8$periodII.time.BA)$pval.exact, 0.0013986014)
+  expect_equal(wilcoxon.mann.whitney(ch8$periodI.time.AB - ch8$periodII.time.AB,
+    ch8$periodII.time.BA - ch8$periodI.time.BA)$pval.exact, 1)
+})
+
+test_that("Exercise 8.9", {
+  expect_equal(wilcoxon.mann.whitney(
+    ch8$seizure.score[ch8$hospital == "HospitalA"],
+    ch8$seizure.score[ch8$hospital == "HospitalB"])$pval.exact, 0.78018576)
+  expect_equal(wilcoxon.mann.whitney(
+    ch8$seizure.score[ch8$hospital == "HospitalA"],
+    ch8$seizure.score[ch8$hospital == "HospitalC"])$pval.exact, 0.01896796)
+  expect_equal(wilcoxon.mann.whitney(
+    ch8$seizure.score[ch8$hospital == "HospitalB"],
+    ch8$seizure.score[ch8$hospital == "HospitalC"])$pval.exact, 0.027396133)
 })
 
 test_that("Following Example 9.3", {

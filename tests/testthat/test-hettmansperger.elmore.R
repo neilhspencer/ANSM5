@@ -22,3 +22,10 @@ test_that("Example 8.7", {
                                      median.polish = TRUE)$pval.asymp,
                0.00182273517)
 })
+
+test_that("Exercise 8.3", {
+  expect_equal(hettmansperger.elmore(ch8$game.time, ch8$experience,
+                                     ch8$game)$pval.asymp.stat, 7.0520487)
+  expect_equal(hettmansperger.elmore(ch8$game.time, ch8$experience,
+                                     ch8$game)$pval.asymp, 0.0294216535)
+})
