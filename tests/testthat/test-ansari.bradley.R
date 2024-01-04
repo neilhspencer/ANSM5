@@ -1,19 +1,19 @@
 test_that("Example 6.12", {
-  expect_equal(ansari.bradley(ch6data$typeA, ch6data$typeB)$pval.exact.stat, 30)
-  expect_equal(ansari.bradley(ch6data$typeA, ch6data$typeB)$pval.exact,
+  expect_equal(ansari.bradley(ch6$typeA, ch6$typeB)$pval.exact.stat, 30)
+  expect_equal(ansari.bradley(ch6$typeA, ch6$typeB)$pval.exact,
                0.143732635)
-  expect_equal(ansari.bradley(ch6data$typeA, ch6data$typeB,
+  expect_equal(ansari.bradley(ch6$typeA, ch6$typeB,
                               do.asymp = TRUE)$pval.asymp.stat, 30)
-  expect_equal(ansari.bradley(ch6data$typeA, ch6data$typeB,
+  expect_equal(ansari.bradley(ch6$typeA, ch6$typeB,
                               do.asymp = TRUE)$pval.asymp, 0.121413624)
 })
 
 test_that("Exercise 6.14", {
-  expect_equal(ansari.bradley(ch6data$time.withoutLD,
-                              ch6data$time.withLD)$pval.exact, 1)
+  expect_equal(ansari.bradley(ch6$time.withoutLD,
+                              ch6$time.withLD)$pval.exact, 1)
 })
 
 test_that("Exercise 6.16", {
-  expect_equal(ansari.bradley(ch6data$travel, ch6data$politics)$pval.exact,
+  expect_equal(ansari.bradley(ch6$travel, ch6$politics)$pval.exact,
                0.032810842)
 })

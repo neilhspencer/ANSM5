@@ -1,14 +1,14 @@
 test_that("Example 4.16", {
-  expect_equal(hodges.ajne(ch4data$times.as.degrees)$pval.stat, 1)
-  expect_equal(hodges.ajne(ch4data$times.as.degrees)$pval, 0.05859375)
+  expect_equal(hodges.ajne(ch4$times.as.degrees)$pval.stat, 1)
+  expect_equal(hodges.ajne(ch4$times.as.degrees)$pval, 0.05859375)
 })
 
 test_that("Exercise 4.13", {
-  expect_equal(hodges.ajne(ch4data$accident.bearings)$pval, 0.109375)
+  expect_equal(hodges.ajne(ch4$accident.bearings)$pval, 0.109375)
 })
 
 test_that("Exercise 4.14", {
-  expect_equal(hodges.ajne(ch4data$board.angles)$pval, 0.9375)
+  expect_equal(hodges.ajne(ch4$board.angles)$pval, 0.9375)
 })
 
 test_that("Test overly-uniform data", {

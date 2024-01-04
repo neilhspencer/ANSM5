@@ -1,17 +1,17 @@
 test_that("Example 6.10", {
   expect_equal(
-    normal.scores.test(ch6data$groupA, ch6data$groupB)$pval.exact.stat,
+    normal.scores.test(ch6$groupA, ch6$groupB)$pval.exact.stat,
     -4.9861603)
   expect_equal
-  (normal.scores.test(ch6data$groupA, ch6data$groupB)$pval.exact, 0.011686456)
-  expect_equal(normal.scores.test(ch6data$groupA, ch6data$groupB,
+  (normal.scores.test(ch6$groupA, ch6$groupB)$pval.exact, 0.011686456)
+  expect_equal(normal.scores.test(ch6$groupA, ch6$groupB,
                                   do.asymp = TRUE)$pval.asymp.stat, -4.9861603)
-  expect_equal(normal.scores.test(ch6data$groupA, ch6data$groupB,
+  expect_equal(normal.scores.test(ch6$groupA, ch6$groupB,
                                   do.asymp = TRUE)$pval.asymp, 0.010654119)
 })
 
 test_that("Exercise 6.15", {
-  expect_equal(normal.scores.test(ch6data$doseI, ch6data$doseII)$pval.exact,
+  expect_equal(normal.scores.test(ch6$doseI, ch6$doseII)$pval.exact,
                0.0080213904)
 })
 

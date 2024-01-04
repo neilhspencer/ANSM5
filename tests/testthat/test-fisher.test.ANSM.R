@@ -1,5 +1,5 @@
 test_that("Example 6.7", {
-  expect_equal(fisher.test.ANSM(ch6data$males, ch6data$females)$pval.exact,
+  expect_equal(fisher.test.ANSM(ch6$males, ch6$females)$pval.exact,
                0.38454106)
 })
 
