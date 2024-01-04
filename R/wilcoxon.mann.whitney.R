@@ -144,7 +144,7 @@ wilcoxon.mann.whitney <-
             sum(permsums[ranksum:length(permsums)]) / sum(permsums)
         }
         if (alternative=="two.sided"){
-          pval.exact <- min(pval.exact.less, pval.exact.greater) * 2
+          pval.exact <- min(1, min(pval.exact.less, pval.exact.greater) * 2)
         }else if (alternative == "less"){
           pval.exact <- pval.exact.less
         }else if (alternative == "greater"){

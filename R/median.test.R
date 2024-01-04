@@ -170,6 +170,16 @@ median.test <-
       ns2 <- s2.gt + sum(s2 < med) #ignoring s2 == med
       #get increment
       increment <- min(abs(diff(sort(unique(c(s1, s2))))))
+      ##get precision and round to avoid multiple dps created by differencing
+      sorted <- sort(unique(c(s1, s2)))
+      dp <- 0
+      for (i in 1:length(sorted)){
+        dp.pos <- unlist(gregexpr(".", as.character(sorted[i]), fixed = TRUE))
+        if (dp.pos > 0 && nchar(as.character(sorted[i])) - dp.pos > dp){
+          dp <- nchar(as.character(sorted[i])) - dp.pos
+        }
+      }
+      increment <- round(increment, dp)
       #get range to try
       largest <- max(c(abs(s1), abs(s2)))
       #Lower limit
