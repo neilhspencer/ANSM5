@@ -1,45 +1,54 @@
 test_that("Example 7.3", {
-  expect_equal(jonckheere.terpstra(ch7data$dementia.age, ch7data$features,
+  expect_equal(jonckheere.terpstra(ch7$dementia.age, ch7$features,
                                    alternative = "greater")$pval.exact.stat, 9)
-  expect_equal(jonckheere.terpstra(ch7data$dementia.age, ch7data$features,
+  expect_equal(jonckheere.terpstra(ch7$dementia.age, ch7$features,
                                    alternative = "greater")$pval.exact,
                0.0046620047)
   expect_equal(
-    jonckheere.terpstra(ch7data$dementia.age, ch7data$features,
+    jonckheere.terpstra(ch7$dementia.age, ch7$features,
                         alternative = "greater", do.exact = FALSE,
                         do.asymp = TRUE,
                         do.asymp.ties.adjust = FALSE)$pval.asymp.stat,
     -2.52810291)
   expect_equal(
-    jonckheere.terpstra(ch7data$dementia.age, ch7data$features,
+    jonckheere.terpstra(ch7$dementia.age, ch7$features,
                         alternative = "greater", do.exact = FALSE,
                         do.asymp = TRUE,
                         do.asymp.ties.adjust = FALSE)$pval.asymp, 0.0057340365)
   expect_equal(
-    jonckheere.terpstra(ch7data$dementia.age, ch7data$features,
+    jonckheere.terpstra(ch7$dementia.age, ch7$features,
                         alternative = "greater", do.exact = FALSE,
                         do.asymp = TRUE)$pval.asymp, 0.0054947789)
 })
 
 test_that("Exercise 7.5", {
-  expect_equal(jonckheere.terpstra(ch7data$braking.distance,
-                                   ch7data$speed)$pval.exact.stat, 32.5)
-  expect_equal(jonckheere.terpstra(ch7data$braking.distance,
-                                   ch7data$speed)$pval.exact, 0.0011111111)
-  expect_equal(jonckheere.terpstra(ch7data$braking.distance, ch7data$speed,
+  expect_equal(jonckheere.terpstra(ch7$braking.distance,
+                                   ch7$speed)$pval.exact.stat, 32.5)
+  expect_equal(jonckheere.terpstra(ch7$braking.distance,
+                                   ch7$speed)$pval.exact, 0.0011111111)
+  expect_equal(jonckheere.terpstra(ch7$braking.distance, ch7$speed,
                                    do.exact = FALSE,
                                    do.asymp = TRUE)$pval.asymp, 0.00219353184)
 })
 
 test_that("Exercise 7.6", {
-  expect_equal(jonckheere.terpstra(ch7data$platelet.count, ch7data$spleen.size,
+  expect_equal(jonckheere.terpstra(ch7$platelet.count, ch7$spleen.size,
                                    alternative = "greater",
                                    seed = 1)$pval.mc.stat, 119)
-  expect_equal(jonckheere.terpstra(ch7data$platelet.count, ch7data$spleen.size,
+  expect_equal(jonckheere.terpstra(ch7$platelet.count, ch7$spleen.size,
                                    alternative = "greater", seed = 1)$pval.mc, 0)
-  expect_equal(jonckheere.terpstra(ch7data$platelet.count, ch7data$spleen.size,
+  expect_equal(jonckheere.terpstra(ch7$platelet.count, ch7$spleen.size,
                                    alternative = "greater", do.exact = FALSE,
                                    do.asymp = TRUE)$pval.asymp, 0.0000194445645)
+})
+
+test_that("Exercise 8.10", {
+  expect_equal(jonckheere.terpstra(ch8$silver.content, ch8$dynasty,
+                                   alternative = "less", seed = 1)$pval.mc,
+               0.0077)
+  expect_equal(jonckheere.terpstra(ch8$silver.content, ch8$dynasty,
+                                   alternative = "less", do.exact = FALSE,
+                                   do.asymp = TRUE)$pval.asymp, 0.0084307191)
 })
 
 test_that("Example 12.7", {
