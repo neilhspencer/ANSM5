@@ -135,6 +135,7 @@ logrank <-
       #use Monte Carlo
       if (!is.null(seed)){set.seed(seed)}
       n.combins1 <- nsims.mc
+      n.combins2 <- 1
     }
     #evaluate all combinations
     tmp.pval <- 0

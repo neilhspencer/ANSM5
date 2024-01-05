@@ -64,7 +64,7 @@ gehan.wilcoxon <-
         U.x <- U.x + sum(y > x[i]) + 0.5 * sum(y == x[i]) +
           0.5 * sum((y < x[i]) * y.c)
       }else{
-        U.x <- U.x + sum((y > x[i]) * (1 - y.c)) + 0.5 * sum(y.c)
+        U.x <- U.x + sum((y > x[i]) * (1 - y.c)) * 0.5 + 0.5 * sum(y.c)
       }
     }
     U.y <- 0
@@ -73,7 +73,7 @@ gehan.wilcoxon <-
         U.y <- U.y + sum(x > y[i]) + 0.5 * sum(x == y[i]) +
           0.5 * sum((x < y[i]) * x.c)
       }else{
-        U.y <- U.y + sum((x > y[i]) * (1 - x.c)) + 0.5 * sum(x.c)
+        U.y <- U.y + sum((x > y[i]) * (1 - x.c)) * 0.5 + 0.5 * sum(x.c)
       }
     }
     if (alternative == "two.sided"){
@@ -124,7 +124,7 @@ gehan.wilcoxon <-
               0.5 * sum(tmp.y == tmp.x[i]) +
               0.5 * sum((tmp.y < tmp.x[i]) * tmp.y.c)
           }else{
-            tmp.U.x <- tmp.U.x + sum((tmp.y > tmp.x[i]) * (1 - tmp.y.c)) +
+            tmp.U.x <- tmp.U.x + sum((tmp.y > tmp.x[i]) * (1 - tmp.y.c)) * 0.5 +
               0.5 * sum(tmp.y.c)
           }
         }
@@ -135,7 +135,7 @@ gehan.wilcoxon <-
               0.5 * sum(tmp.x == tmp.y[i]) +
               0.5 * sum((tmp.x < tmp.y[i]) * tmp.x.c)
           }else{
-            tmp.U.y <- tmp.U.y + sum((tmp.x > tmp.y[i]) * (1 - tmp.x.c)) +
+            tmp.U.y <- tmp.U.y + sum((tmp.x > tmp.y[i]) * (1 - tmp.x.c)) * 0.5 +
               0.5 * sum(tmp.x.c)
           }
         }
@@ -150,9 +150,6 @@ gehan.wilcoxon <-
         if (tmp.U > U){
           tmp.pval <- tmp.pval + 1 / n.combins
         }
-      }
-      if (alternative == "two.sided"){
-        tmp.pval <- min(1, tmp.pval * 2)
       }
       #output
       if (n.perms <= max.exact.perms && !OverflowState){
