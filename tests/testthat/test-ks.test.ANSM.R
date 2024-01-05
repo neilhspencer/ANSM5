@@ -54,3 +54,8 @@ test_that("Exercise 6.16", {
   expect_equal(ks.test.ANSM(ch6$travel, ch6$politics)$pval.exact,
                0.0104786854)
 })
+
+test_that("Exercise 9.2", {
+  expect_equal(ks.test.ANSM(ch9$boys.toothtime, ch9$girls.toothtime)$pval.exact,
+               0.994672)
+})

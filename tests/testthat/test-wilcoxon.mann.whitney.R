@@ -209,18 +209,29 @@ test_that("Exercise 8.9", {
     ch8$seizure.score[ch8$hospital == "HospitalC"])$pval.exact, 0.027396133)
 })
 
+test_that("Example 9.1", {
+  asymp.survtime.2 <- ch9$asymp.survtime * (ch9$asymp.censor == 0) +
+    362 * (ch9$asymp.censor == 1)
+  expect_equal(
+    wilcoxon.mann.whitney(ch9$symp.survtime, asymp.survtime.2,
+                          alternative = "less", do.exact = FALSE,
+                          do.asymp = TRUE)$pval.exact, 0.0040800767)
+  expect_equal(
+    wilcoxon.mann.whitney(ch9$symp.survtime, asymp.survtime.2,
+                          alternative = "less", do.exact = FALSE,
+                          do.asymp = TRUE)$pval.asymp, 0.0045926817)
+})
+
 test_that("Following Example 9.3", {
-  SampleI <-c(9, 25, 35, 38, 41)
-  SampleIIa <-c(10, 26, 29, 36, 37, 48, 57, 58)
-  expect_equal(wilcoxon.mann.whitney(SampleI, SampleIIa,
-                                     alternative = "less")$pval.exact.stat,
-               paste0("\n","29 (rank sum from SampleI), ",
-                      "62 (rank sum from SampleIIa)", "\n",
-                      "14 (Mann-Whitney U from SampleI), ",
-                      "26 (Mann-Whitney U from SampleIIa)"))
-expect_equal(wilcoxon.mann.whitney(SampleI, SampleIIa,
-                                     alternative = "less")$pval.exact,
-               0.21756022)
+  expect_equal(
+    wilcoxon.mann.whitney(ch9$sampleI.survtime, ch9$sampleII.survtime.2,
+                          alternative = "less")$pval.exact, 0.21756022)
+})
+
+test_that("Exercise 9.2", {
+  expect_equal(
+    wilcoxon.mann.whitney(ch9$boys.toothtime, ch9$girls.toothtime)$pval.exact,
+    0.85181485)
 })
 
 test_that("Example 12.5", {
