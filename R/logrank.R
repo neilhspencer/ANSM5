@@ -56,6 +56,11 @@ logrank <-
     x <- x[complete.cases.ID] #remove missing cases
     censored <- censored[complete.cases.ID] #remove missing cases
     groups <- groups[complete.cases.ID] #remove missing cases
+    ##order cases
+    censored <- censored[order(x)]
+    groups <- groups[order(x)]
+    x <- sort(x)
+    #continue preparation
     g <- nlevels(groups)
     n <- length(x)
     n.g1 <- table(groups)[1]
@@ -67,25 +72,24 @@ logrank <-
     }
     #calculate statistics
     if (score.censored){
-      x1 <- sort(x)
-      c1 <- censored[order(x)]
-      g1 <- groups[order(x)]
       score <- rep(NA, n)
       score.c0 <- 1
       for (i in 1:n){
-        if (c1[i] == 0){
-          score[i] <- score.c0 - sum(x1 == x1[i]) / (n - sum(x1 < x1[i]))
+        if (censored[i] == 0){
+          score[i] <- score.c0 - sum(x == x[i]) / (n - sum(x < x[i]))
         }else{
           score[i] <- score.c0 - 1
         }
         #update retained scores
         if (i < n){
-          if (c1[i] == 0 && x1[i] != x1[i + 1]){
+          if (censored[i] == 0 && x[i] != x[i + 1]){
             score.c0 <- score[i]
           }
         }
       }
-      test.stat <- max(by(score, g1, sum))
+      test.stat <- abs(by(score, groups, sum))
+      which.test.stat <- which.max(test.stat)
+      test.stat <- max(test.stat)
     }else{
       obs.failures <- table(x[censored == 0], groups[censored ==0])
       tot.failures <- rowSums(obs.failures)
@@ -104,8 +108,15 @@ logrank <-
       }
       at.risk <- rowSums(in.sample)
       e.failures <- tot.failures * in.sample / at.risk
-      test.stat <- max(colSums(obs.failures) - colSums(e.failures))
+      test.stat <- abs(colSums(obs.failures) - colSums(e.failures))
+      which.test.stat <- which.max(test.stat)
+      test.stat <- max(test.stat)
     }
+    #reorder by groups
+    x <- x[order(groups)]
+    censored <- censored[order(groups)]
+    score <- score[order(groups)]
+    groups <- sort(groups)
 
     #exact p-value
     OverflowState <- FALSE
@@ -151,37 +162,38 @@ logrank <-
           }
           tmp.combins <- c(tmp.combins, seq(1, n)[-tmp.combins])
         }
-        tmp.groups <- groups[tmp.combins]
+        tmp.x <- x[tmp.combins]
+        tmp.censored <- censored[tmp.combins]
         #calculate statistics
         if (score.censored){
-          tmp.g1 <- tmp.groups[order(x)]
-          tmp.max.score <- max(by(score, tmp.g1, sum))
+          tmp.score <- score[tmp.combins]
+          tmp.test.stat <- abs(by(tmp.score, groups, sum))[[which.test.stat]]
           #check against actual test statistic
-          if (tmp.max.score <= test.stat){
-            tmp.pval <- tmp.pval + 1 / (n.combins1 * n.combins2)
+          if (tmp.test.stat >= test.stat){
+              tmp.pval <- tmp.pval + 1 / (n.combins1 * n.combins2)
           }
         }else{
-          tmp.obs.failures <- table(x[censored == 0], tmp.groups[censored ==0])
+          tmp.obs.failures <- table(tmp.x[tmp.censored == 0], groups[tmp.censored ==0])
           tmp.tot.failures <- rowSums(tmp.obs.failures)
           for (k in 1:g){
             if (k == 1){
               tmp.in.sample <-
                 as.numeric(lapply(as.numeric(row.names(tmp.obs.failures)),
                               function(y)
-                              sum(y <= x[tmp.groups == levels(tmp.groups)[k]])))
+                              sum(y <= tmp.x[groups == levels(groups)[k]])))
             }else{
               tmp.in.sample <-
                 cbind(tmp.in.sample,
                       as.numeric(lapply(as.numeric(row.names(tmp.obs.failures)),
                             function(y)
-                            sum(y <= x[tmp.groups == levels(tmp.groups)[k]]))))
+                            sum(y <= tmp.x[groups == levels(groups)[k]]))))
             }
           }
           tmp.at.risk <- rowSums(tmp.in.sample)
           tmp.e.failures <- tmp.tot.failures * tmp.in.sample / tmp.at.risk
-          tmp.max.sm <- max(colSums(tmp.obs.failures) - colSums(tmp.e.failures))
+          tmp.test.stat <- abs(colSums(tmp.obs.failures) - colSums(tmp.e.failures))[[which.test.stat]]
           #check against actual test statistic
-          if (tmp.max.sm <= test.stat){
+          if (tmp.test.stat >= test.stat){
             tmp.pval <- tmp.pval + 1 / (n.combins1 * n.combins2)
           }
         }
