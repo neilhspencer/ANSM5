@@ -115,7 +115,7 @@ logrank <-
     #reorder by groups
     x <- x[order(groups)]
     censored <- censored[order(groups)]
-    score <- score[order(groups)]
+    if (score.censored){score <- score[order(groups)]}
     groups <- sort(groups)
 
     #exact p-value
