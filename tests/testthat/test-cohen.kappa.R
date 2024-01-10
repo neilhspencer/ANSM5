@@ -35,3 +35,11 @@ test_that("Exercise 10.12", {
                            do.asymp = TRUE)$pval.asymp, 2.528931e-10)
 })
 
+test_that("Exercise 10.13", {
+  expect_equal(cohen.kappa(ch10$questionnaire, ch10$demonstration,
+                           ch10$gender)$stat, c(0.184024697, 0.245444989))
+  expect_equal(cohen.kappa(ch10$questionnaire, ch10$demonstration,
+                           ch10$gender)$pval.asymp.stat, 0.85621234)
+  expect_equal(cohen.kappa(ch10$questionnaire, ch10$demonstration,
+                           ch10$gender)$pval.asymp, 0.35480082)
+})
