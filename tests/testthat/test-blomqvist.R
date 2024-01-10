@@ -1,8 +1,14 @@
 test_that("Example 10.9", {
-  Q1 <- c(1, 3, 4, 5, 6, 8, 10, 11, 13, 14, 16, 17)
-  Q2 <- c(13, 15, 18, 16, 23, 31, 39, 56, 45, 43, 37, 0)
-  expect_equal(blomqvist(Q1, Q2, alternative = "greater")$stat,
+  expect_equal(blomqvist(ch10$q1, ch10$q2, alternative = "greater")$stat,
                0.66666667)
-  expect_equal(blomqvist(Q1, Q2, alternative = "greater")$pval.exact,
+  expect_equal(blomqvist(ch10$q1, ch10$q2, alternative = "greater")$pval.exact,
                0.04004329)
+})
+
+test_that("Exercise 10.6", {
+  expect_equal(blomqvist(ch10$ERA, ch10$ESMS)$pval.exact, 0.007936508)
+})
+
+test_that("Exercise 10.7", {
+  expect_equal(blomqvist(ch10$ERA, ch10$SSS)$pval.exact, 0.007936508)
 })

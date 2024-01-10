@@ -21,3 +21,8 @@ test_that("Exercise 4.11", {
 test_that("Exercise 4.12", {
   expect_equal(cox.stuart(ch4$piped.water.DRC)$pval.exact, 1)
 })
+
+test_that("Exercise 10.5", {
+  expect_equal(cox.stuart(ch10$age.at.death, alternative = "less")$pval.exact,
+               0.1875)
+})

@@ -13,8 +13,7 @@ test_that("Example 6.8", {
 })
 
 test_that("Example 7.4", {
-  expect_equal(median.test(ch7$time, ch7$surgeon)$pval.exact,
-               0.046045976)
+  expect_equal(median.test(ch7$time, ch7$surgeon)$pval.exact, 0.046045976)
 })
 
 test_that("Example 7.5", {
