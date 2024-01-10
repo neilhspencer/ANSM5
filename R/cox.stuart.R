@@ -1,10 +1,11 @@
 #' @importFrom stats complete.cases
 cox.stuart <-
-  function(x, cont.corr = TRUE, max.exact.cases = 10000000, do.asymp = FALSE,
-           do.exact = TRUE) {
+  function(x, alternative = c("two.sided", "less", "greater"), cont.corr = TRUE,
+           max.exact.cases = 10000000, do.asymp = FALSE, do.exact = TRUE) {
     stopifnot(is.vector(x), is.numeric(x), is.logical(cont.corr) == TRUE,
               is.numeric(max.exact.cases), length(max.exact.cases) == 1,
               is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE)
+    alternative <- match.arg(alternative)
 
     #labels
     varname1 <- deparse(substitute(x))
@@ -51,7 +52,6 @@ cox.stuart <-
 
     #carry out test
     H0 <- 0
-    alternative <- "two.sided"
     do.CI <- FALSE
     result <- sign.test(diffs, H0 = H0, alternative = alternative,
                         cont.corr = cont.corr,
