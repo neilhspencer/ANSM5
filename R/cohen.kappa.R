@@ -180,7 +180,7 @@ cohen.kappa <-
         }
         kappabar <- sum(W * kappa2) / sum(W)
         pval.asymp.stat <- sum(W * (kappa2 - rep(kappabar, b)) ^ 2)
-        pval.asymp <- pchisq(pval.asymp.stat, 2, lower.tail = FALSE)
+        pval.asymp <- pchisq(pval.asymp.stat, b - 1, lower.tail = FALSE)
       }
     }
 
