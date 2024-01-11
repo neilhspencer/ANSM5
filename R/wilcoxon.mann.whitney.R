@@ -61,7 +61,7 @@ wilcoxon.mann.whitney <-
       varname1 <- paste0(varname1, " - ", H0)
     }else{
       H0 <- 0
-      xy <- c(x, y)
+      xy <- round(c(x, y), -floor(log10(sqrt(.Machine$double.eps))))
     }
     s <- rank(xy, ties.method = "average")
     ranksumx <- sum(s[1 : length(x)])

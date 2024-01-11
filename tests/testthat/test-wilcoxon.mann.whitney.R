@@ -190,11 +190,13 @@ test_that("Exercise 8.6", {
 
 test_that("Exercise 8.7", {
   expect_equal(wilcoxon.mann.whitney(ch8$periodI.time.AB + ch8$periodII.time.AB,
-    ch8$periodI.time.BA + ch8$periodII.time.BA)$pval.exact, 0.82362082)
+    ch8$periodI.time.BA + ch8$periodII.time.BA)$pval.exact, 0.85951826)
   expect_equal(wilcoxon.mann.whitney(ch8$periodI.time.AB - ch8$periodII.time.AB,
-    ch8$periodI.time.BA - ch8$periodII.time.BA)$pval.exact, 0.0013986014)
+    ch8$periodI.time.BA - ch8$periodII.time.BA)$pval.exact, 0.00155400155)
   expect_equal(wilcoxon.mann.whitney(ch8$periodI.time.AB - ch8$periodII.time.AB,
     ch8$periodII.time.BA - ch8$periodI.time.BA)$pval.exact, 1)
+  expect_equal(wilcoxon.mann.whitney(ch8$periodI.time.AB - ch8$periodII.time.AB,
+   ch8$periodII.time.BA - ch8$periodI.time.BA)$pval.exact, 0.93752914)
 })
 
 test_that("Exercise 8.9", {
