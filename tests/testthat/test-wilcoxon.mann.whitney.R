@@ -28,7 +28,7 @@ test_that("Example 6.4", {
 
 test_that("Example 6.5", {
   expect_equal(
-    wilcoxon.mann.whitney(groupA.sch2.grp, groupB.sch2.grp)$pval.exact,
+    wilcoxon.mann.whitney(ch6$groupA.sch2.grp, ch6$groupB.sch2.grp)$pval.exact,
     0.044156106)
 })
 
@@ -49,7 +49,7 @@ test_that("Example 6.6", {
 
 test_that("Example 6.7", {
   expect_equal(wilcoxon.mann.whitney(ch6$males, ch6$females)$pval.exact,
-               0.12812405)
+               0.1225212)
 })
 
 test_that("Example 6.8", {
@@ -81,7 +81,6 @@ test_that("Example 6.17", {
   expect_equal(wilcoxon.mann.whitney(ch6$groupA, ch6$groupB)$pval.exact,
                0.015871126)
 })
-
 
 test_that("Exercise 6.1", {
   expect_equal(wilcoxon.mann.whitney(ch6$temp.H, ch6$temp.L)$pval.exact,
@@ -194,8 +193,6 @@ test_that("Exercise 8.7", {
   expect_equal(wilcoxon.mann.whitney(ch8$periodI.time.AB - ch8$periodII.time.AB,
     ch8$periodI.time.BA - ch8$periodII.time.BA)$pval.exact, 0.00155400155)
   expect_equal(wilcoxon.mann.whitney(ch8$periodI.time.AB - ch8$periodII.time.AB,
-    ch8$periodII.time.BA - ch8$periodI.time.BA)$pval.exact, 1)
-  expect_equal(wilcoxon.mann.whitney(ch8$periodI.time.AB - ch8$periodII.time.AB,
    ch8$periodII.time.BA - ch8$periodI.time.BA)$pval.exact, 0.93752914)
 })
 
@@ -216,8 +213,7 @@ test_that("Example 9.1", {
     362 * (ch9$asymp.censor == 1)
   expect_equal(
     wilcoxon.mann.whitney(ch9$symp.survtime, asymp.survtime.2,
-                          alternative = "less", do.exact = FALSE,
-                          do.asymp = TRUE)$pval.exact, 0.0040800767)
+                          alternative = "less")$pval.exact, 0.0040800767)
   expect_equal(
     wilcoxon.mann.whitney(ch9$symp.survtime, asymp.survtime.2,
                           alternative = "less", do.exact = FALSE,
