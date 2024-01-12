@@ -53,6 +53,8 @@ gehan.wilcoxon <-
     x.c <- x.c[complete.cases(x, x.c)] #remove missing cases
     y <- y[complete.cases(y, y.c)] #remove missing cases
     y.c <- y.c[complete.cases(y, y.c)] #remove missing cases
+    x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
+    y <- round(y, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     xy <- c(x, y)
     xy.c <- c(x.c, y.c)
     n <- length(xy)
@@ -61,8 +63,8 @@ gehan.wilcoxon <-
     U.x <- 0
     for (i in 1:length(x)){
       if (x.c[i] == 0){
-        U.x <- U.x + sum(y > x[i]) + 0.5 * sum(y == x[i]) +
-          0.5 * sum((y < x[i]) * y.c)
+        U.x <- U.x + sum(y > x[i]) + sum((y == x[i]) * y.c) +
+          0.5 * sum(y == x[i] * (1 - y.c)) + 0.5 * sum((y < x[i]) * y.c)
       }else{
         U.x <- U.x + sum((y > x[i]) * (1 - y.c)) * 0.5 + 0.5 * sum(y.c)
       }
@@ -70,8 +72,8 @@ gehan.wilcoxon <-
     U.y <- 0
     for (i in 1:length(y)){
       if (y.c[i] == 0){
-        U.y <- U.y + sum(x > y[i]) + 0.5 * sum(x == y[i]) +
-          0.5 * sum((x < y[i]) * x.c)
+        U.y <- U.y + sum(x > y[i]) + sum((x == y[i]) * x.c) +
+          0.5 * sum(x == y[i] * (1 - x.c)) + 0.5 * sum((x < y[i]) * x.c)
       }else{
         U.y <- U.y + sum((x > y[i]) * (1 - x.c)) * 0.5 + 0.5 * sum(x.c)
       }
@@ -121,7 +123,8 @@ gehan.wilcoxon <-
         for (i in 1:length(tmp.x)){
           if (tmp.x.c[i] == 0){
             tmp.U.x <- tmp.U.x + sum(tmp.y > tmp.x[i]) +
-              0.5 * sum(tmp.y == tmp.x[i]) +
+              sum((tmp.y == tmp.x[i]) * tmp.y.c) +
+              0.5 * sum(tmp.y == tmp.x[i] * (1 - tmp.y.c)) +
               0.5 * sum((tmp.y < tmp.x[i]) * tmp.y.c)
           }else{
             tmp.U.x <- tmp.U.x + sum((tmp.y > tmp.x[i]) * (1 - tmp.y.c)) * 0.5 +
@@ -132,7 +135,8 @@ gehan.wilcoxon <-
         for (i in 1:length(tmp.y)){
           if (tmp.y.c[i] == 0){
             tmp.U.y <- tmp.U.y + sum(tmp.x > tmp.y[i]) +
-              0.5 * sum(tmp.x == tmp.y[i]) +
+              sum((tmp.x == tmp.y[i]) * tmp.x.c) +
+              0.5 * sum(tmp.x == tmp.y[i] * (1 - tmp.x.c)) +
               0.5 * sum((tmp.x < tmp.y[i]) * tmp.x.c)
           }else{
             tmp.U.y <- tmp.U.y + sum((tmp.x > tmp.y[i]) * (1 - tmp.x.c)) * 0.5 +
