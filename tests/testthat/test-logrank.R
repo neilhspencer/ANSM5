@@ -1,4 +1,4 @@
-test_that("Example 9.5", {
+test_that("Example 9.6", {
   #exact
   expect_equal(logrank(ch9$samplesAB.survtime, ch9$samplesAB.censor,
                        ch9$samplesAB, score.censored = FALSE)$pval.exact.stat,
@@ -16,7 +16,7 @@ test_that("Example 9.5", {
                        nsims.mc = 100000)$pval.mc, 0.3378)
 })
 
-test_that("Example 9.6", {
+test_that("Example 9.7", {
   expect_equal(logrank(ch9$samplesXYZ.survtime, ch9$samplesXYZ.censor,
                        ch9$samplesXYZ)$pval.exact.stat, 1.3702381)
   expect_equal(logrank(ch9$samplesXYZ.survtime, ch9$samplesXYZ.censor,
