@@ -1,10 +1,10 @@
-#' @importFrom stats model.frame model.response model.matrix complete.cases lm median pnorm quantile
+#' @importFrom stats complete.cases median pnorm quantile
 theil.kendall <-
-  function(formula, data, H0 = NULL, do.abbreviated = FALSE, do.alpha = FALSE,
+  function(y, x, H0 = NULL, do.abbreviated = FALSE, do.alpha = FALSE,
            alternative = c("two.sided", "less", "greater"), CI.width = 0.95,
            max.exact.cases = 10, nsims.mc = 100000, seed = NULL,
            do.asymp = FALSE, do.exact = TRUE, do.CI = FALSE, do.mc = FALSE) {
-    stopifnot(inherits(formula,"formula"), length(all.vars(formula)) == 2,
+    stopifnot(is.numeric(y), is.numeric(x), length(y) == length(x),
               ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
               is.logical(do.abbreviated) == TRUE, is.logical(do.alpha) == TRUE,
               is.numeric(CI.width), length(CI.width) == 1,
@@ -17,7 +17,7 @@ theil.kendall <-
     alternative <- match.arg(alternative)
 
     #labels
-    varname1 <- Reduce(paste, deparse(formula))
+    varname1 <- paste0(deparse(substitute(y)), " ~ ", deparse(substitute(x)))
     varname2 <- NULL
     varname3 <- NULL
 
@@ -49,14 +49,6 @@ theil.kendall <-
     stat.note <- NULL
 
     #prepare
-    mf <- match.call(expand.dots = FALSE)
-    m <- match(c("formula", "data"), names(mf), 0L)
-    mf <- mf[c(1L, m)]
-    mf[[1L]] <- quote(stats::model.frame)
-    mf <- eval(mf, parent.frame())
-    y <- model.response(mf, "numeric")
-    mt <- attr(mf, "terms")
-    x <- model.matrix(mt, mf)[, -1]
     complete.cases.id <- complete.cases(x, y)
     y <- y[complete.cases.id] #remove missing cases
     x <- x[complete.cases.id] #remove missing cases
@@ -85,7 +77,7 @@ theil.kendall <-
     stat <- median(bvals2[is.finite(bvals2)])
     statlabel <- "Theil-Kendall beta"
     if (!is.null(H0)){
-      Tt <- diff(table(sign(bvals2 - H0)))[[1]]
+      Tt <- sum(sign(bvals2 - H0) == 1) - sum(sign(bvals2 - H0) == -1)
     }
 
     #give mc output if exact not possible
@@ -123,11 +115,11 @@ theil.kendall <-
             pval.exact <- pval.exact + 1 / n.perms
           }
         }else if (alternative == "less"){
-          if (beta.tmp <= stat){
+          if (beta.tmp >= stat){
             pval.exact <- pval.exact + 1 / n.perms
           }
         }else if (alternative == "greater"){
-          if (beta.tmp >= stat){
+          if (beta.tmp <= stat){
             pval.exact <- pval.exact + 1 / n.perms
           }
         }
@@ -164,11 +156,11 @@ theil.kendall <-
             pval.mc <- pval.mc + 1 / nsims.mc
           }
         }else if (alternative == "less"){
-          if (beta.tmp <= stat){
+          if (beta.tmp >= stat){
             pval.mc <- pval.mc + 1 / nsims.mc
           }
         }else if (alternative == "greater"){
-          if (beta.tmp >= stat){
+          if (beta.tmp <= stat){
             pval.mc <- pval.mc + 1 / nsims.mc
           }
         }
@@ -278,19 +270,16 @@ theil.kendall <-
     #create hypotheses
     if (!is.null(H0)){
       H0val <- H0
-      H0 <- paste0("H0: Theil-Kendall beta for ",
-                   Reduce(paste, deparse(formula)), " is ", H0val)
+      H0 <- paste0("H0: Theil-Kendall beta for ", varname1, " is ", H0val)
       if (alternative == "two.sided"){
-        H0 <- paste0(H0, "\nH1: Theil-Kendall beta for ",
-                     Reduce(paste, deparse(formula)), " is not ", H0val)
+        H0 <- paste0(H0, "\nH1: Theil-Kendall beta for ", varname1, " is not ",
+                     H0val)
       }else if(alternative == "greater"){
-        H0 <- paste0(H0, "\nH1: Theil-Kendall beta for ",
-                     Reduce(paste, deparse(formula)), " is greater than ",
-                     H0val)
+        H0 <- paste0(H0, "\nH1: Theil-Kendall beta for ", varname1,
+                     " is greater than ", H0val)
       }else{
-        H0 <- paste0(H0, "\nH1: Theil-Kendall beta for ",
-                     Reduce(paste, deparse(formula)), " is less than ",
-                     H0val)
+        H0 <- paste0(H0, "\nH1: Theil-Kendall beta for ", varname1,
+                     " is less than ", H0val)
       }
       H0 <- paste0(H0, "\n")
     }

@@ -1,10 +1,10 @@
-#' @importFrom stats model.frame model.response model.matrix complete.cases lm median approx quantile
+#' @importFrom stats lm complete.cases median approx qnorm
 spearman.beta <-
-  function(formula, data, H0 = NULL,
-           alternative = c("two.sided", "less", "greater"), CI.width = 0.95,
-           max.exact.cases = 10, nsims.mc = 100000, seed = NULL,
-           do.asymp = FALSE, do.exact = TRUE, do.CI = FALSE, do.mc = FALSE) {
-    stopifnot(inherits(formula,"formula"), length(all.vars(formula)) == 2,
+  function(y, x, H0 = NULL, alternative = c("two.sided", "less", "greater"),
+           CI.width = 0.95, max.exact.cases = 10, nsims.mc = 100000,
+           seed = NULL, do.asymp = FALSE, do.exact = TRUE, do.CI = FALSE,
+           do.mc = FALSE) {
+    stopifnot(is.numeric(y), is.numeric(x), length(y) == length(x),
               ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
               is.numeric(CI.width), length(CI.width) == 1,
               CI.width > 0, CI.width < 1,
@@ -16,7 +16,7 @@ spearman.beta <-
     alternative <- match.arg(alternative)
 
     #labels
-    varname1 <- Reduce(paste, deparse(formula))
+    varname1 <- paste0(deparse(substitute(y)), " ~ ", deparse(substitute(x)))
     varname2 <- NULL
     varname3 <- NULL
 
@@ -48,36 +48,32 @@ spearman.beta <-
     stat.note <- NULL
 
     #prepare
-    mf <- match.call(expand.dots = FALSE)
-    m <- match(c("formula", "data"), names(mf), 0L)
-    mf <- mf[c(1L, m)]
-    mf[[1L]] <- quote(stats::model.frame)
-    mf <- eval(mf, parent.frame())
-    y <- model.response(mf, "numeric")
-    mt <- attr(mf, "terms")
-    x <- model.matrix(mt, mf)[, -1]
+    model <- lm(y ~ x)
+    y <- model$model[, 1]
+    x <- model$model[, 2]
     complete.cases.id <- complete.cases(x, y)
     y <- y[complete.cases.id] #remove missing cases
     x <- x[complete.cases.id] #remove missing cases
-    x <- x - median(x)
+    x.c <- x - median(x)
     n <- length(y)
 
     #calculate estimate of beta
     outer.y <- outer(y, y, "-")
-    outer.x <- outer(x, x, "-")
-    bvals <- outer.y / outer.x
+    outer.x.c <- outer(x.c, x.c, "-")
+    bvals <- outer.y / outer.x.c
     bvals <- sort(bvals[upper.tri(bvals)])
     mid.b <- c(NA, bvals[1:(length(bvals) - 1)] + diff(bvals) / 2, NA)
-    T <- NULL
-    for (i in 1:length(mid.b)){
-      T[i] <- sum(x * rank(y - mid.b[i] * x))
-
+    T <- sum(1:n)
+    for (i in 2:(length(mid.b) - 1)){
+      T[i] <- sum(x.c * rank(y - mid.b[i] * x.c))
     }
+    T[length(mid.b)] <- -T[1]
+    rs <- T / max(T)
     stat <- approx(T[!duplicated(T)], mid.b[!duplicated(T)], xout=0)$y
     statlabel <- "Spearman beta"
 
     if (!is.null(H0)){
-      spearman.test <- spearman(x, y - H0 * x, alternative = alternative,
+      spearman.test <- spearman(x.c, y - H0 * x.c, alternative = alternative,
                               max.exact.cases = max.exact.cases,
                               nsims.mc = nsims.mc, seed = seed,
                               do.asymp = do.asymp, do.exact = do.exact,
@@ -86,58 +82,52 @@ spearman.beta <-
       pval.stat <- spearman.test$pval.stat
       pval.note <- spearman.test$pval.note
       pval.asymp <- spearman.test$pval.asymp
-      pval.asymp.stat <- spearman.test$pval.asymp.stat
+      pval.asymp.stat <- spearman.test$stat
       pval.asymp.note <- spearman.test$pval.asymp.note
       pval.exact <- spearman.test$pval.exact
-      pval.exact.stat <- spearman.test$pval.exact.stat
+      pval.exact.stat <- spearman.test$stat
       pval.exact.note <- spearman.test$pval.exact.note
       pval.mc <- spearman.test$pval.mc
-      pval.mc.stat <- spearman.test$pval.mc.stat
+      pval.mc.stat <- spearman.test$stat
       pval.mc.note <- spearman.test$pval.mc.note
       stat.note <- spearman.test$stat.note
     }
 
-    #create Monte Carlo confidence interval
+    #CI from exact/asymptotic distribution
     if (do.CI){
-      if (!is.null(seed)){set.seed(seed)}
-      beta.mc <- NA
-      for (i in 1:nsims.mc){
-        xy.sample <- sample(n, n, replace = TRUE)
-        y.sample <- y[xy.sample]
-        x.sample <- x[xy.sample] - median(x[xy.sample])
-        outer.y <- outer(y.sample, y.sample, "-")
-        outer.x <- outer(x.sample, x.sample, "-")
-        bvals <- outer.y / outer.x
-        bvals <- sort(bvals[upper.tri(bvals)])
-        mid.b <- c(NA, bvals[1:(length(bvals) - 1)] + diff(bvals) / 2, NA)
-        T <- NA
-        for (j in 1:length(mid.b)){
-          T[j] <- sum(x.sample * rank(y.sample - mid.b[j] * x.sample))
-
+      if (n <= max.exact.cases){
+        combins <- perms(n)
+        n.perms <- dim(combins)[1]
+        corrs <- rep(NA, n.perms)
+        for (i in 1:n.perms){
+          corrs[i] <- cor(combins[i,], 1:n, method = "spearman")
         }
-        if (sum(!is.na(mid.b[!duplicated(T)])) > 1){
-          beta.mc[i] <- approx(T[!duplicated(T)], mid.b[!duplicated(T)], xout=0)$y
-        }
+        corrs.dist <- cumsum(table(corrs) / n.perms)
+        corr.CI.limit <- as.numeric(names(corrs.dist[sum(corrs.dist <= (1 - CI.width) / 2)]))
+        corr.CI.p <- corrs.dist[sum(corrs.dist <= (1 - CI.width) / 2)][[1]]
+        CI.exact.upper <- approx(rs[!duplicated(rs)], c(NA, bvals)[!duplicated(rs)], xout = corr.CI.limit)$y
+        CI.exact.lower <- approx(rs[!duplicated(rs)], c(bvals, NA)[!duplicated(rs)], xout = -corr.CI.limit)$y
+        actualCIwidth.exact <- 1 - corr.CI.p * 2
+      }else{
+        z <- qnorm((1 - CI.width) / 2, lower.tail = FALSE)
+        r.approx <- z / sqrt(n - 1)
+        CI.asymp.lower <- approx(rs[!duplicated(rs)], c(bvals, NA)[!duplicated(rs)], xout = r.approx)$y
+        CI.asymp.upper <- approx(rs[!duplicated(rs)], c(NA, bvals)[!duplicated(rs)], xout = -r.approx)$y
       }
-      CI.mc.lower <- quantile(beta.mc, (1 - CI.width) / 2, na.rm = TRUE)[[1]]
-      CI.mc.upper <- quantile(beta.mc, 1 - (1 - CI.width) / 2, na.rm = TRUE)[[1]]
     }
 
     #create hypotheses
     if (!is.null(H0)){
       H0val <- H0
-      H0 <- paste0("H0: Spearman beta for ", Reduce(paste, deparse(formula)),
-                   " is ", H0val)
+      H0 <- paste0("H0: Spearman beta for ", varname1, " is ", H0val)
       if (alternative == "two.sided"){
-        H0 <- paste0(H0, "\nH1: Spearman beta for ",
-                     Reduce(paste, deparse(formula)), " is not ", H0val)
-      }else if(alternative == "greater"){
-        H0 <- paste0(H0, "\nH1: Spearman beta for ",
-                     Reduce(paste, deparse(formula)), " is greater than ",
+        H0 <- paste0(H0, "\nH1: Spearman beta for ", varname1, " is not ",
                      H0val)
+      }else if(alternative == "greater"){
+        H0 <- paste0(H0, "\nH1: Spearman beta for ", varname1,
+                     " is greater than ", H0val)
       }else{
-        H0 <- paste0(H0, "\nH1: Spearman beta for ",
-                     Reduce(paste, deparse(formula)), " is less than ",
+        H0 <- paste0(H0, "\nH1: Spearman beta for ", varname1, " is less than ",
                      H0val)
       }
       H0 <- paste0(H0, "\n")

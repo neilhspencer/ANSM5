@@ -1,10 +1,10 @@
-#' @importFrom stats model.frame model.response model.matrix complete.cases lm quantile
+#' @importFrom stats complete.cases lm quantile
 pearson.beta <-
-  function(formula, data, H0 = NULL,
-           alternative = c("two.sided", "less", "greater"), CI.width = 0.95,
-           max.exact.cases = 10, nsims.mc = 100000, seed = NULL,
-           do.asymp = FALSE, do.exact = TRUE, do.CI = FALSE, do.mc = FALSE) {
-    stopifnot(inherits(formula,"formula"), length(all.vars(formula)) == 2,
+  function(y, x, H0 = NULL, alternative = c("two.sided", "less", "greater"),
+           CI.width = 0.95, max.exact.cases = 10, nsims.mc = 100000,
+           seed = NULL, do.asymp = FALSE, do.exact = TRUE, do.CI = FALSE,
+           do.mc = FALSE) {
+    stopifnot(is.numeric(y), is.numeric(x), length(y) == length(x),
               ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
               is.numeric(CI.width), length(CI.width) == 1,
               CI.width > 0, CI.width < 1,
@@ -16,7 +16,7 @@ pearson.beta <-
     alternative <- match.arg(alternative)
 
     #labels
-    varname1 <- Reduce(paste, deparse(formula))
+    varname1 <- paste0(deparse(substitute(y)), " ~ ", deparse(substitute(x)))
     varname2 <- NULL
     varname3 <- NULL
 
@@ -48,7 +48,7 @@ pearson.beta <-
     stat.note <- NULL
 
     #prepare
-    model <- lm(formula, data)
+    model <- lm(y ~ x)
     y <- model$model[, 1]
     x <- model$model[, 2]
     complete.cases.id <- complete.cases(x, y)
@@ -68,13 +68,13 @@ pearson.beta <-
       pval.stat <- pearson.test$pval.stat
       pval.note <- pearson.test$pval.note
       pval.asymp <- pearson.test$pval.asymp
-      pval.asymp.stat <- pearson.test$pval.asymp.stat
+      pval.asymp.stat <- pearson.test$stat
       pval.asymp.note <- pearson.test$pval.asymp.note
       pval.exact <- pearson.test$pval.exact
-      pval.exact.stat <- pearson.test$pval.exact.stat
+      pval.exact.stat <- pearson.test$stat
       pval.exact.note <- pearson.test$pval.exact.note
       pval.mc <- pearson.test$pval.mc
-      pval.mc.stat <- pearson.test$pval.mc.stat
+      pval.mc.stat <- pearson.test$stat
       pval.mc.note <- pearson.test$pval.mc.note
       stat.note <- pearson.test$stat.note
     }
@@ -89,25 +89,21 @@ pearson.beta <-
         x.sample <- x[xy.sample]
         beta.mc[i] <- lm(y.sample ~ x.sample)$coefficients[2]
       }
-      CI.mc.lower <- quantile(beta.mc, (1 - CI.width) / 2)[[1]]
-      CI.mc.upper <- quantile(beta.mc, 1 - (1 - CI.width) / 2)[[1]]
+      CI.mc.lower <- quantile(beta.mc, (1 - CI.width) / 2, na.rm = TRUE)[[1]]
+      CI.mc.upper <- quantile(beta.mc, 1 - (1 - CI.width) / 2, na.rm = TRUE)[[1]]
     }
 
     #create hypotheses
     if (!is.null(H0)){
       H0val <- H0
-      H0 <- paste0("H0: Pearson beta for ", Reduce(paste, deparse(formula)),
-                   " is ", H0val)
+      H0 <- paste0("H0: Pearson beta for ", varname1, " is ", H0val)
       if (alternative == "two.sided"){
-        H0 <- paste0(H0, "\nH1: Pearson beta for ",
-                     Reduce(paste, deparse(formula)), " is not ", H0val)
+        H0 <- paste0(H0, "\nH1: Pearson beta for ", varname1, " is not ", H0val)
       }else if(alternative == "greater"){
-        H0 <- paste0(H0, "\nH1: Pearson beta for ",
-                     Reduce(paste, deparse(formula)), " is greater than ",
-                     H0val)
+        H0 <- paste0(H0, "\nH1: Pearson beta for ", varname1,
+                     " is greater than ", H0val)
       }else{
-        H0 <- paste0(H0, "\nH1: Pearson beta for ",
-                     Reduce(paste, deparse(formula)), " is less than ",
+        H0 <- paste0(H0, "\nH1: Pearson beta for ", varname1, " is less than ",
                      H0val)
       }
       H0 <- paste0(H0, "\n")
