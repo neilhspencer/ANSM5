@@ -71,6 +71,20 @@ print.ANSMstat <- function(x, ...) {
         }
       }
       if (!is.null(x$CI.mc.note)){cat(x$CI.mc.note, "\n")}
+      #print sample-based CI that is neither exact nor asymptotic
+      if (!is.null(x$CI.sample.lower) && !is.null(x$CI.sample.upper)){
+        if (is.na(x$CI.sample.lower) | is.na(x$CI.sample.upper)){
+          cat(paste0(100 * round(x$targetCIwidth, 5),
+                     "% Confidence Interval cannot be calculated"), "\n")
+        }else{
+          cat(paste0(100 * round(x$targetCIwidth, 5),
+                     "% Confidence Interval (", sprintf("%1$d",x$nsims.mc),
+                     " simulations)"), "\n")
+          cat(paste0("(", sprintf("%.5f", x$CI.sample.lower), ", ",
+                     sprintf("%.5f", x$CI.sample.upper), ")"), "\n")
+        }
+      }
+      if (!is.null(x$CI.sample.note)){cat(x$CI.sample.note, "\n")}
     }
   }
 
