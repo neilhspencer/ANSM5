@@ -45,12 +45,12 @@ spearman.beta <-
     CI.mc.lower <- NULL
     CI.mc.upper <- NULL
     CI.mc.note <- NULL
+    CI.sample.lower <- NULL
+    CI.sample.upper <- NULL
+    CI.sample.note <- NULL
     stat.note <- NULL
 
     #prepare
-    model <- lm(y ~ x)
-    y <- model$model[, 1]
-    x <- model$model[, 2]
     complete.cases.id <- complete.cases(x, y)
     y <- y[complete.cases.id] #remove missing cases
     x <- x[complete.cases.id] #remove missing cases
@@ -105,14 +105,14 @@ spearman.beta <-
         corrs.dist <- cumsum(table(corrs) / n.perms)
         corr.CI.limit <- as.numeric(names(corrs.dist[sum(corrs.dist <= (1 - CI.width) / 2)]))
         corr.CI.p <- corrs.dist[sum(corrs.dist <= (1 - CI.width) / 2)][[1]]
-        CI.exact.upper <- approx(rs[!duplicated(rs)], c(NA, bvals)[!duplicated(rs)], xout = corr.CI.limit)$y
-        CI.exact.lower <- approx(rs[!duplicated(rs)], c(bvals, NA)[!duplicated(rs)], xout = -corr.CI.limit)$y
+        CI.sample.upper <- approx(rs[!duplicated(rs)], c(NA, bvals)[!duplicated(rs)], xout = corr.CI.limit)$y
+        CI.sample.lower <- approx(rs[!duplicated(rs)], c(bvals, NA)[!duplicated(rs)], xout = -corr.CI.limit)$y
         actualCIwidth.exact <- 1 - corr.CI.p * 2
       }else{
         z <- qnorm((1 - CI.width) / 2, lower.tail = FALSE)
         r.approx <- z / sqrt(n - 1)
-        CI.asymp.lower <- approx(rs[!duplicated(rs)], c(bvals, NA)[!duplicated(rs)], xout = r.approx)$y
-        CI.asymp.upper <- approx(rs[!duplicated(rs)], c(NA, bvals)[!duplicated(rs)], xout = -r.approx)$y
+        CI.sample.lower <- approx(rs[!duplicated(rs)], c(bvals, NA)[!duplicated(rs)], xout = r.approx)$y
+        CI.sample.upper <- approx(rs[!duplicated(rs)], c(NA, bvals)[!duplicated(rs)], xout = -r.approx)$y
       }
     }
 
@@ -151,7 +151,8 @@ spearman.beta <-
                    pval.mc = pval.mc, pval.mc.stat = pval.mc.stat,
                    nsims.mc = nsims.mc, pval.mc.note = pval.mc.note,
                    CI.mc.lower = CI.mc.lower, CI.mc.upper = CI.mc.upper,
-                   CI.mc.note = CI.mc.note,
+                   CI.mc.note = CI.mc.note, CI.sample.lower = CI.sample.lower,
+                   CI.sample.upper = CI.sample.upper, CI.sample.note = CI.sample.note,
                    stat.note = stat.note)
     class(result) <- "ANSMstat"
     return(result)

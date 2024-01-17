@@ -46,6 +46,9 @@ theil.kendall <-
     CI.mc.lower <- NULL
     CI.mc.upper <- NULL
     CI.mc.note <- NULL
+    CI.sample.lower <- NULL
+    CI.sample.upper <- NULL
+    CI.sample.note <- NULL
     stat.note <- NULL
 
     #prepare
@@ -207,7 +210,7 @@ theil.kendall <-
             }
           }else{ #odd
             for (j in 1:((n - 1) / 2)){
-              bvals2 <- c(bvals2, bvals[j, j + ((n +1) / 2)])
+              bvals2 <- c(bvals2, bvals[j, j + ((n + 1) / 2)])
             }
           }
         }else{
@@ -302,7 +305,8 @@ theil.kendall <-
                    pval.mc = pval.mc, pval.mc.stat = pval.mc.stat,
                    nsims.mc = nsims.mc, pval.mc.note = pval.mc.note,
                    CI.mc.lower = CI.mc.lower, CI.mc.upper = CI.mc.upper,
-                   CI.mc.note = CI.mc.note,
+                   CI.mc.note = CI.mc.note, CI.sample.lower = CI.sample.lower,
+                   CI.sample.upper = CI.sample.upper, CI.sample.note = CI.sample.note,
                    stat.note = stat.note)
     class(result) <- "ANSMstat"
     return(result)
