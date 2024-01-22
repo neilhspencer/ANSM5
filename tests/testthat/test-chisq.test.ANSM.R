@@ -1,87 +1,137 @@
 test_that("Example 12.1", {
-  frequency <- factor(c(rep("Never", 12), rep("Sometimes", 40),
-                        rep("Always", 10), rep("Never", 4),
-                        rep("Sometimes", 17), rep("Always", 17)),
-                      levels = c("Never", "Sometimes", "Always"))
-  person <- factor(c(rep("Representative", 62), rep("Researcher", 38)),
-                   levels = c("Representative", "Researcher"))
-  expect_equal(chisq.test.ANSM(frequency, person, do.exact = FALSE,
+  expect_equal(chisq.test.ANSM(ch12$feedback.freq, ch12$PPI.person,
+                               do.exact = FALSE,
                                do.asymp = TRUE)$pval.asymp.stat, 9.9061084)
-  expect_equal(chisq.test.ANSM(frequency, person, do.exact = FALSE,
+  expect_equal(chisq.test.ANSM(ch12$feedback.freq, ch12$PPI.person,
+                               do.exact = FALSE,
                                do.asymp = TRUE)$pval.asymp, 0.0070618077)
 })
 
 test_that("Example 12.3", {
-  site <- factor(c("Nose", "Ears", "Nose", "Throat", "Throat", "Nose", "Throat",
-                   rep("Nose", 8), rep("Ears", 7), "Throat", "Ears"),
-                 levels = c("Nose", "Throat", "Ears"))
-  district <- factor(c(rep("A", 2), rep("B", 2), "C", rep("D", 2),rep("E", 15),
-                       rep("F", 2)))
-  expect_equal(chisq.test.ANSM(site, district, do.exact = FALSE,
+  expect_equal(chisq.test.ANSM(ch12$infection.site, ch12$district, do.exact = FALSE,
                                do.asymp = TRUE)$pval.asymp.stat, 14.959596)
-  expect_equal(chisq.test.ANSM(site, district, do.exact = FALSE,
+  expect_equal(chisq.test.ANSM(ch12$infection.site, ch12$district, do.exact = FALSE,
                                do.asymp = TRUE)$pval.asymp, 0.133541873)
-  ct.out <- chisq.test.ANSM(site, district, seed = 1)
-  expect_equal(ct.out$pval.mc, 0.109388906)
+  expect_equal(chisq.test.ANSM(ch12$infection.site, ch12$district,
+                               seed = 1)$pval.mc, 0.109388906)
 })
 
 test_that("Example 12.4", {
-  drug <- factor(c(rep("A", 6), rep("B", 44)), levels = c("A", "B"))
-  side.effect <- factor(c("Y", rep("N", 5), rep("Y", 38), rep("N", 6)),
-                        levels = c("Y", "N"))
-  expect_equal(chisq.test.ANSM(drug, side.effect, do.exact = FALSE,
+  expect_equal(chisq.test.ANSM(ch12$drugYZ, ch12$side.effect, do.exact = FALSE,
                                do.asymp = TRUE)$pval.asymp.stat, 11.160998)
-  expect_equal(chisq.test.ANSM(drug, side.effect, do.exact = FALSE,
+  expect_equal(chisq.test.ANSM(ch12$drugYZ, ch12$side.effect, do.exact = FALSE,
                                do.asymp = TRUE)$pval.asymp, 0.0008353497)
-  expect_equal(chisq.test.ANSM(drug, side.effect, seed = 1)$pval.mc,
-               0.0011099989)
-  expect_equal(chisq.test.ANSM(drug, side.effect, cont.corr = FALSE,
+  expect_equal(chisq.test.ANSM(ch12$drugYZ, ch12$side.effect, seed = 1)$pval.mc,
+               0.0009899901)
+  expect_equal(chisq.test.ANSM(ch12$drugYZ, ch12$side.effect, cont.corr = FALSE,
                                do.exact = FALSE,
                                do.asymp = TRUE)$pval.asymp.stat, 14.9466695)
 })
 
 test_that("Example 12.5", {
-  drug <- factor(c(rep("Drug A", 45), rep("Drug B", 54)),
-                 levels = c("Drug A", "Drug B"))
-  side.effect.level <- factor(c(rep("None", 23), rep("Slight", 8),
-                                rep("Moderate", 9), rep("Severe", 3),
-                                rep("Fatal", 2), rep("None", 42),
-                                rep("Slight", 8), rep("Moderate", 4),
-                                rep("Severe", 0)),
-                              levels = c("None", "Slight", "Moderate", "Severe",
-                                         "Fatal"))
-  expect_equal(chisq.test.ANSM(drug, side.effect.level, do.exact = FALSE,
+  expect_equal(chisq.test.ANSM(ch12$drugAB, ch12$side.effect.level,
+                               do.exact = FALSE,
                                do.asymp = TRUE)$pval.asymp.stat, 11.7558974)
-  expect_equal(chisq.test.ANSM(drug, side.effect.level, do.exact = FALSE,
-                               do.asymp = TRUE)$pval.asymp, 0.0192618608)
+  expect_equal(chisq.test.ANSM(ch12$drugAB, ch12$side.effect.level,
+                               do.exact = FALSE, do.asymp = TRUE)$pval.asymp,
+               0.0192618608)
 })
 
 test_that("Example 12.10", {
-  last.digits <- factor(c(rep(0, 7), rep(1, 11), rep(2, 17), rep(3, 19), rep(4, 9),
-                          rep(5, 13), rep(6, 9), rep(7, 11), rep(8, 13), rep(9, 8)),
-                        levels = c(0:9))
-  expect_equal(chisq.test.ANSM(table(last.digits), do.exact = FALSE,
+  expect_equal(chisq.test.ANSM(table(ch12$last.digits), do.exact = FALSE,
                                do.asymp = TRUE)$pval.asymp.stat, 11.6324786)
-  expect_equal(chisq.test.ANSM(table(last.digits), do.exact = FALSE,
+  expect_equal(chisq.test.ANSM(table(ch12$last.digits), do.exact = FALSE,
                                do.asymp = TRUE)$pval.asymp, 0.23483005)
-  ct.out <- chisq.test.ANSM(table(last.digits), seed = 1)
+  ct.out <- chisq.test.ANSM(table(ch12$last.digits), seed = 1)
   expect_equal(ct.out$pval.mc, 0.23810762)
 })
 
 test_that("Example 12.11", {
-  accidents <- factor(c(rep(0, 181), rep(1, 9), rep(2, 4), rep(3, 10),
-                        rep(4, 7), rep(5, 4), rep(">=6", 5)),
-                      levels = c(0:5, ">=6"))
-  lambda <- sum(0:6 * table(accidents)) / length(accidents)
-  accidents.v2 <- factor(c(rep(0, 181), rep(1, 9), rep(2, 4), rep(">=3", 26)),
-                         levels = c(0:2, ">=3"))
+  lambda <- sum(0:6 * table(ch12$accidents)) / length(ch12$accidents)
   poisson.probs <- c(dpois(0:2, lambda), 1 - sum(dpois(0:2, lambda)))
-  expect_equal(chisq.test.ANSM(table(accidents.v2), p = poisson.probs,
+  expect_equal(chisq.test.ANSM(table(ch12$accidents.reduced), p = poisson.probs,
                                do.exact = FALSE,
                                do.asymp = TRUE)$pval.asymp.stat, 197.73701)
-  expect_equal(chisq.test.ANSM(table(accidents.v2), p = poisson.probs,
+  expect_equal(chisq.test.ANSM(table(ch12$accidents.reduced), p = poisson.probs,
+                               do.exact = FALSE, do.asymp = TRUE)$pval.asymp, 0)
+})
+
+test_that("Exercise 12.1", {
+  expect_equal(chisq.test.ANSM(ch12$bronchitis, ch12$otitis.media,
                                do.exact = FALSE,
-                               do.asymp = TRUE)$pval.asymp, 0)
+                               do.asymp = TRUE)$pval.asymp.stat, 33.263889)
+  expect_equal(chisq.test.ANSM(ch12$bronchitis, ch12$otitis.media,
+                               do.exact = FALSE, do.asymp = TRUE)$pval.asymp,
+               0.00000105472323)
+})
+
+test_that("Exercise 12.2", {
+  expect_equal(chisq.test.ANSM(ch12$welsh.language, ch12$opportunities,
+                               cont.corr = FALSE, do.exact = FALSE,
+                               do.asymp = TRUE)$pval.asymp.stat, 5.1437532)
+  expect_equal(chisq.test.ANSM(ch12$welsh.language, ch12$opportunities,
+                               cont.corr = FALSE, do.exact = FALSE,
+                               do.asymp = TRUE)$pval.asymp, 0.0233301574)
+  expect_equal(chisq.test.ANSM(ch12$welsh.language, ch12$opportunities,
+                               do.exact = FALSE,
+                               do.asymp = TRUE)$pval.asymp.stat, 3.7356353)
+  expect_equal(chisq.test.ANSM(ch12$welsh.language, ch12$opportunities,
+                               do.exact = FALSE, do.asymp = TRUE)$pval.asymp,
+               0.053263409)
+})
+
+test_that("Exercise 12.5", {
+  expect_equal(chisq.test.ANSM(ch12$win.opinion, ch12$supporter,
+                               seed = 1)$pval.mc, 0.071469285)
+})
+
+test_that("Exercise 12.6", {
+  expect_equal(chisq.test.ANSM(ch12$ethnic.group, ch12$diabetes.status,
+                               do.exact = FALSE, do.asymp = TRUE)$pval.asymp,
+               0.07932863)
+})
+
+
+test_that("Exercise 12.7", {
+  expect_equal(chisq.test.ANSM(table(ch12$horse.wins), do.exact = FALSE,
+                               do.asymp = TRUE)$pval.asymp.stat, 16)
+  expect_equal(chisq.test.ANSM(table(ch12$horse.wins), do.exact = FALSE,
+                               do.asymp = TRUE)$pval.asymp, 0.0251163607)
+})
+
+test_that("Exercise 12.8", {
+  expect_equal(chisq.test.ANSM(table(ch12$F1.wins), p = c(0.05, 0.15, 0.2, 0.6),
+                               do.exact = FALSE,
+                               do.asymp = TRUE)$pval.asymp.stat, 408.19048)
+  expect_equal(chisq.test.ANSM(table(ch12$F1.wins), p = c(0.05, 0.15, 0.2, 0.6),
+                               do.exact = FALSE,
+                               do.asymp = TRUE)$pval.asymp, 3.723882e-88)
+})
+
+test_that("Exercise 12.9", {
+  expect_equal(chisq.test.ANSM(table(ch12$strokes), do.exact = FALSE,
+                               do.asymp = TRUE)$pval.asymp.stat, 24.2712504)
+  expect_equal(chisq.test.ANSM(table(ch12$strokes), do.exact = FALSE,
+                               do.asymp = TRUE)$pval.asymp, 0.0004655284)
+})
+
+test_that("Exercise 12.10", {
+  poisson.probs <- c(dpois(0:3, 0.61), 1 - sum(dpois(0:3, 0.61)))
+  expect_equal(chisq.test.ANSM(table(ch12$recurrent.visits), p = poisson.probs,
+                               do.exact = FALSE,
+                               do.asymp = TRUE)$pval.asymp.stat, 15370.6084)
+  expect_equal(chisq.test.ANSM(table(ch12$recurrent.visits), p = poisson.probs,
+                               do.exact = FALSE, do.asymp = TRUE)$pval.asymp, 0)
+})
+
+test_that("Exercise 12.11", {
+  binomial.probs <- c(dbinom(0:2, 5, 0.188), sum(dbinom(3:5, 5, 0.188)))
+  expect_equal(chisq.test.ANSM(table(ch12$holes), p = binomial.probs,
+                               do.exact = FALSE,
+                               do.asymp = TRUE)$pval.asymp.stat, 5.0729944)
+  expect_equal(chisq.test.ANSM(table(ch12$holes), p = binomial.probs,
+                               do.exact = FALSE, do.asymp = TRUE)$pval.asymp,
+               0.1665295)
 })
 
 test_that("Example 13.1", {

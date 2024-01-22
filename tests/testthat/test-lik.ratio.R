@@ -1,14 +1,15 @@
 test_that("Example 12.2", {
-  site <- factor(c("Nose", "Ears", "Nose", "Throat", "Throat", "Nose", "Throat",
-                   rep("Nose", 8), rep("Ears", 7), "Throat", "Ears"),
-                 levels = c("Nose", "Throat", "Ears"))
-  district <- factor(c(rep("A", 2), rep("B", 2), "C", rep("D", 2),rep("E", 15),
-                       rep("F", 2)))
-  expect_equal(lik.ratio(site, district, do.exact = FALSE,
+  expect_equal(lik.ratio(ch12$infection.site, ch12$district, do.exact = FALSE,
                          do.asymp = TRUE)$pval.asymp.stat, 17.3344364)
-  expect_equal(lik.ratio(site, district, do.exact = FALSE,
+  expect_equal(lik.ratio(ch12$infection.site, ch12$district, do.exact = FALSE,
                          do.asymp = TRUE)$pval.asymp, 0.06728363)
-  expect_equal(lik.ratio(site, district, seed = 1)$pval.mc, 0.04813)
+  expect_equal(lik.ratio(ch12$infection.site, ch12$district, seed = 1)$pval.mc,
+               0.04813)
+})
+
+test_that("Exercise 12.5", {
+  expect_equal(lik.ratio(ch12$win.opinion, ch12$supporter, seed = 1)$pval.mc,
+               0.07012)
 })
 
 test_that("Example 13.1", {

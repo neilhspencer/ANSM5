@@ -4,26 +4,33 @@ test_that("Example 6.7", {
 })
 
 test_that("Example 12.2", {
-  site <- factor(c("Nose", "Ears", "Nose", "Throat", "Throat", "Nose", "Throat",
-                   rep("Nose", 8), rep("Ears", 7), "Throat", "Ears"),
-                 levels = c("Nose", "Throat", "Ears"))
-  district <- factor(c(rep("A", 2), rep("B", 2), "C", rep("D", 2),rep("E", 15),
-                       rep("F", 2)))
-  expect_equal(fisher.test.ANSM(site, district)$pval.exact, 0.026133508)
+  expect_equal(fisher.test.ANSM(ch12$infection.site, ch12$district)$pval.exact,
+               0.026133508)
 })
 
 test_that("Example 12.5", {
-  drug <- factor(c(rep("Drug A", 45), rep("Drug B", 54)),
-                 levels = c("Drug A", "Drug B"))
-  side.effect.level <- factor(c(rep("None", 23), rep("Slight", 8),
-                                rep("Moderate", 9), rep("Severe", 3),
-                                rep("Fatal", 2), rep("None", 42),
-                                rep("Slight", 8), rep("Moderate", 4),
-                                rep("Severe", 0)),
-                              levels = c("None", "Slight", "Moderate", "Severe",
-                                         "Fatal"))
-  expect_equal(fisher.test.ANSM(drug, side.effect.level)$pval.exact,
+  expect_equal(fisher.test.ANSM(ch12$drugAB, ch12$side.effect.level)$pval.exact,
                0.0127213014)
+})
+
+test_that("Exercise 12.2", {
+  expect_equal(fisher.test.ANSM(ch12$welsh.language,
+                                ch12$opportunities)$pval.exact, 0.042385254)
+})
+
+test_that("Exercise 12.3", {
+  expect_equal(fisher.test.ANSM(ch12$diagnosis,
+                                ch12$position.played)$pval.exact, 0.077922078)
+})
+
+test_that("Exercise 12.5", {
+  expect_equal(fisher.test.ANSM(ch12$win.opinion, ch12$supporter)$pval.exact,
+               0.06950145)
+})
+
+test_that("Exercise 12.6", {
+  expect_equal(fisher.test.ANSM(ch12$ethnic.group,
+                                ch12$diabetes.status)$pval.exact, 0.071578042)
 })
 
 test_that("Example 13.1", {

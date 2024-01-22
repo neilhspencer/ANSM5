@@ -233,17 +233,8 @@ test_that("Exercise 9.2", {
 })
 
 test_that("Example 12.5", {
-  drug <- factor(c(rep("Drug A", 45), rep("Drug B", 54)),
-                 levels = c("Drug A", "Drug B"))
-  side.effect.level <- factor(c(rep("None", 23), rep("Slight", 8),
-                                rep("Moderate", 9), rep("Severe", 3),
-                                rep("Fatal", 2), rep("None", 42),
-                                rep("Slight", 8), rep("Moderate", 4),
-                                rep("Severe", 0)),
-                              levels = c("None", "Slight", "Moderate", "Severe",
-                                         "Fatal"))
-  side.effect.level.A <- as.numeric(side.effect.level[drug == "Drug A"])
-  side.effect.level.B <- as.numeric(side.effect.level[drug == "Drug B"])
+  side.effect.level.A <- ch12$side.effect.level[ch12$drugAB == "Drug A"]
+  side.effect.level.B <- ch12$side.effect.level[ch12$drugAB == "Drug B"]
   wmw.out <- wilcoxon.mann.whitney(side.effect.level.A, side.effect.level.B,
                                    do.CI = FALSE, seed = 1,
                                    nsims.mc = 1000000)
@@ -262,4 +253,15 @@ test_that("Example 12.5", {
                       "1589 (Mann-Whitney U from side.effect.level.A), ",
                       "841 (Mann-Whitney U from side.effect.level.B)"))
   expect_equal(wmw.out$pval.asymp, 0.00184697407)
+})
+
+test_that("Exercise 12.4", {
+  feedback.satisfaction.Representative <-
+    ch12$feedback.satisfaction[ch12$PPI.person.2 == "Representative"]
+  feedback.satisfaction.Researcher <-
+    ch12$feedback.satisfaction[ch12$PPI.person.2 == "Researcher"]
+  expect_equal(
+    wilcoxon.mann.whitney(feedback.satisfaction.Representative,
+                          feedback.satisfaction.Researcher, do.exact = FALSE,
+                          do.asymp = TRUE)$pval.asymp, 0.99598853)
 })
