@@ -174,16 +174,31 @@ wilcoxon.mann.whitney <-
     #Monte Carlo p-value
     if(do.mc){
       pval.mc.stat <- stat
-      stat.mc <-  wilcox.test(x, y, exact = FALSE, correct = cont.corr,
+      stat.mc.1 <- wilcox.test(x, y, exact = FALSE, correct = cont.corr,
                               conf.int = FALSE)$statistic
+      stat.mc.2 <- wilcox.test(y, x, exact = FALSE, correct = cont.corr,
+                              conf.int = FALSE)$statistic
+      stat.mc <- min(stat.mc.1, stat.mc.2)
+      if (stat.mc.1 < stat.mc.2){
+        xy.order <- "xy"
+      }else{
+        xy.order <- "yx"
+      }
       if (!is.null(seed)){set.seed(seed)}
       pval.mc <- 0
       for (i in 1:nsims.mc){
         xy.tmp <- sample(n, n, replace = FALSE)
         x.tmp <- xy[xy.tmp[1:n.x]]
         y.tmp <- xy[xy.tmp[(n.x + 1):n]]
-        stat.tmp <-  wilcox.test(x.tmp, y.tmp, exact = FALSE,
-                                 correct = cont.corr, conf.int = FALSE)$statistic
+        if (xy.order == "xy"){
+          stat.tmp <-
+            wilcox.test(x.tmp, y.tmp, exact = FALSE,  correct = cont.corr,
+                        conf.int = FALSE)$statistic
+        }else{
+          stat.tmp <-
+            wilcox.test(y.tmp, x.tmp, exact = FALSE,  correct = cont.corr,
+                        conf.int = FALSE)$statistic
+        }
         if (alternative == "two.sided"){
           if (stat.tmp <= stat.mc){
             pval.mc <- pval.mc + 2 / nsims.mc
