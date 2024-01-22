@@ -3,7 +3,8 @@
 kruskal.wallis <-
   function(x, g, max.exact.cases = 15, nsims.mc = 10000, seed = NULL,
            do.asymp = FALSE, do.exact = TRUE, do.mc = FALSE) {
-    stopifnot(is.vector(x), is.numeric(x), is.factor(g), length(x) == length(g),
+    stopifnot((is.vector(x) && is.numeric(x)) | is.factor(x), is.factor(g),
+              length(x) == length(g),
               length(x[complete.cases(x)]) == length(g[complete.cases(g)]),
               is.numeric(max.exact.cases), length(max.exact.cases) == 1,
               is.numeric(nsims.mc), length(nsims.mc) == 1,
@@ -51,6 +52,9 @@ kruskal.wallis <-
     x <- x[complete.cases(x)] #remove missing cases
     g <- g[complete.cases(g)] #remove missing cases
     n <- length(x)
+    if (is.factor(x)){
+      x <- as.numeric(x)
+    }
     rank.x <- rank(x)
     table_g <- table(g)
     divide_by <- (n * (n + 1))
