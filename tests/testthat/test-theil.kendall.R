@@ -76,4 +76,12 @@ test_that("Exercise 11.9", {
 
 test_that("Exercise 11.10", {
   expect_equal(theil.kendall(ch11$SW.England, ch11$N.Scotland)$stat, 1.024)
+  expect_equal(theil.kendall(ch11$N.Scotland, ch11$SW.England)$stat, 0.97196262)
+  expect_equal(median(
+    ch11$N.Scotland - theil.kendall(ch11$N.Scotland, ch11$SW.England)$stat *
+      ch11$SW.England), 20.490654)
+  expect_equal(median(
+    ch11$N.Scotland - theil.kendall(ch11$N.Scotland, ch11$SW.England)$stat *
+      ch11$SW.England) + theil.kendall(ch11$N.Scotland, ch11$SW.England)$stat *
+      122, 139.070093)
 })
