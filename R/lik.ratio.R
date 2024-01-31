@@ -95,7 +95,6 @@ lik.ratio <-
     if (do.mc){
       pval.mc.stat <- stat
       if (!is.null(seed)){set.seed(seed)}
-      probs <- as.vector(t(exp / n))
       pval.mc <- 0
       for (i in 1:nsims.mc){
         obs.tmp <- r2dtable(1, rtots, ctots)[[1]]
