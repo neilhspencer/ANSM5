@@ -4,7 +4,7 @@ linear.by.linear <-
            do.asymp = FALSE, do.mc = TRUE) {
     stopifnot(is.factor(x), is.factor(y), length(x) == length(y),
               (is.vector(u) && length(u) == nlevels(x)) | is.null(u),
-              (is.vector(v) && length(v) == nlevels(x)) | is.null(v),
+              (is.vector(v) && length(v) == nlevels(y)) | is.null(v),
               is.numeric(nsims.mc), length(nsims.mc) == 1,
               is.numeric(seed) | is.null(seed),
               length(seed) == 1 | is.null(seed),
@@ -69,13 +69,18 @@ linear.by.linear <-
     if (do.mc){
       pval.mc.stat <- stat
       if (!is.null(seed)){set.seed(seed)}
-      pval.mc <- 0
+      pval.mc.1 <- 0
+      pval.mc.2 <- 0
       for (i in 1:nsims.mc){
         tab.tmp <- r2dtable(1, tab.rtots, tab.ctots)
         S.tmp <- sum(unlist(tab.tmp) * score.vec)
         if (S.tmp >= stat){
-          pval.mc <- pval.mc + 1 / nsims.mc
+          pval.mc.1 <- pval.mc.1 + 1 / nsims.mc
         }
+        if (S.tmp <= stat){
+          pval.mc.2 <- pval.mc.2 + 1 / nsims.mc
+        }
+        pval.mc <- min(pval.mc.1, pval.mc.2)
       }
     }
 
@@ -99,13 +104,18 @@ linear.by.linear <-
     H0 <- paste0("H0: There is no linear relationship between the levels of ",
                  varname1, " and ", varname2, "\n",
                  "H1: There is a positive linear relationship between the ",
-                 "levels of ", varname1, " and ", varname2, "\n")
+                 "levels of ", varname1, " and ", varname2, "\n",
+                 "    with scores u = c(",
+                 capture.output(cat(paste0(u[1:(length(u) - 1)], ","))), " ",
+                 u[length(u)], ") and v = c(",
+                 capture.output(cat(paste0(v[1:(length(v) - 1)], ","))), " ",
+                 v[length(v)], ")")
 
     #add note regarding two-sided test
     test.note <- paste0("For a two-sided hypothesis test, double the reported ",
                         "one-sided p-value.\n", "For a one-sided test of a ",
-                        "negative linear relationship, reverse the factor\n",
-                        "level order for one of the variables.")
+                        "negative linear relationship, reverse\nthe u or v ",
+                        "scoring for one of the variables.")
 
     #return
     result <- list(title = "Linear by linear association test",
