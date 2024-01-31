@@ -142,3 +142,25 @@ test_that("Example 13.1", {
                                ch13$tv.viewing[ch13$gender == "Girl"],
                                seed = 1)$pval.mc, 0.0049899501)
 })
+
+test_that("Exercise 13.3", {
+  expect_equal(
+    chisq.test.ANSM(ch13$breakfast.eaten[ch13$boys.girls == "Boys"],
+                    ch13$VEL[ch13$boys.girls == "Boys"], do.exact = FALSE,
+                    do.asymp = TRUE)$pval.asymp, 0.70749547)
+  expect_equal(
+    chisq.test.ANSM(ch13$breakfast.eaten[ch13$boys.girls == "Girls"],
+                    ch13$VEL[ch13$boys.girls == "Girls"], do.exact = FALSE,
+                    do.asymp = TRUE)$pval.asymp, 0.035047454)
+})
+
+test_that("Exercise 13.7", {
+  expect_equal(
+    chisq.test.ANSM(ch13$medicine[ch13$location == "Urban"],
+                    ch13$response[ch13$location == "Urban"], seed = 1)$pval.mc,
+    9.9999e-06)
+  expect_equal(
+    chisq.test.ANSM(ch13$medicine[ch13$location == "Rural"],
+                    ch13$response[ch13$location == "Rural"], seed = 1)$pval.mc,
+    0.0032099679)
+})

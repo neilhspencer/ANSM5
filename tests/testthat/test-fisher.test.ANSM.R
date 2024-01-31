@@ -67,3 +67,32 @@ test_that("Section 13.4", {
   expect_equal(fisher.test.ANSM(ch13$group, ch13$company)$pval.exact,
                0.030086355)
 })
+
+test_that("Exercise 13.3", {
+  expect_equal(
+    fisher.test.ANSM(ch13$breakfast.eaten[ch13$boys.girls == "Boys"],
+                     ch13$VEL[ch13$boys.girls == "Boys"])$pval.exact,
+    0.6897803)
+  expect_equal(
+    fisher.test.ANSM(ch13$breakfast.eaten[ch13$boys.girls == "Girls"],
+                     ch13$VEL[ch13$boys.girls == "Girls"])$pval.exact,
+    0.0300630155)
+})
+
+test_that("Exercise 13.7", {
+  expect_equal(
+    fisher.test.ANSM(ch13$medicine[ch13$location == "Urban"],
+                     ch13$response[ch13$location == "Urban"])$pval.exact,
+    1.17710918e-05)
+  expect_equal(
+    fisher.test.ANSM(ch13$medicine[ch13$location == "Rural"],
+                     ch13$response[ch13$location == "Rural"])$pval.exact,
+    0.0032792054)
+})
+
+test_that("Exercise 13.10", {
+  expect_equal(fisher.test.ANSM(ch13$laid.off, ch13$employee.ages,
+                                alternative = "greater")$pval.exact, 0.008529354)
+  expect_equal(fisher.test.ANSM(ch13$laid.off, ch13$employee.ages)$pval.exact,
+               0.016494163)
+})

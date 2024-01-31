@@ -19,3 +19,8 @@ test_that("Example 13.4", {
   expect_equal(breslow.day(ch13$drug, ch13$side.effects,
                            ch13$age.group)$CI.asymp.upper,2.64532585)
 })
+
+test_that("Exercise 13.7", {
+  expect_equal(breslow.day(ch13$medicine, ch13$response,
+                           ch13$location)$pval.asymp, 0.52001332)
+})

@@ -68,3 +68,23 @@ test_that("Example 13.12", {
   expect_equal(lik.ratio(ch13$chemo.drug, chemo.side.effect.3, do.exact = FALSE,
                          do.asymp = TRUE)$pval.asymp, 0.6830428)
 })
+
+test_that("Exercise 13.3", {
+  expect_equal(
+    lik.ratio(ch13$breakfast.eaten[ch13$boys.girls == "Boys"],
+              ch13$VEL[ch13$boys.girls == "Boys"], do.exact = FALSE,
+              do.asymp = TRUE)$pval.asymp, 0.66599628)
+  expect_equal(
+    lik.ratio(ch13$breakfast.eaten[ch13$boys.girls == "Girls"],
+              ch13$VEL[ch13$boys.girls == "Girls"], do.exact = FALSE,
+              do.asymp = TRUE)$pval.asymp, 0.029181087)
+})
+
+test_that("Exercise 13.7", {
+  expect_equal(
+    lik.ratio(ch13$medicine[ch13$location == "Urban"],
+              ch13$response[ch13$location == "Urban"], seed = 1)$pval.mc, 0)
+  expect_equal(
+    lik.ratio(ch13$medicine[ch13$location == "Rural"],
+              ch13$response[ch13$location == "Rural"], seed = 1)$pval.mc, 0)
+})
