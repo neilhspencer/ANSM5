@@ -87,8 +87,6 @@ linear.by.linear <-
     #asymptotic p-value
     if (do.asymp){
       E.S <- sum(u * tab.rtots) * sum(v * tab.ctots) / n
-      Var.S <- (sum(u ^ 2 * tab.rtots) - sum(u * tab.rtots) ^ 2) *
-        (sum(v ^ 2 * tab.ctots) - sum(v * tab.ctots) ^ 2) / (n ^ 2 * (n - 1))
       Var.S <- (sum(u ^ 2 * tab.rtots) - (sum(u * tab.rtots) ^ 2 / n)) *
         (sum(v ^ 2 * tab.ctots) - (sum(v * tab.ctots) ^ 2 / n)) / (n - 1)
       pval.asymp.stat <- abs(stat - E.S) / sqrt(Var.S)
