@@ -54,28 +54,28 @@ test_that("Exercise 8.10", {
 test_that("Example 12.7", {
   expect_equal(
     jonckheere.terpstra(ch12$dose.side.effect, ch12$dose,
-                        alternative = "greater", do.asymp = TRUE,
+                        alternative = "less", do.asymp = TRUE,
                         do.exact = FALSE,
                         do.asymp.ties.adjust = FALSE)$pval.asymp.stat,
     -0.74273281)
   expect_equal(
     jonckheere.terpstra(ch12$dose.side.effect, ch12$dose,
-                        alternative = "greater", do.asymp = TRUE,
+                        alternative = "less", do.asymp = TRUE,
                         do.exact = FALSE,
                         do.asymp.ties.adjust = FALSE)$pval.asymp, 0.22882173)
 })
 
 test_that("Example 12.8", {
   jt.out <- jonckheere.terpstra(ch12$dose.side.effect, ch12$dose,
-                                alternative = "greater", seed = 1)
+                                alternative = "less", seed = 1)
   expect_equal(jt.out$pval.mc.stat, 6217)
   expect_equal(jt.out$pval.mc, 0.0176)
   expect_equal(jonckheere.terpstra(ch12$dose.side.effect, ch12$dose,
-                                   alternative = "greater", do.asymp = TRUE,
+                                   alternative = "less", do.asymp = TRUE,
                                    do.exact = FALSE)$pval.asymp.stat,
                -2.1248932)
   expect_equal(jonckheere.terpstra(ch12$dose.side.effect, ch12$dose,
-                                   alternative = "greater", do.asymp = TRUE,
+                                   alternative = "less", do.asymp = TRUE,
                                    do.exact = FALSE)$pval.asymp, 0.0167977625)
 })
 

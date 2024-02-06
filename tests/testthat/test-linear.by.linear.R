@@ -1,22 +1,22 @@
 test_that("Example 13.7", {
   expect_equal(linear.by.linear(ch13$dose, ch13$dose.side.effect,
-                                u = c(4, 3, 2, 1), seed = 1)$pval.mc.stat, 484)
+                                seed = 1)$pval.mc.stat, 484)
   expect_equal(linear.by.linear(ch13$dose, ch13$dose.side.effect,
-                                u = c(4, 3, 2, 1), seed = 1)$pval.mc, 0.01087)
+                                seed = 1)$pval.mc, 0.01099)
   expect_equal(linear.by.linear(ch13$dose, ch13$dose.side.effect,
-                                u = c(4, 3, 2, 1), v = c(1, 2, 20, 200),
+                                v = c(1, 2, 20, 200),
                                 seed = 1)$pval.mc.stat, 2188)
   expect_equal(linear.by.linear(ch13$dose, ch13$dose.side.effect,
-                                u = c(4, 3, 2, 1), v = c(1, 2, 20, 200),
-                                seed = 1)$pval.mc, 0.00699)
+                                v = c(1, 2, 20, 200),
+                                seed = 1)$pval.mc, 0.00715)
 })
 
 test_that("Example 13.8", {
   expect_equal(linear.by.linear(
-    ch13$dose, ch13$dose.side.effect, u = c(4, 3, 2, 1), do.mc = FALSE,
+    ch13$dose, ch13$dose.side.effect, do.mc = FALSE,
     do.asymp = TRUE)$pval.asymp.stat, 2.3888324)
   expect_equal(linear.by.linear(
-    ch13$dose, ch13$dose.side.effect, u = c(4, 3, 2, 1), do.mc = FALSE,
+    ch13$dose, ch13$dose.side.effect, do.mc = FALSE,
     do.asymp = TRUE)$pval.asymp, 0.0084510055)
 })
 
