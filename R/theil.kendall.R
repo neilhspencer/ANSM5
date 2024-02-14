@@ -221,6 +221,7 @@ theil.kendall <-
       }
       CI.mc.lower <- quantile(beta.mc, (1 - CI.width) / 2, na.rm = TRUE)[[1]]
       CI.mc.upper <- quantile(beta.mc, 1 - (1 - CI.width) / 2, na.rm = TRUE)[[1]]
+      CI.mc.note <- "Confidence interval is basic bootstrap interval"
     }
 
     #create estimates of alpha to report in note

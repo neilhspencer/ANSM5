@@ -203,6 +203,7 @@ cohen.kappa <-
       }
       CI.mc.lower <- quantile(kappa.vec, (1 - CI.width) / 2)[[1]]
       CI.mc.upper <- quantile(kappa.vec, 1 - (1 - CI.width) / 2)[[1]]
+      CI.mc.note <- "Confidence interval is basic bootstrap interval"
     }
 
     #check if message needed
