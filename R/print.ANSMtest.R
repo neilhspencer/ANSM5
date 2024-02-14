@@ -172,13 +172,18 @@ print.ANSMtest <- function(x, ...) {
   }
   if (!is.null(x$pval.mc.note)){cat(x$pval.mc.note, "\n")}
 
-  #print Monte Carlo CI
+  #print Monte Carlo/Bootstrap CI
   if (!is.null(x$CI.mc.lower) && !is.null(x$CI.mc.upper)){
+    if (length(grep("bootstrap", x$CI.mc.note, ignore.case = TRUE)) != 0){
+      CItype <- "Bootstrap"
+    }else{
+      CItype <- "Monte Carlo"
+    }
     if (is.na(x$CI.mc.lower) | is.na(x$CI.mc.upper)){
-      cat(paste0("Monte Carlo ", 100 * round(x$targetCIwidth, 5),
+      cat(paste0(CItype, " ", 100 * round(x$targetCIwidth, 5),
                  "% Confidence Interval cannot be calculated"), "\n")
     }else{
-      cat(paste0("Monte Carlo ", 100 * round(x$targetCIwidth, 5),
+      cat(paste0(CItype, " ", 100 * round(x$targetCIwidth, 5),
                  "% Confidence Interval (", sprintf("%1$d",x$nsims.mc),
                  " simulations)"), "\n")
       cat(paste0("(", sprintf("%.5f", x$CI.mc.lower), ", ",
