@@ -48,6 +48,7 @@ friedman.lsd <-
     #prepare
     complete.cases.ID <- complete.cases(y, groups, blocks)
     y <- y[complete.cases.ID] #remove missing cases
+    y <- round(y, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     groups <- groups[complete.cases.ID] #remove missing cases
     blocks <- blocks[complete.cases.ID] #remove missing cases
     b <- nlevels(blocks)

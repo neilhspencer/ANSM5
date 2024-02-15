@@ -52,6 +52,7 @@ sign.test <-
                  "H1: there is a difference between the levels of ", varname1,
                  "\n")
   }else{
+    x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     if (!is.null(H0)) {
       x <- x[x != H0] #remove cases equal to H0
       pluses <- sum(x > H0)

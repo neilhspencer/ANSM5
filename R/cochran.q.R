@@ -49,6 +49,7 @@ cochran.q <-
 
     #prepare
     y <- y[complete.cases(y)] #remove missing cases
+    y <- round(y, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     b <- nlevels(blocks)
     g <- nlevels(groups)
     n.perms <- factorial(g) ** (b - 1)

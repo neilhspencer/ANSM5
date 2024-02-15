@@ -40,6 +40,7 @@ runs.2cat <-
 
     #statistics
     x <- x[complete.cases(x)] #remove missing cases
+    x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     n <- length(x)
     n1 <- sum(x == unique(x)[1])
     n2 <- sum(x == unique(x)[2])

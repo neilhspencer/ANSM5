@@ -41,7 +41,11 @@ runs.ncat <-
 
     #statistics
     x <- x[complete.cases(x)] #remove missing cases
-    if (is.factor(x)){x <- as.vector(x)}
+    if (is.factor(x)){
+      x <- as.vector(x)
+    }else{
+      x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
+    }
     n <- length(x)
     k <- length(unique(x))
     pri <- rep(NA, k)

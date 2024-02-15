@@ -55,6 +55,8 @@ theil.kendall <-
     complete.cases.id <- complete.cases(x, y)
     y <- y[complete.cases.id] #remove missing cases
     x <- x[complete.cases.id] #remove missing cases
+    y <- round(y, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
+    x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     x.c <- x - median(x)
     n <- length(y)
 

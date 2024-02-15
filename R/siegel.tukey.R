@@ -46,6 +46,8 @@ siegel.tukey <-
     #prepare
     x <- x[complete.cases(x)] #remove missing cases
     y <- y[complete.cases(y)] #remove missing cases
+    x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
+    y <- round(y, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     #equalise medians/means
     if (mean.shift){
       x <- x + (mean(y) - mean(x))

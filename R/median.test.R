@@ -45,6 +45,7 @@ median.test <-
 
     #prepare
     x <- x[complete.cases(x)] #remove missing cases
+    x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     y <- y[complete.cases(y)] #remove missing cases
     if (!is.null(H0)) {
       varname1 <- paste0(varname1, " - ", H0)
@@ -52,6 +53,7 @@ median.test <-
       H0 <- 0
     }
     if (!is.factor(y)){
+      y <- round(y, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
       if (!is.null(H0)) {
         xy <- c(x - H0, y)
       }else{

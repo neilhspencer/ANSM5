@@ -54,6 +54,7 @@ logrank <-
     #prepare
     complete.cases.ID <- complete.cases(x, censored, groups)
     x <- x[complete.cases.ID] #remove missing cases
+    x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     censored <- censored[complete.cases.ID] #remove missing cases
     groups <- groups[complete.cases.ID] #remove missing cases
     ##order cases

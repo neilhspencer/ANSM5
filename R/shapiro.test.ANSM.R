@@ -38,6 +38,7 @@ shapiro.test.ANSM <-
 
     #prepare
     x <- x[complete.cases(x)] #remove missing cases
+    x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
 
     #create hypotheses
     H0 <- paste0("H0: distribution of ", varname1, " is Normal\n",

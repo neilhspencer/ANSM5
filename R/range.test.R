@@ -38,6 +38,7 @@ range.test <-
 
     #prepare
     x <- x[complete.cases(x)] #remove missing cases
+    x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     n <- length(x)
     x <- (x + minx) #make smallest possible number zero
     x <- x * (360 / maxx) #make largest possible number 360

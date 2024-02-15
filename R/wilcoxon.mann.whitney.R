@@ -55,6 +55,9 @@ wilcoxon.mann.whitney <-
     if (is.factor(x) && is.factor(y)){
       x <- as.numeric(x)
       y <- as.numeric(y)
+    }else{
+      x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
+      y <- round(y, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     }
     if (!is.null(H0)) {
       xy <- c(x - H0, y)

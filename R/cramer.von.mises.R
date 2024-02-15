@@ -44,6 +44,8 @@ cramer.von.mises <-
     #prepare
     x <- x[complete.cases(x)] #remove missing cases
     y <- y[complete.cases(y)] #remove missing cases
+    x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
+    y <- round(y, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     cdf_x <- ecdf(x)(x)
     cdf_y <- ecdf(y)(y)
     cdf_xy <- c(cdf_x, cdf_y)[order(rank(c(x, y)))]

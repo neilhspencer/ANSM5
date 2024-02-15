@@ -49,6 +49,8 @@ control.median <-
     #prepare
     x <- x[complete.cases(x)] #remove missing cases
     y <- y[complete.cases(y)] #remove missing cases
+    x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
+    y <- round(y, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     nxy <- length(x) + length(y)
     if (!is.null(H0)) {
       x <- x - H0

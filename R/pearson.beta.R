@@ -51,6 +51,8 @@ pearson.beta <-
     stat.note <- NULL
 
     #prepare
+    y <- round(y, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
+    x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     model <- lm(y ~ x)
     y <- model$model[, 1]
     x <- model$model[, 2]

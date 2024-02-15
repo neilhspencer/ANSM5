@@ -46,14 +46,23 @@ fisher.test.ANSM <-
     if (!is.factor(x) && !is.factor(y)){
       x <- x[complete.cases(x)] #remove missing cases
       y <- y[complete.cases(y)] #remove missing cases
+      x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
+      y <- round(y, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     }else{
       complete.cases.id <- complete.cases(x, y)
       x <- x[complete.cases.id] #remove missing cases
       y <- y[complete.cases.id] #remove missing cases
-      if (is.factor(x)){x <- droplevels(x)}
-      if (is.factor(y)){y <- droplevels(y)}
+      if (is.factor(x)){
+        x <- droplevels(x)
+      }else{
+        x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
+      }
+      if (is.factor(y)){
+        y <- droplevels(y)
+      }else{
+        y <- round(y, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
+      }
     }
-
     if (!is.factor(x) && !is.factor(y)){
       if (!is.null(H0)) {
         xy <- c(x - H0, y)

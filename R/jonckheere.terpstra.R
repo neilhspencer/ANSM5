@@ -56,6 +56,8 @@ jonckheere.terpstra <-
     n <- length(x)
     if (is.factor(x)){
       x <- as.numeric(x)
+    }else{
+      x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     }
     table_g <- table(g)
 

@@ -40,6 +40,7 @@ lilliefors <-
 
     #statistics
     x <- x[complete.cases(x)] #remove missing cases
+    x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     x <- sort(x)
     n <- length(x)
     zx <- scale(x)

@@ -49,6 +49,7 @@ hettmansperger.elmore <-
     #prepare
     complete.cases.ID <- complete.cases(y, factor.a, factor.b)
     y <- y[complete.cases.ID] #remove missing cases
+    y <- round(y, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     factor.a <- factor.a[complete.cases.ID] #remove missing cases
     factor.b <- factor.b[complete.cases.ID] #remove missing cases
     nlev.a <- nlevels(factor.a)

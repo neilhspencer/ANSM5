@@ -40,6 +40,7 @@ cox.stuart <-
 
     #prepare
     x <- x[complete.cases(x)] #remove missing cases
+    x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     if (length(x) %% 2 == 1){ #odd so remove middle value
       x <- c(x[1:floor(length(x)/2)], x[(ceiling(length(x)/2) +  1):length(x)])
     }

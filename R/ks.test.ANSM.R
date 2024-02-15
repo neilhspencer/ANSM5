@@ -48,8 +48,10 @@ ks.test.ANSM <-
 
     #prepare
     x <- x[complete.cases(x)] #remove missing cases
+    x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     if (is.numeric(y)){
       y <- y[complete.cases(y)] #remove missing cases
+      y <- round(y, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
       n <- length(x) + length(y)
     }else{
       varname2 <- shQuote(y)

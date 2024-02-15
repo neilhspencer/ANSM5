@@ -53,6 +53,8 @@ peto.wilcoxon <-
     x.c <- x.c[complete.cases(x, x.c)] #remove missing cases
     y <- y[complete.cases(y, y.c)] #remove missing cases
     y.c <- y.c[complete.cases(y, y.c)] #remove missing cases
+    x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
+    y <- round(y, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     xy <- c(x, y)
     xy.c <- c(x.c, y.c)
     n.x <- length(x)
