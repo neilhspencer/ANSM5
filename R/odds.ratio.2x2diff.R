@@ -230,8 +230,8 @@ odds.ratio.2x2diff <-
         }
       }
       if (do.CI){
-        CI.mc.lower <- quantile(stat.tmp, (1 - CI.width) / 2)[[1]]
-        CI.mc.upper <- quantile(stat.tmp, 1 - (1 - CI.width) / 2)[[1]]
+        CI.mc.lower <- quantile(stat.tmp, (1 - CI.width) / 2, na.rm = TRUE)[[1]]
+        CI.mc.upper <- quantile(stat.tmp, 1 - (1 - CI.width) / 2, na.rm = TRUE)[[1]]
       }
     }
 
