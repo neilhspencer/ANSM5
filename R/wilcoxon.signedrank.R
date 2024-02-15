@@ -103,7 +103,7 @@ wilcoxon.signedrank <-
     pval.exact.greater <-
       sum(permsums.test[permsums.test[, 1] >= ranksumplus, 2]) / sum(permsums.test[, 2])
     if (alternative=="two.sided"){
-      pval.exact <- min(pval.exact.less, pval.exact.greater) * 2
+      pval.exact <- min(1, min(pval.exact.less, pval.exact.greater) * 2)
     }else if (alternative == "less"){
       pval.exact <- pval.exact.less
     }else if (alternative == "greater"){
@@ -174,7 +174,7 @@ wilcoxon.signedrank <-
                 sqrt(n * (n + 1) * (2 * n + 1) / 24), lower.tail = FALSE)
     }
     if (alternative=="two.sided"){
-      pval.asymp <- min(pval.asymp.less, pval.asymp.greater) * 2
+      pval.asymp <- min(1, min(pval.asymp.less, pval.asymp.greater) * 2)
     }else if (alternative == "less"){
       pval.asymp <- pval.asymp.less
     }else if (alternative == "greater"){

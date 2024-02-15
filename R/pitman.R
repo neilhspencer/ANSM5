@@ -92,7 +92,7 @@ pitman <- function(x, H0 = NULL, alternative=c("two.sided", "less", "greater"),
       sum(permsums[,2])
     if (alternative=="two.sided"){
       pval.exact.stat <- pval.stat.greater
-      pval.exact <- min(pval.less, pval.greater) * 2
+      pval.exact <- min(1, min(pval.less, pval.greater) * 2)
     }else if (alternative == "less"){
       pval.exact.stat <- pval.stat.less
       pval.exact <- pval.less
@@ -116,7 +116,7 @@ pitman <- function(x, H0 = NULL, alternative=c("two.sided", "less", "greater"),
     if (alternative=="two.sided"){
       pval.asymp.stat <- abs((pval.stat.greater - 0.5 * sum(abs(s))) /
                                (0.5 * sqrt(sum(s ** 2))))
-      pval.asymp <- min(pval.asymp.less, pval.asymp.greater) * 2
+      pval.asymp <- min(1, min(pval.asymp.less, pval.asymp.greater) * 2)
     }else if (alternative == "less"){
       pval.asymp.stat <- abs((pval.stat.less - 0.5 * sum(abs(s))) /
                                (0.5 * sqrt(sum(s ** 2))))
