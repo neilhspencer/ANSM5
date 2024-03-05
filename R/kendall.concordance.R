@@ -53,8 +53,15 @@ kendall.concordance <-
     complete.cases.ID <- complete.cases(y, groups, blocks)
     y <- y[complete.cases.ID] #remove missing cases
     y <- round(y, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
-    groups <- groups[complete.cases.ID] #remove missing cases
-    blocks <- blocks[complete.cases.ID] #remove missing cases
+    groups <- droplevels(groups[complete.cases.ID]) #remove missing cases
+    blocks <- droplevels(blocks[complete.cases.ID]) #remove missing cases
+    ##ensure full replicate
+    full.blocks <- levels(blocks)[(rowSums(table(blocks, groups)) == nlevels(groups))]
+    keep.blocks <- blocks %in% full.blocks
+    y <- y[keep.blocks]
+    groups <- droplevels(groups[keep.blocks])
+    blocks <- droplevels(blocks[keep.blocks])
+    ##calculate
     g <- nlevels(groups)
     b <- nlevels(blocks)
     n.perms <- factorial(g) ** (b - 1)
