@@ -50,6 +50,7 @@ pitman <- function(x, H0 = NULL, alternative=c("two.sided", "less", "greater"),
   if (!is.null(H0)) {
     x <- x[x != H0] #remove cases equal to H0
   }
+  x.keep <- x
   n <- length(x)
 
   #give asymptotic output if exact not possible
@@ -136,7 +137,8 @@ pitman <- function(x, H0 = NULL, alternative=c("two.sided", "less", "greater"),
 
   #confidence interval
   if (do.CI){
-    bs.ci.res <- bs(x, CI.width = CI.width, nsims.bs = nsims.mc, seed = seed)$CI
+    bs.ci.res <- bs(x.keep, CI.width = CI.width, nsims.bs = nsims.mc,
+                    seed = seed)$CI
     CI.mc.lower <- bs.ci.res[1]
     CI.mc.upper <- bs.ci.res[2]
     CI.mc.note <- "Confidence interval is basic bootstrap interval for the median"
