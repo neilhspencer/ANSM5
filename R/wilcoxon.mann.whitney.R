@@ -169,13 +169,19 @@ wilcoxon.mann.whitney <-
       pval.asymp.stat <- stat
       pval.asymp <- wilcox.test.output$p.value
       if (do.CI){
+        if (alternative != "two.sided"){
+          wilcox.test.output <- wilcox.test(x, y, alternative = "two.sided",
+                                            mu = H0, exact = FALSE,
+                                            correct = cont.corr, conf.int = TRUE,
+                                            conf.level = CI.width)
+        }
         CI.asymp.lower <- wilcox.test.output$conf.int[1]
         CI.asymp.upper <- wilcox.test.output$conf.int[2]
       }
     }
 
     #Monte Carlo p-value
-    if(do.mc){
+    if(do.mc | (do.exact && is.null(CI.exact.lower))){
       pval.mc.stat <- stat
       stat.mc.1 <- wilcox.test(x, y, exact = FALSE, correct = cont.corr,
                               conf.int = FALSE)$statistic
@@ -217,6 +223,16 @@ wilcoxon.mann.whitney <-
         }
       }
       if (pval.mc > 1) {pval.mc <- 1}
+    }
+
+    #Bootstrap CI
+    if(do.CI && (do.mc | (do.exact && is.null(CI.exact.lower)))){
+      bs.ci.res <- bs(x = x, y = y, CI.width = CI.width, nsims.bs = nsims.mc,
+                      seed = seed)$CI
+      CI.mc.lower <- bs.ci.res[1]
+      CI.mc.upper <- bs.ci.res[2]
+      CI.mc.note <- paste0("Confidence interval for difference (", varname1,
+                           " minus ", varname2, ")\nis basic bootstrap interval for the median")
     }
 
     #check if message needed
