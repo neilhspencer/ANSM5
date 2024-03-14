@@ -1,5 +1,5 @@
 #' @importFrom stats median quantile
-bs.ci <-
+bs <-
   function(x, y = NULL, CI.width = 0.95, nsims.bs = 10000, seed = NULL) {
     stopifnot(is.vector(x), is.numeric(x), is.vector(y) | is.null(y),
               is.numeric(y) | is.null(y), is.numeric(CI.width),
@@ -19,6 +19,7 @@ bs.ci <-
       }
       bs.ci.lower <- quantile(median.vec, (1 - CI.width) / 2, na.rm = TRUE)
       bs.ci.upper <- quantile(median.vec, 1 - (1 - CI.width) / 2, na.rm = TRUE)
+      bs.vec <- median.vec
     }else{ #for two samples
       mediandiff.vec <- rep(NA, nsims.bs)
       nx <- length(x)
@@ -31,8 +32,11 @@ bs.ci <-
       }
       bs.ci.lower <- quantile(mediandiff.vec, (1 - CI.width) / 2, na.rm = TRUE)
       bs.ci.upper <- quantile(mediandiff.vec, 1 - (1 - CI.width) / 2, na.rm = TRUE)
+      bs.vec <- mediandiff.vec
     }
 
     #return
-    return(c(as.numeric(bs.ci.lower), as.numeric(bs.ci.upper)))
+    return(list("vector" = bs.vec, "nsamples" = nsims.bs, "seed" = seed,
+           "CI" = c(as.numeric(bs.ci.lower), as.numeric(bs.ci.upper)),
+           "CI.width" = CI.width))
   }
