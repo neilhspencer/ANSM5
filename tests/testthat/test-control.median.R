@@ -5,5 +5,5 @@ test_that("Example 6.9", {
 
 test_that("Exercise 9.8", {
   expect_equal(control.median(ch9$bulbA, ch9$bulbB,
-                              alternative = "greater")$pval.exact, 0.01420773)
+                              alternative = "greater")$pval.exact, 0.014207735)
 })
