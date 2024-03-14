@@ -120,8 +120,8 @@ control.median <-
 
     #confidence interval
     if (do.CI){
-      bs.ci.res <- bs.ci(x = x, y = y, CI.width = CI.width, nsims.bs = nsims.mc,
-                         seed = seed)
+      bs.ci.res <- bs(x = x, y = y, CI.width = CI.width, nsims.bs = nsims.mc,
+                         seed = seed)$CI
       CI.mc.lower <- bs.ci.res[1]
       CI.mc.upper <- bs.ci.res[2]
       CI.mc.note <- paste0("Confidence interval for difference (", varname1,
