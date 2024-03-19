@@ -88,6 +88,12 @@ conover <-
       }
       n.perms <- choose(n.xy, n.s)
     }else{
+      #ensure alternative hypothesis is "two.sided"
+      if (alternative != "two.sided"){
+        alternative <- "two.sided"
+        test.note <- paste0("NOTE: As ", varname2, " is a factor, alternative ",
+                            "hypothesis must be two-sided")
+      }
       #first reorder factor with smallest groups first for exact calculation purposes
       y <- factor(y, levels = levels(y)[rank(table(y), ties.method = "random")])
       y.count <- table(y)
@@ -189,7 +195,11 @@ conover <-
     if (do.mc){
       if (!is.null(seed)){set.seed(seed)}
       if (!is.factor(y)){
-        pval.mc.stat <- xyranks.s
+        if (alternative == "two.sided"){
+          pval.mc.stat <- xyranks.s
+        }else{
+          pval.mc.stat <- xyranks.x
+        }
         pval.mc <- 0
         for (i in 1:nsims.mc){
           xy.sim <- sample(c(x, y), n.xy, replace = FALSE)
@@ -204,8 +214,18 @@ conover <-
           xyranks.x.sim <- sum(xyranks.sim[1:n.x])
           xyranks.y.sim <- sum(xyranks.sim[(n.x + 1):n.xy])
           xyranks.s.sim <- min(xyranks.x.sim, xyranks.y.sim)
-          if (xyranks.s.sim <= pval.mc.stat){
-            pval.mc <- pval.mc + 1 / nsims.mc
+          if (alternative == "two.sided"){
+            if (xyranks.s.sim <= pval.mc.stat){
+              pval.mc <- pval.mc + 1 / nsims.mc
+            }
+          }else if (alternative == "less"){
+            if (xyranks.x.sim <= pval.mc.stat){
+              pval.mc <- pval.mc + 0.5 / nsims.mc
+            }
+          }else if (alternative == "greater"){
+            if (xyranks.x.sim >= pval.mc.stat){
+              pval.mc <- pval.mc + 0.5 / nsims.mc
+            }
           }
         }
       }else{
@@ -278,6 +298,9 @@ conover <-
 
     #check if message needed
     if (do.exact && n.perms > max.exact.perms) {
+      if (!is.null(test.note)){
+        test.note <- paste0(test.note, "\n")
+      }
       test.note <- paste0("NOTE: Number of permutations required greater than ",
                           "current maximum allowed\nfor exact calculations ",
                           "required for exact test (max.exact.perms = ",
