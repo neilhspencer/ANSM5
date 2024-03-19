@@ -2,10 +2,11 @@
 siegel.tukey <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            mean.shift = FALSE, cont.corr = TRUE, max.exact.cases = 1000,
-           do.asymp = FALSE, do.exact = TRUE) {
+           seed = NULL, do.asymp = FALSE, do.exact = TRUE) {
     stopifnot(is.vector(x), is.numeric(x), is.vector(y), is.numeric(y),
               ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
               is.numeric(max.exact.cases), length(max.exact.cases) == 1,
+              is.numeric(seed) | is.null(seed),
               is.logical(mean.shift) == TRUE, is.logical(cont.corr) == TRUE,
               is.logical(do.asymp) == TRUE, is.logical(do.exact) == TRUE)
     alternative <- match.arg(alternative)
@@ -99,7 +100,7 @@ siegel.tukey <-
     res <- wilcoxon.mann.whitney(x = allocatedranksx, y = allocatedranksy,
                                  H0 = NULL, alternative=alternative,
                                  cont.corr = cont.corr,
-                                 max.exact.cases = max.exact.cases,
+                                 max.exact.cases = max.exact.cases, seed = seed,
                                  do.asymp = do.asymp, do.exact = do.exact,
                                  do.CI = FALSE)
     pval <- res$pval
