@@ -11,12 +11,10 @@ test_that("Section 10.1.2", {
 })
 
 test_that("Example 11.2", {
-  parentlimit <- c(0, 1, 2, 3, 4, 5, 6)
-  reportedtime <- c(2.5, 3.1, 3.4, 4, 4.6, 5.1, 11.1)
   H0 <- 1
-  expect_equal(pearson(parentlimit, reportedtime - H0 * parentlimit,
+  expect_equal(pearson(ch11$parentlimit, ch11$reportedtime - H0 * ch11$parentlimit,
                        alternative = "two.sided")$stat, 0.139175554)
-  expect_equal(pearson(parentlimit, reportedtime - H0 * parentlimit,
+  expect_equal(pearson(ch11$parentlimit, ch11$reportedtime - H0 * ch11$parentlimit,
                        alternative = "two.sided")$pval.exact, 0.79246032)
 })
 
