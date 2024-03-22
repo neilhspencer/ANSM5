@@ -219,7 +219,7 @@ test_that("Example 5.7", {
 })
 
 test_that("Exercise 5.7", {
-  expect_equal(binom(32, 57, 0.5)$pval.exact, 0.4270429)
+  expect_equal(binom(32, 57, 0.5)$pval.exact, 0.42704286)
   expect_equal(binom(32, 70, 0.75, alternative = "less")$pval.exact,
                0.000000158118703)
   expect_equal(binom(32, 70, 0.75)$CI.exact.lower, 0.33744)

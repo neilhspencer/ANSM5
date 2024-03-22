@@ -4,12 +4,10 @@ test_that("Example 6.7", {
 })
 
 test_that("Example 6.8", {
-  expect_equal(median.test(ch6$males, ch6$females,
-                           CI.width = 0.90)$CI.exact.lower, -14.4)
-  expect_equal(median.test(ch6$males, ch6$females,
-                           CI.width = 0.90)$CI.exact.upper, 4)
-  expect_equal(median.test(ch6$males, ch6$females,
-                           CI.width = 0.90)$actualCIwidth, 0.9231884)
+  tmp <- median.test(ch6$males, ch6$females, CI.width = 0.90)
+  expect_equal(tmp$CI.exact.lower, -14.4)
+  expect_equal(tmp$CI.exact.upper, 4)
+  expect_equal(tmp$actualCIwidth, 0.9231884)
 })
 
 test_that("Example 7.4", {

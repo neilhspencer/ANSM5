@@ -1,11 +1,11 @@
 test_that("Example 6.11", {
-  expect_equal(siegel.tukey(ch6$typeA, ch6$typeB)$pval.exact.stat,
+  tmp <- siegel.tukey(ch6$typeA, ch6$typeB)
+  expect_equal(tmp$pval.exact.stat,
                paste0("\n","106 (rank sum from ch6$typeA), ",
                       "104 (rank sum from ch6$typeB)", "\n",
                       "70 (Mann-Whitney U from ch6$typeA), ",
                       "26 (Mann-Whitney U from ch6$typeB)"))
-  expect_equal(siegel.tukey(ch6$typeA, ch6$typeB)$pval.exact,
-               0.097880448)
+  expect_equal(tmp$pval.exact, 0.097880448)
 })
 
 test_that("Exercise 6.11", {

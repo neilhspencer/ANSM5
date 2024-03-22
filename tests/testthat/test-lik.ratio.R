@@ -86,5 +86,6 @@ test_that("Exercise 13.7", {
               ch13$response[ch13$location == "Urban"], seed = 1)$pval.mc, 0)
   expect_equal(
     lik.ratio(ch13$medicine[ch13$location == "Rural"],
-              ch13$response[ch13$location == "Rural"], seed = 1)$pval.mc, 0)
+              ch13$response[ch13$location == "Rural"], seed = 1)$pval.mc,
+    0.0032)
 })

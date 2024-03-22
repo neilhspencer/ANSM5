@@ -11,14 +11,12 @@ test_that("Example 13.2", {
   expect_equal(odds.ratio.2x2diff(ch13$physical.activity, ch13$tv.viewing,
                                   ch13$gender, do.exact = FALSE,
                                   do.asymp = TRUE)$CI.asymp.upper, 0.475127192)
-  expect_equal(odds.ratio.2x2diff(ch13$physical.activity, ch13$tv.viewing,
-                                  ch13$gender)$pval.exact.stat, 0.136726013)
-  expect_equal(odds.ratio.2x2diff(ch13$physical.activity, ch13$tv.viewing,
-                                  ch13$gender)$pval.exact, 0.44031545)
-  expect_equal(odds.ratio.2x2diff(ch13$physical.activity, ch13$tv.viewing,
-                                  ch13$gender)$CI.exact.lower, -0.34815705)
-  expect_equal(odds.ratio.2x2diff(ch13$physical.activity, ch13$tv.viewing,
-                                  ch13$gender)$CI.exact.upper, 0.34589494)
+  tmp <- odds.ratio.2x2diff(ch13$physical.activity, ch13$tv.viewing,
+                            ch13$gender)
+  expect_equal(tmp$pval.exact.stat, 0.136726013)
+  expect_equal(tmp$pval.exact, 0.44031545)
+  expect_equal(tmp$CI.exact.lower, -0.34815705)
+  expect_equal(tmp$CI.exact.upper, 0.34589494)
   expect_equal(odds.ratio.2x2diff(ch13$physical.activity, ch13$tv.viewing,
                                   ch13$gender, do.exact = FALSE, do.mc = TRUE,
                                   seed = 1)$pval.mc.stat, -0.136726013)

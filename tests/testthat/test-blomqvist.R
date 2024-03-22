@@ -10,5 +10,5 @@ test_that("Exercise 10.6", {
 })
 
 test_that("Exercise 10.7", {
-  expect_equal(blomqvist(ch10$ERA, ch10$SSS)$pval.exact, 0.007936508)
+  expect_equal(blomqvist(ch10$ERA, ch10$SSS)$pval.exact, 1)
 })

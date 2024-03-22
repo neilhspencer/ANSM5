@@ -61,25 +61,23 @@ test_that("Example 6.8", {
 })
 
 test_that("Example 6.11", {
-  expect_equal(
-    wilcoxon.mann.whitney(ch6$typeA, ch6$typeB)$pval.exact.stat,
+  tmp <- wilcoxon.mann.whitney(ch6$typeA, ch6$typeB)
+  expect_equal(tmp$pval.exact.stat,
                paste0("\n","112.5 (rank sum from ch6$typeA), ",
                       "97.5 (rank sum from ch6$typeB)", "\n",
                       "76.5 (Mann-Whitney U from ch6$typeA), ",
                       "19.5 (Mann-Whitney U from ch6$typeB)"))
-  expect_equal(wilcoxon.mann.whitney(ch6$typeA, ch6$typeB)$pval.exact,
-               0.026768278)
+  expect_equal(tmp$pval.exact, 0.026768278)
 })
 
 test_that("Example 6.17", {
-  expect_equal(
-    wilcoxon.mann.whitney(ch6$groupA, ch6$groupB)$pval.exact.stat,
+  tmp <- wilcoxon.mann.whitney(ch6$groupA, ch6$groupB)
+  expect_equal(tmp$pval.exact.stat,
                paste0("\n","76 (rank sum from ch6$groupA), ",
                       "155 (rank sum from ch6$groupB)", "\n",
                       "21 (Mann-Whitney U from ch6$groupA), ",
                       "89 (Mann-Whitney U from ch6$groupB)"))
-  expect_equal(wilcoxon.mann.whitney(ch6$groupA, ch6$groupB)$pval.exact,
-               0.015871126)
+  expect_equal(tmp$pval.exact, 0.015871126)
 })
 
 test_that("Exercise 6.1", {
@@ -107,15 +105,11 @@ test_that("Exercise 6.4", {
 })
 
 test_that("Exercise 6.5", {
-  expect_equal(
-    wilcoxon.mann.whitney(ch6$cooling.time.standard,
-                          ch6$cooling.time.cheap)$pval.exact, 0.13879062)
-  expect_equal(
-    wilcoxon.mann.whitney(ch6$cooling.time.standard,
-                          ch6$cooling.time.cheap)$CI.exact.lower, -0.2)
-  expect_equal(
-    wilcoxon.mann.whitney(ch6$cooling.time.standard,
-                          ch6$cooling.time.cheap)$CI.exact.upper, 1.9)
+  tmp <- wilcoxon.mann.whitney(ch6$cooling.time.standard,
+                               ch6$cooling.time.cheap)
+  expect_equal(tmp$pval.exact, 0.13879062)
+  expect_equal(tmp$CI.exact.lower, -0.2)
+  expect_equal(tmp$CI.exact.upper, 1.9)
 })
 
 test_that("Exercise 6.6", {
@@ -133,12 +127,10 @@ test_that("Exercise 6.7", {
 })
 
 test_that("Exercise 6.15", {
-  expect_equal(wilcoxon.mann.whitney(ch6$doseI, ch6$doseII)$pval.exact,
-               0.0106129165)
-  expect_equal(wilcoxon.mann.whitney(ch6$doseI,
-                                     ch6$doseII)$CI.exact.lower, -17.42)
-  expect_equal(wilcoxon.mann.whitney(ch6$doseI,
-                                     ch6$doseII)$CI.exact.upper, -2.4)
+  tmp <- wilcoxon.mann.whitney(ch6$doseI, ch6$doseII)
+  expect_equal(tmp$pval.exact, 0.0106129165)
+  expect_equal(tmp$CI.exact.lower, -17.42)
+  expect_equal(tmp$CI.exact.upper, -2.4)
 })
 
 test_that("Exercise 6.16", {
@@ -152,27 +144,27 @@ test_that("Example 8.9", {
   groupAB.diff <- (ch8$periodI - ch8$periodII)[ch8$sequence == "AB"]
   groupBA.diff <- (ch8$periodI - ch8$periodII)[ch8$sequence == "BA"]
   groupBA.diff2 <- (ch8$periodII - ch8$periodI)[ch8$sequence == "BA"]
-  expect_equal(wilcoxon.mann.whitney(groupAB.sum, groupBA.sum)$pval.exact.stat,
+  tmp <- wilcoxon.mann.whitney(groupAB.sum, groupBA.sum)
+  expect_equal(tmp$pval.exact.stat,
                paste0("\n","22 (rank sum from groupAB.sum), ",
                       "33 (rank sum from groupBA.sum)", "\n",
                       "7 (Mann-Whitney U from groupAB.sum), ",
                       "18 (Mann-Whitney U from groupBA.sum)"))
-  expect_equal(wilcoxon.mann.whitney(groupAB.sum, groupBA.sum)$pval.exact,
-               0.30952381)
-  expect_equal(wilcoxon.mann.whitney(groupAB.diff, groupBA.diff)$pval.exact.stat,
+  expect_equal(tmp$pval.exact, 0.30952381)
+  tmp <- wilcoxon.mann.whitney(groupAB.diff, groupBA.diff)
+  expect_equal(tmp$pval.exact.stat,
                paste0("\n","16 (rank sum from groupAB.diff), ",
                       "39 (rank sum from groupBA.diff)", "\n",
                       "1 (Mann-Whitney U from groupAB.diff), ",
                       "24 (Mann-Whitney U from groupBA.diff)"))
-  expect_equal(wilcoxon.mann.whitney(groupAB.diff, groupBA.diff)$pval.exact,
-               0.015873016)
-  expect_equal(wilcoxon.mann.whitney(groupAB.diff, groupBA.diff2)$pval.exact.stat,
+  expect_equal(tmp$pval.exact, 0.015873016)
+  tmp <- wilcoxon.mann.whitney(groupAB.diff, groupBA.diff2)
+  expect_equal(tmp$pval.exact.stat,
                paste0("\n","33 (rank sum from groupAB.diff), ",
                       "22 (rank sum from groupBA.diff2)", "\n",
                       "18 (Mann-Whitney U from groupAB.diff), ",
                       "7 (Mann-Whitney U from groupBA.diff2)"))
-  expect_equal(wilcoxon.mann.whitney(groupAB.diff, groupBA.diff2)$pval.exact,
-               0.30952381)
+  expect_equal(tmp$pval.exact, 0.30952381)
 })
 
 test_that("Exercise 8.6", {
@@ -235,24 +227,23 @@ test_that("Exercise 9.2", {
 test_that("Example 12.5", {
   side.effect.level.A <- ch12$side.effect.level[ch12$drugAB == "Drug A"]
   side.effect.level.B <- ch12$side.effect.level[ch12$drugAB == "Drug B"]
-  wmw.out <- wilcoxon.mann.whitney(side.effect.level.A, side.effect.level.B,
-                                   do.CI = FALSE, seed = 1,
-                                   nsims.mc = 1000000)
-  expect_equal(wmw.out$pval.mc.stat,
+  tmp <- wilcoxon.mann.whitney(side.effect.level.A, side.effect.level.B,
+                               do.CI = FALSE, seed = 1, nsims.mc = 1000000)
+  expect_equal(tmp$pval.mc.stat,
                paste0("\n","2624 (rank sum from side.effect.level.A), ",
                        "2326 (rank sum from side.effect.level.B)", "\n",
                        "1589 (Mann-Whitney U from side.effect.level.A), ",
                        "841 (Mann-Whitney U from side.effect.level.B)"))
-  expect_equal(wmw.out$pval.mc, 0.001872)
-  wmw.out <- wilcoxon.mann.whitney(side.effect.level.A, side.effect.level.B,
+  expect_equal(tmp$pval.mc, 0.001872)
+  tmp <- wilcoxon.mann.whitney(side.effect.level.A, side.effect.level.B,
                                    do.CI = FALSE, do.exact = FALSE,
                                    do.asymp = TRUE)
-  expect_equal(wmw.out$pval.asymp.stat,
+  expect_equal(tmp$pval.asymp.stat,
                paste0("\n","2624 (rank sum from side.effect.level.A), ",
                       "2326 (rank sum from side.effect.level.B)", "\n",
                       "1589 (Mann-Whitney U from side.effect.level.A), ",
                       "841 (Mann-Whitney U from side.effect.level.B)"))
-  expect_equal(wmw.out$pval.asymp, 0.00184697407)
+  expect_equal(tmp$pval.asymp, 0.00184697407)
 })
 
 test_that("Exercise 12.4", {
