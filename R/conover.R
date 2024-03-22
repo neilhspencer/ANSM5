@@ -185,9 +185,10 @@ conover <-
           Sr_i <- sum(rank.x_i ** 4)
           T0_i <- (n.x - 1) * (Sk_i - C_i) / (Sr_i - C_i)
           if (T0_i >= pval.exact.stat){
-            pval.exact <- pval.exact + 1 / n.combins
+            pval.exact <- pval.exact + 1
           }
         }
+        pval.exact <- pval.exact / n.combins
       }
     }
 
