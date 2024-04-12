@@ -229,6 +229,9 @@ median.test <-
       }else{
         pval.asymp.stat <- as.numeric(asymp.test$statistic)
         pval.asymp <- asymp.test$p.value
+        if (alternative != "two.sided"){
+          pval.asymp <- pval.asymp / 2
+        }
       }
     }
 
