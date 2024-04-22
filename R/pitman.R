@@ -1,8 +1,8 @@
 #' @importFrom stats complete.cases pnorm
-pitman <- function(x, H0 = NULL, alternative=c("two.sided", "less", "greater"),
-                   CI.width = 0.95, max.exact.cases = 1000, nsims.mc = 10000,
-                   seed = NULL, do.asymp = FALSE, do.exact = TRUE,
-                   do.CI = TRUE) {
+pitman <-
+  function(x, H0 = NULL, alternative=c("two.sided", "less", "greater"),
+           CI.width = 0.95, max.exact.cases = 1000, nsims.mc = 10000,
+           seed = NULL, do.asymp = FALSE, do.exact = TRUE, do.CI = TRUE) {
   stopifnot(is.vector(x), is.numeric(x),
             ((is.numeric(H0) && length(H0) == 1) | is.null(H0)),
             is.numeric(CI.width), length(CI.width) == 1, CI.width > 0,
