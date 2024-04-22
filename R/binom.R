@@ -1,6 +1,9 @@
 #' Perform binomial test
 #'
-#' @param r Number of "successes"
+#' @description
+#' `binom()` performs the binomial test and is used in chapters 4, 5 and 13 of the 5th edition of `Applied Nonparametric Statistical Methods`
+#'
+#' @param r Number of successes
 #' @param n Number of trials
 #' @param H0 Null hypothesis value
 #' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
