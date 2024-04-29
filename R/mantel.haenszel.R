@@ -96,7 +96,7 @@ mantel.haenszel <-
                  " is not equal to 1 for all levels of ", varname3, "\n")
 
     #return
-    result <- list(title = "Mantel–Haenszel test",
+    result <- list(title = "Mantel-Haenszel test",
                    varname1 = varname1, varname2 = varname2, H0 = H0,
                    alternative = alternative, cont.corr = cont.corr, pval = pval,
                    pval.stat = pval.stat, pval.note = pval.note,
