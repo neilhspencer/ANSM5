@@ -66,7 +66,7 @@ range.test <-
                  "H1: distribution of ", varname1, " is not uniform\n")
 
     #return
-    result <- list(title = paste0("Range test"),
+    result <- list(title = "Range test",
                    varname1 = varname1, varname2 = varname2, H0 = H0,
                    alternative = alternative, cont.corr = cont.corr, pval = pval,
                    pval.stat = pval.stat, pval.note = pval.note,

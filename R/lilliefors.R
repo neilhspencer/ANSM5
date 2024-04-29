@@ -76,7 +76,7 @@ lilliefors <-
                  "H1: distribution of ", varname1, " is not Normal\n")
 
     #return
-    result <- list(title = paste0("Lilliefors test of Normality"),
+    result <- list(title = "Lilliefors test of Normality",
                    varname1 = varname1, varname2 = varname2, H0 = H0,
                    alternative = alternative, cont.corr = cont.corr, pval = pval,
                    pval.stat = pval.stat, pval.note = pval.note,
