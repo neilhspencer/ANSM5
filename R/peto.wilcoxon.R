@@ -238,7 +238,7 @@ peto.wilcoxon <-
     }
 
     #return
-    result <- list(title = "Peto–Wilcoxon test", varname1 = varname1,
+    result <- list(title = "Peto-Wilcoxon test", varname1 = varname1,
                    varname2 = varname2, H0 = H0,
                    alternative = alternative, cont.corr = cont.corr, pval = pval,
                    pval.stat = pval.stat, pval.note = pval.note,
