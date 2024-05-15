@@ -1,5 +1,29 @@
+#' Perform logrank test
+#'
+#' @description
+#' `logrank()` performs the logrank test and is used in chapter 9 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param x Numeric vector of same length as censored, groups
+#' @param censored Binary vector of same length as x, groups
+#' @param groups Factor of same length as x, censored
+#' @param score.censored Boolean indicating whether or not to score censored values (defaults to `TRUE`)
+#' @param max.exact.perms Maximum number of permutations allowed for exact calculations (defaults to `100000`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `10000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 9.6 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' logrank(ch9$samplesAB.survtime, ch9$samplesAB.censor, ch9$samplesAB,
+#'   score.censored = FALSE, max.exact.perms = 1, seed = 1)
+#'
+#' # Exercise 9.6 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' logrank(c(ch9$regimeA.survtime, ch9$regimeB.survtime), c(ch9$regimeA.censor, ch9$regimeB.censor),
+#'   factor(c(rep("RegimeA", 12), rep("RegimeB", 13))),
+#'   score.censored = FALSE, seed = 1, nsims.mc = 100000)
+#'
 #' @importFrom stats complete.cases
 #' @importFrom utils combn
+#' @export
 logrank <-
   function(x, censored, groups, score.censored = TRUE,
            max.exact.perms = 100000, nsims.mc = 10000, seed = NULL) {

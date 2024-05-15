@@ -1,4 +1,28 @@
+#' Perform Pitman test
+#' 
+#' @description
+#' `pitman()` performs the Pitman test and is used in chapter 3 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' 
+#' @param x Numeric vector
+#' @param H0 Null hypothesis value (defaults to `NULL`)
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param CI.width Confidence interval width (defaults to `0.95`)
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `1000`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `10000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @param do.CI Boolean indicating whether or not to perform confidence interval calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 3.11 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' pitman(ch3$heartrates1, 70, "greater", do.exact = FALSE, do.asymp = TRUE)
+#' 
+#' # Exercise 3.17 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' pitman(ch3$sampleII, 110, do.exact = FALSE, do.asymp = TRUE)
+#' 
 #' @importFrom stats complete.cases pnorm
+#' @export
 pitman <-
   function(x, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            CI.width = 0.95, max.exact.cases = 1000, nsims.mc = 10000,

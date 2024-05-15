@@ -1,5 +1,30 @@
+#' Perform Jonckheere-Terpstra test
+#'
+#' @description
+#' `jonckheere.terpstra()` performs the Jonckheere-Terpstra test and is used in chapters 7, 8 and 12 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param x Numeric vector or factor of same length as g
+#' @param g Factor of same length as x
+#' @param alternative Type of alternative hypothesis (defaults to `c("less","greater")`)
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `15`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `10000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @param do.mc Boolean indicating whether or not to perform Monte Carlo calculations (defaults to `FALSE`)
+#' @param do.asymp.ties.adjust Boolean indicating whether or not to use adjustment for ties in data (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 7.3 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' jonckheere.terpstra(ch7$dementia.age, ch7$features, alternative = "greater",
+#'   do.exact = FALSE, do.asymp = TRUE, do.asymp.ties.adjust = FALSE)
+#'
+#' # Exercise 12.6 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' jonckheere.terpstra(ch12$ethnic.group, ch12$diabetes.status, seed = 1)
+#'
 #' @importFrom stats complete.cases
 #' @importFrom utils combn
+#' @export
 jonckheere.terpstra <-
   function(x, g, alternative = c("less", "greater"),
            max.exact.cases = 15, nsims.mc = 10000, seed = NULL,

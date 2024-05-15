@@ -1,4 +1,21 @@
+#' Perform Mantel-Haenszel test
+#' 
+#' @description
+#' `mantel.haenszel()` performs the Mantel-Haenszel test and is used in chapter 13 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' 
+#' @param x Binary factor of same length as y, z
+#' @param y Binary factor of same length as x, z
+#' @param z Factor of same length as x, y
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 13.4 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' mantel.haenszel(ch13$drug, ch13$side.effects, ch13$age.group)
+#' 
+#' #  from `Applied Nonparametric Statistical Methods` (5th edition)
+#' 
 #' @importFrom stats complete.cases pchisq
+#' @export
 mantel.haenszel <-
   function(x, y, z, do.asymp = TRUE) {
     stopifnot(is.factor(x), is.factor(y), is.factor(z),

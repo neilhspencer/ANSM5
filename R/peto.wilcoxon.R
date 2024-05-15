@@ -1,5 +1,24 @@
+#' Perform Peto-Wilcoxon test
+#'
+#' @description
+#' `peto.wilcoxon()` performs the Peto-Wilcoxon test and is used in chapter 9 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param x Numeric vector of same length as y, x.c, y.c
+#' @param y Numeric vector of same length as x, x.c, y.c
+#' @param x.c Binary vector of same length as x, y, x.c
+#' @param y.c Binary vector of same length as x, y, y.c
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param max.exact.perms Maximum number of permutations allowed for exact calculations (defaults to `100000`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `10000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' #  from `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#'
 #' @importFrom stats complete.cases
 #' @importFrom utils combn
+#' @export
 peto.wilcoxon <-
   function(x, y, x.c, y.c, alternative=c("two.sided", "less", "greater"),
            max.exact.perms = 100000, nsims.mc = 10000, seed = NULL) {

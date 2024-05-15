@@ -1,4 +1,24 @@
+#' Perform Fisher exact test
+#' 
+#' @description
+#' `fisher.test.ANSM()` is a wrapper for stats::fisher.test - performs the Fisher exact test and is used in chapters 6, 12 and 13 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' 
+#' @param x Numeric vector or factor
+#' @param y Numeric vector or factor
+#' @param H0 Null hypothesis value (defaults to `NULL`)
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `10000`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 6.7 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' fisher.test.ANSM(ch6$males, ch6$females)
+#' 
+#' # Exercise 13.10 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' fisher.test.ANSM(ch13$laid.off, ch13$employee.ages)
+#' 
 #' @importFrom stats complete.cases median
+#' @export
 fisher.test.ANSM <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            max.exact.cases = 10000, do.exact = TRUE) {

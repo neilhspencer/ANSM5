@@ -1,4 +1,27 @@
+#' Perform Sign test
+#'
+#' @description
+#' `sign.test()` performs the Sign test and is used in chapters 3, 4, 5 and 6 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param x Numeric vector, or binary factor and H0 is NULL
+#' @param H0 Null hypothesis value (defaults to `NULL`)
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param cont.corr Boolean indicating whether or not to use continuity correction (defaults to `TRUE`)
+#' @param CI.width Confidence interval width (defaults to `0.95`)
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `1000000`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @param do.CI Boolean indicating whether or not to perform confidence interval calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 3.1 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' #sign.test(ch3$sampleI, 110)
+#'
+#' # Exercise 6.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' #sign.test(ch5$LVF - ch5$RVF, 0)
+#'
 #' @importFrom stats complete.cases dbinom pbinom pnorm qnorm
+#' @export
 sign.test <-
   function(x, H0 = NULL, alternative = c("two.sided", "less", "greater"),
            cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000000,

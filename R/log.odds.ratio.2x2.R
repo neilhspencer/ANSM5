@@ -1,4 +1,26 @@
+#' Perform Log odds ratio test
+#'
+#' @description
+#' `log.odds.ratio.2x2()` performs the Log odds ratio test and is used in chapter 13 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param x Binary factor of same length as y
+#' @param y Binary factor of same length as x
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `10`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `100000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.mc Boolean indicating whether or not to perform Monte Carlo calculations (defaults to `FALSE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Exercise 13.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' #log.odds.ratio.2x2(ch13$physical.activity[ch13$gender == "Boy"],
+#' #  ch13$tv.viewing[ch13$gender == "Boy"], do.exact = FALSE, do.asymp = TRUE)
+#' #log.odds.ratio.2x2(ch13$physical.activity[ch13$gender == "Girl"],
+#' #  ch13$tv.viewing[ch13$gender == "Girl"], do.exact = FALSE, do.asymp = TRUE)
+#'
 #' @importFrom stats complete.cases r2dtable pnorm
+#' @export
 log.odds.ratio.2x2 <-
   function(x, y, max.exact.cases = 10, nsims.mc = 100000,
            seed = NULL, do.exact = TRUE, do.asymp = FALSE, do.mc = FALSE) {
@@ -57,7 +79,8 @@ log.odds.ratio.2x2 <-
     rtots <- table(x)
     ctots <- table(y)
     tab.xy <- table(x, y)
-    stat <- log((tab.xy[1, 1] * tab.xy[2, 2]) / (tab.xy[1, 2] * tab.xy[2, 1]))
+    stat <- log((tab.xy[1, 1] * tab.xy[2, 2]) / (tab.xy[1, 2] * tab.xy[2, 1]),
+                base = exp(1))
 
     #give mc output if exact not possible
     if (do.exact && n > max.exact.cases){
@@ -73,7 +96,7 @@ log.odds.ratio.2x2 <-
       for (i in 1:n.perms){
         tmp.tab.xy <- table(x[permutations[i,]], y)
         tmp.stat <- log((tmp.tab.xy[1, 1] * tmp.tab.xy[2, 2]) /
-                          (tmp.tab.xy[1, 2] * tmp.tab.xy[2, 1]))
+                          (tmp.tab.xy[1, 2] * tmp.tab.xy[2, 1]), base = exp(1))
         if (tmp.stat >= pval.exact.stat){
           pval.exact <- pval.exact + 2 / n.perms
         }
@@ -89,7 +112,7 @@ log.odds.ratio.2x2 <-
       for (i in 1:nsims.mc){
         tmp.tab.xy <- r2dtable(1, rtots, ctots)[[1]]
         tmp.stat <- log((tmp.tab.xy[1, 1] * tmp.tab.xy[2, 2]) /
-                          (tmp.tab.xy[1, 2] * tmp.tab.xy[2, 1]))
+                          (tmp.tab.xy[1, 2] * tmp.tab.xy[2, 1]), base = exp(1))
         if (tmp.stat >= pval.mc.stat){
           pval.mc <- pval.mc + 2 / nsims.mc
         }

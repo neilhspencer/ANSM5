@@ -1,4 +1,21 @@
+#' Perform Bowker's extension of McNemar's test
+#' 
+#' @description
+#' `bowker()` performs the Bowker's extension of McNemar's test and is used in chapter 12 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' 
+#' @param x Factor of same length as y, or two-dimensional square table
+#' @param y Factor of same length as x (or NULL if x is table) (defaults to `NULL`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 12.12 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' bowker(ch12$side.effect.new, ch12$side.effect.old)
+#' 
+#' # Exercise 12.12 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' bowker(ch12$first.response, ch12$second.response)
+#' 
 #' @importFrom stats complete.cases pchisq
+#' @export
 bowker <-
   function(x, y = NULL, do.asymp = TRUE) {
     stopifnot((is.factor(x) && nlevels(x) > 1 |

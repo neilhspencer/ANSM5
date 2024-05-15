@@ -1,4 +1,21 @@
+#' Perform Least Significant Differences test after the Friedman test
+#' 
+#' @description
+#' `friedman.lsd()` performs the Least Significant Differences test after the Friedman test and is used in chapter 8 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' 
+#' @param y Numeric vector of same length as groups, blocks
+#' @param groups Factor of same length as y, blocks with levels such that length(y) == nlevels(groups) * nlevels(blocks)
+#' @param blocks Factor of same length as y, groups with levels such that length(y) == nlevels(groups) * nlevels(blocks)
+#' @param ids Vector of length 2 with elements both levels of groups
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 8.11 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' friedman.lsd(ch8$prey.preference, ch8$prey, ch8$larva, c("Cyclops", "Anopheles"))
+#' 
+#' #  from `Applied Nonparametric Statistical Methods` (5th edition)
+#' 
 #' @importFrom stats complete.cases pt
+#' @export
 friedman.lsd <-
   function(y, groups, blocks, ids) {
     stopifnot(is.vector(y), is.numeric(y), is.factor(groups), is.factor(blocks),

@@ -1,4 +1,23 @@
+#' Perform Runs test for two categories
+#' 
+#' @description
+#' `runs.2cat()` performs the Runs test for two categories and is used in chapters 4, 5 and 6 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' 
+#' @param x Vector with two unique values
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param cont.corr Boolean indicating whether or not to use continuity correction (defaults to `TRUE`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 4.14 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' runs.2cat(ch4$tosses1, do.exact = FALSE, do.asymp = TRUE)
+#' 
+#' # Exercise 6.17 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' runs.2cat(ch6$twins, alternative = "greater")
+#' 
 #' @importFrom stats complete.cases pnorm
+#' @export
 runs.2cat <-
   function(x,  alternative=c("two.sided", "less", "greater"), cont.corr = TRUE,
            do.asymp = FALSE, do.exact = TRUE) {

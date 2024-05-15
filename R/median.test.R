@@ -1,4 +1,27 @@
+#' Perform Median test
+#'
+#' @description
+#' `median.test()` performs the Median test and is used in chapters 6 and 7 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param x Numeric vector of same length as y
+#' @param y Numeric vector, or factor of same length as x
+#' @param H0 Null hypothesis value (defaults to `NULL`)
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param CI.width Confidence interval width (defaults to `0.95`)
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `1000`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @param do.CI Boolean indicating whether or not to perform confidence interval calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 6.7 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' #median.test(ch6$males, ch6$females)
+#'
+#' # Example 7.5 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' #median.test(ch7$time, ch7$surgeon, do.exact = FALSE, do.asymp = TRUE)
+#'
 #' @importFrom stats complete.cases median chisq.test
+#' @export
 median.test <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            CI.width = 0.95, max.exact.cases = 1000,

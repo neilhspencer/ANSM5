@@ -1,4 +1,21 @@
+#' Perform Least Significant Differences test after the Kruskal-Wallis test
+#' 
+#' @description
+#' `kruskal.wallis.lsd()` performs the Least Significant Differences test after the Kruskal-Wallis test and is used in chapter 8 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' 
+#' @param x Numeric vector of same length as g
+#' @param g Factor of same length as x
+#' @param ids Vector of length 2 with elements both levels of g
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 8.10 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' kruskal.wallis.lsd(ch8$sentences, ch8$authors, c("Vulliamy", "Queen"))
+#' 
+#' # Exercise 8.8 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' kruskal.wallis.lsd(ch8$seizure.score, ch8$hospital, c("HospitalA", "HospitalC"))
+#' 
 #' @importFrom stats complete.cases pt
+#' @export
 kruskal.wallis.lsd <-
   function(x, g, ids) {
     stopifnot(is.vector(x), is.numeric(x), is.factor(g), length(x) == length(g),

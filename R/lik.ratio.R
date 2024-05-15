@@ -1,4 +1,27 @@
+#' Perform Likelihood ratio test
+#'
+#' @description
+#' `lik.ratio()` performs the Likelihood ratio test and is used in chapters 12 and 13 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param x Factor of same length as y
+#' @param y Factor of same length as x
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `10`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `100000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.mc Boolean indicating whether or not to perform Monte Carlo calculations (defaults to `FALSE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 12.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' lik.ratio(ch12$infection.site, ch12$district, do.exact = FALSE, do.asymp = TRUE)
+#'
+#' # Exercise 13.7 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' lik.ratio(ch13$medicine[ch13$location == "Rural"], ch13$response[ch13$location == "Rural"],
+#'   seed = 1)
+#'
 #' @importFrom stats complete.cases chisq.test r2dtable pchisq
+#' @export
 lik.ratio <-
   function(x, y, max.exact.cases = 10, nsims.mc = 100000,
            seed = NULL, do.exact = TRUE, do.asymp = FALSE, do.mc = FALSE) {
@@ -82,8 +105,8 @@ lik.ratio <-
         obs.tmp <- chisq.test.out.tmp$observed
         exp.tmp <- chisq.test.out.tmp$expected
         obs <- obs[obs != 0]
-        G2.tmp <- 2 * sum(obs.tmp[obobs.tmps != 0] *
-                            log(obs.tmp[obobs.tmps != 0] /
+        G2.tmp <- 2 * sum(obs.tmp[obs.tmp != 0] *
+                            log(obs.tmp[obs.tmp != 0] /
                                   exp.tmp[obs.tmp != 0]))
         if (G2.tmp >= pval.exact.stat){
           pval.exact <- pval.exact + 1 / n.perms

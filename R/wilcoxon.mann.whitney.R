@@ -1,5 +1,33 @@
+#' Perform Wilcoxon-Mann-Whitney test
+#'
+#' @description
+#' `wilcoxon.mann.whitney()` performs the Wilcoxon-Mann-Whitney test and is used in chapters 6, 8, 9 and 12 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param x Numeric vector, or factor with same levels as y
+#' @param y Numeric vector, or factor with same levels as x
+#' @param H0 Null hypothesis value (defaults to `NULL`)
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param cont.corr Boolean indicating whether or not to use continuity correction (defaults to `TRUE`)
+#' @param CI.width Confidence interval width (defaults to `0.95`)
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `1000`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `100000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @param do.mc Boolean indicating whether or not to perform Monte Carlo calculations (defaults to `FALSE`)
+#' @param do.CI Boolean indicating whether or not to perform confidence interval calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Examples 6.1 and 6.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' wilcoxon.mann.whitney(ch6$groupA, ch6$groupB)
+#'
+#' # Exercise 12.4 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' wilcoxon.mann.whitney(feedback.satisfaction.Representative, feedback.satisfaction.Researcher,
+#'   do.exact = FALSE, do.asymp = TRUE)
+#'
 #' @importFrom stats complete.cases wilcox.test
 #' @importFrom utils combn tail
+#' @export
 wilcoxon.mann.whitney <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000,

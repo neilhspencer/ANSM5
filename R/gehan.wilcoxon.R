@@ -1,5 +1,32 @@
+#' Perform Gehan-Wilcoxon test
+#'
+#' @description
+#' `gehan.wilcoxon()` performs the Gehan-Wilcoxon test and is used in chapter 9 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param x Numeric vector of same length as y, x.c, y.c
+#' @param y Numeric vector of same length as x, x.c, y.c
+#' @param x.c Binary vector of same length as x, y, x.c
+#' @param y.c Binary vector of same length as x, y, y.c
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param max.exact.perms Maximum number of permutations allowed for exact calculations (defaults to `100000`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `100000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 9.1 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' gehan.wilcoxon(ch9$symp.survtime, ch9$asymp.survtime,
+#'   ch9$symp.censor, ch9$asymp.censor, alternative = "less",
+#'   do.exact = FALSE, do.asymp = TRUE)
+#'
+#' # Exercise 9.5 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' gehan.wilcoxon(ch9$regimeA.survtime, ch9$regimeB.survtime,
+#'   ch9$regimeA.censor, ch9$regimeB.censor, seed = 1)
+#'
 #' @importFrom stats complete.cases pnorm
 #' @importFrom utils combn
+#' @export
 gehan.wilcoxon <-
   function(x, y, x.c, y.c, alternative=c("two.sided", "less", "greater"),
            max.exact.perms = 100000, nsims.mc = 100000, seed = NULL,

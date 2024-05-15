@@ -1,4 +1,23 @@
+#' Perform Zelen test
+#' 
+#' @description
+#' `zelen()` performs the Zelen test and is used in chapter 13 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' 
+#' @param x Binary factor of same length as y, z
+#' @param y Binary factor of same length as x, z
+#' @param z Factor of same length as x, y
+#' @param max.exact.perms Maximum number of permutations allowed for exact calculations (defaults to `1000000`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Section 13.2.5 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' zelen(ch13$drug, ch13$side.effects, ch13$age.group)
+#' 
+#' # Example 13.3 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' zelen(ch13$machine, ch13$output.status, ch13$material.source)
+#' 
 #' @importFrom stats complete.cases dhyper
+#' @export
 zelen <-
   function(x, y, z, max.exact.perms = 1000000, do.exact = TRUE) {
     stopifnot(is.factor(x), is.factor(y), is.factor(z),

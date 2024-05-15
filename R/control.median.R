@@ -1,4 +1,29 @@
+#' Perform Control median test
+#' 
+#' @description
+#' `control.median()` performs the Control median test and is used in chapters 6 and 9 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' 
+#' @param x Numeric vector
+#' @param y Numeric vector
+#' @param H0 Null hypothesis value (defaults to `NULL`)
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param CI.width Confidence interval width (defaults to `0.95`)
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `1000`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `10000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @param do.CI Boolean indicating whether or not to perform confidence interval calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 6.9 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' control.median(ch6$sampleI, ch6$sampleII, alternative = "greater")
+#' 
+#' # Exercise 9.8 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' control.median(ch9$bulbA, ch9$bulbB, alternative = "greater")
+#' 
 #' @importFrom stats complete.cases median pnorm
+#' @export
 control.median <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            CI.width = 0.95, max.exact.cases = 1000,

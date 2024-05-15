@@ -1,4 +1,30 @@
+#' Perform test for difference in odds ratios
+#'
+#' @description
+#' `odds.ratio.2x2diff()` performs the test for difference in odds ratios and is used in chapter 13 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param x Binary factor of same length as y, z
+#' @param y Binary factor of same length as x, z
+#' @param z Binary factor of same length as x, y
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param CI.width Confidence interval width (defaults to `0.95`)
+#' @param max.exact.perms Maximum number of permutations allowed for exact calculations (defaults to `1000000`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `100000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.mc Boolean indicating whether or not to perform Monte Carlo calculations (defaults to `FALSE`)
+#' @param do.CI Boolean indicating whether or not to perform confidence interval calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 13.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' odds.ratio.2x2diff(ch13$physical.activity, ch13$tv.viewing, ch13$gender,
+#'   do.exact = FALSE, do.asymp = TRUE)
+#' odds.ratio.2x2diff(ch13$physical.activity, ch13$tv.viewing, ch13$gender,
+#'   do.exact = FALSE, do.mc = TRUE, seed = 1)
+#'
 #' @importFrom stats complete.cases r2dtable quantile pnorm qnorm
+#' @export
 odds.ratio.2x2diff <-
   function(x, y, z, alternative = c("two.sided", "less", "greater"),
            CI.width = 0.95, max.exact.perms = 1000000, nsims.mc = 100000,

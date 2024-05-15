@@ -1,5 +1,24 @@
+#' Perform Mood test
+#'
+#' @description
+#' `mood()` performs the Mood test and is used in chapter 6 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param x Numeric vector
+#' @param y Numeric vector
+#' @param H0 Null hypothesis value (defaults to `NULL`)
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `25`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 6.12 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' mood(ch6$typeA, ch6$typeB)
+#' mood(ch6$typeA, ch6$typeB, do.exact = FALSE, do.asymp = TRUE)
+#'
 #' @importFrom stats complete.cases median mood.test
 #' @importFrom utils combn
+#' @export
 mood <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            max.exact.cases = 25, do.asymp = FALSE, do.exact = TRUE) {

@@ -1,4 +1,28 @@
+#' Perform Siegel-Tukey test
+#' 
+#' @description
+#' `siegel.tukey()` performs the Siegel-Tukey test using mean or median shift and is used in chapter 6 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' 
+#' @param x Numeric vector
+#' @param y Numeric vector
+#' @param H0 Null hypothesis value (defaults to `NULL`)
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param mean.shift Boolean indicating whether mean shift to be used instead of median shift (defaults to `FALSE`)
+#' @param cont.corr Boolean indicating whether or not to use continuity correction (defaults to `TRUE`)
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `1000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Exercise 6.11 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' siegel.tukey(ch6$typeA, ch6$typeB, mean.shift = TRUE)
+#' 
+#' # Exercise 6.16 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' siegel.tukey(ch6$travel, ch6$politics)
+#' 
 #' @importFrom stats complete.cases median
+#' @export
 siegel.tukey <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            mean.shift = FALSE, cont.corr = TRUE, max.exact.cases = 1000,

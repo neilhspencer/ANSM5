@@ -1,4 +1,27 @@
+#' Calculate Pearson correlation
+#'
+#' @description
+#' `pearson()` calculates the Pearson correlation and is used in chapters 10 and 11 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param x Numeric vector of same length as y
+#' @param y Numeric vector of same length as x
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `10`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `100000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @param do.mc Boolean indicating whether or not to perform Monte Carlo calculations (defaults to `FALSE`)
+#' @returns An ANSMstat object with the results from applying the function
+#' @examples
+#' # Section 10.1.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' pearson(ch10$q1, ch10$q2, alternative = "greater", do.asymp = TRUE, do.exact = FALSE)
+#'
+#' # Example 11.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' pearson(ch11$parentlimit, ch11$reportedtime - 1 * ch11$parentlimit, alternative = "two.sided")
+#'
 #' @importFrom stats complete.cases cor pt
+#' @export
 pearson <-
   function(x, y, alternative = c("two.sided", "less", "greater"),
            max.exact.cases = 10, nsims.mc = 100000, seed = NULL,

@@ -2,7 +2,7 @@
 % Please edit documentation in R/binom.R
 \name{binom}
 \alias{binom}
-\title{Perform binomial test}
+\title{Perform Binomial test}
 \usage{
 binom(
   r,
@@ -17,27 +17,35 @@ binom(
 )
 }
 \arguments{
-\item{r}{Number of "successes"}
+\item{r}{Number of successes}
 
 \item{n}{Number of trials}
 
-\item{H0}{Null hypothesis value}
+\item{H0}{Null hypothesis value (defaults to \code{NULL})}
 
 \item{alternative}{Type of alternative hypothesis (defaults to \code{two.sided})}
 
-\item{CI.width}{confidence interval width (defaults to \code{0.95})}
+\item{CI.width}{Confidence interval width (defaults to \code{0.95})}
 
 \item{max.exact.cases}{Maximum number of cases allowed for exact calculations (defaults to \code{10000000})}
 
-\item{do.asymp}{Boolean for performing/not performing asymptotic calculations (defaults to \code{FALSE})}
+\item{do.asymp}{Boolean indicating whether or not to perform asymptotic calculations (defaults to \code{FALSE})}
 
-\item{do.exact}{Boolean for performing/not performing exact calculations (defaults to \code{TRUE})}
+\item{do.exact}{Boolean indicating whether or not to perform exact calculations (defaults to \code{TRUE})}
 
-\item{do.CI}{Boolean for creating/not creating confidence interval (defaults to \code{TRUE})}
+\item{do.CI}{Boolean indicating whether or not to perform confidence interval calculations (defaults to \code{TRUE})}
 }
 \value{
-An ANSMtest object with the results of the binomial test/confidence interval
+An ANSMtest object with the results from applying the function
 }
 \description{
-Perform binomial test
+\code{binom()} performs the Binomial test and calculates the Binomial confidence interval and is used in chapters 4, 5 and 13 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+}
+\examples{
+# Example 4.6 from `Applied Nonparametric Statistical Methods` (5th edition)
+binom(3, 20)
+
+# Exercise 5.8 from `Applied Nonparametric Statistical Methods` (5th edition)
+binom(24, 40, 0.5)
+
 }

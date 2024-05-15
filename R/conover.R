@@ -1,5 +1,30 @@
-#' @importFrom stats complete.cases pnorm pchisq
+#' Perform Conover test using standard or squared ranks
+#'
+#' @description
+#' `conover()` performs the Conover test using standard or squared ranks and is used in chapters 6 and 7 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param x Numeric vector of same length as y
+#' @param y Factor of same length as x
+#' @param H0 Null hypothesis value (defaults to `NULL`)
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param abs.ranks Boolean indicating whether absolute ranks to be used instead of squared ranks (defaults to `FALSE`)
+#' @param max.exact.perms Maximum number of permutations allowed for exact calculations (defaults to `5000000`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `10000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @param do.mc Boolean indicating whether or not to perform Monte Carlo calculations (defaults to `FALSE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 6.13 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' conover(ch6$typeA, ch6$typeB, do.exact = FALSE, do.asymp = TRUE)
+#'
+#' # Exercise 7.15 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' conover(ch7$braking.distance.2, ch7$initial.speed, do.exact = FALSE, do.asymp = TRUE)
+#'
+#' @importFrom stats complete.cases pnorm pchisq var
 #' @importFrom utils combn
+#' @export
 conover <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            abs.ranks = FALSE, max.exact.perms = 5000000, nsims.mc = 10000,

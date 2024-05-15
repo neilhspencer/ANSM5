@@ -1,4 +1,27 @@
+#' Perform Linear by linear association test
+#'
+#' @description
+#' `linear.by.linear()` performs the Linear by linear association test and is used in chapter 13 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param x Factor of same length as y
+#' @param y Factor of same length as x
+#' @param u Numeric vector of length equal to number of levels of x or NULL (defaults to `NULL`)
+#' @param v Numeric vector of length equal to number of levels of y or NULL (defaults to `NULL`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `100000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.mc Boolean indicating whether or not to perform Monte Carlo calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 13.8 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' linear.by.linear( ch13$dose, ch13$dose.side.effect, do.mc = FALSE, do.asymp = TRUE)
+#'
+#' # Exercise 13.11 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' linear.by.linear(ch13$laid.off, ch13$employee.ages.2, seed = 1)
+#'
 #' @importFrom stats complete.cases r2dtable pnorm
+#' @importFrom utils capture.output
+#' @export
 linear.by.linear <-
   function(x, y, u = NULL, v = NULL, nsims.mc = 100000, seed = NULL,
            do.asymp = FALSE, do.mc = TRUE) {

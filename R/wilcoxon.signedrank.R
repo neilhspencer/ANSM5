@@ -1,4 +1,27 @@
+#' Perform Wilcoxon signed-rank test
+#' 
+#' @description
+#' `wilcoxon.signedrank()` performs the Wilcoxon signed-rank test and is used in chapters 3, 4 and 5 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' 
+#' @param x Numeric vector
+#' @param H0 Null hypothesis value (defaults to `NULL`)
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param cont.corr Boolean indicating whether or not to use continuity correction (defaults to `TRUE`)
+#' @param CI.width Confidence interval width (defaults to `0.95`)
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `1000`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @param do.CI Boolean indicating whether or not to perform confidence interval calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 3.4 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' wilcoxon.signedrank(ch3$heartrates1, 70, "greater")
+#' 
+#' # Exercise 5.12 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' wilcoxon.signedrank(ch5$kHz0.125 - ch5$kHz0.25, 0)
+#' 
 #' @importFrom stats complete.cases pnorm qnorm
+#' @export
 wilcoxon.signedrank <-
   function(x, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            cont.corr = TRUE, CI.width = 0.95, max.exact.cases = 1000,

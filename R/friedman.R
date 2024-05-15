@@ -1,6 +1,30 @@
+#' Perform Friedman test
+#'
+#' @description
+#' `friedman()` performs the Friedman test and is used in chapter 7 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param y Numeric vector of same length as groups, blocks
+#' @param groups Factor of same length as y, blocks with levels such that length(y) == nlevels(groups) * nlevels(blocks)
+#' @param blocks Factor of same length as y, groups with levels such that length(y) == nlevels(groups) * nlevels(blocks)
+#' @param use.Iman.Davenport Boolean indicating whether or not to use Iman and Davenport approximation (defaults to `FALSE`)
+#' @param max.exact.perms Maximum number of permutations allowed for exact calculations (defaults to `100000`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `100000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 7.6 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' friedman(ch7$pulse, ch7$time.period, ch7$student, do.exact = FALSE, do.asymp = TRUE)
+#'
+#' # Exercise 7.12 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' friedman(ch7$names.recalled, ch7$group, ch7$medical.student, use.Iman.Davenport = TRUE,
+#'   do.exact = FALSE, do.asymp = TRUE)
+#'
 #' @importFrom stats complete.cases pf pchisq
+#' @export
 friedman <-
-  function(y, groups, blocks, ..., use.Iman.Davenport = FALSE,
+  function(y, groups, blocks, use.Iman.Davenport = FALSE,
            max.exact.perms = 100000, nsims.mc = 100000, seed = NULL,
            do.asymp = FALSE, do.exact = TRUE) {
     stopifnot(is.vector(y), is.numeric(y), is.factor(groups), is.factor(blocks),

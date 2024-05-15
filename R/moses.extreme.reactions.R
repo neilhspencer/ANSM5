@@ -1,4 +1,21 @@
+#' Perform Moses test for extreme reactions
+#' 
+#' @description
+#' `moses.extreme.reactions()` performs the Moses test for extreme reactions and is used in chapter 6 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' 
+#' @param x Numeric vector
+#' @param y Numeric vector
+#' @param H0 Null hypothesis value (defaults to `NULL`)
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `1000`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 6.14 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' moses.extreme.reactions(ch6$groupI.amended, ch6$groupII)
+#' moses.extreme.reactions(ch6$groupI.amended, ch6$groupII)
+#' 
 #' @importFrom stats complete.cases
+#' @export
 moses.extreme.reactions <-
   function(x, y, H0 = NULL, max.exact.cases = 1000, do.exact = TRUE) {
     stopifnot(is.vector(x), is.numeric(x), is.vector(y), is.numeric(y),

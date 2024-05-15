@@ -1,4 +1,28 @@
+#' Calculate Spearman beta
+#' 
+#' @description
+#' `spearman.beta()` calculates the Spearman beta and is used in chapter 11 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' 
+#' @param y Numeric vector of same length as x
+#' @param x Numeric vector of same length as y
+#' @param H0 Null hypothesis value (defaults to `NULL`)
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param CI.width Confidence interval width (defaults to `0.95`)
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `10`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `100000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @param do.CI Boolean indicating whether or not to perform confidence interval calculations (defaults to `FALSE`)
+#' @param do.mc Boolean indicating whether or not to perform Monte Carlo calculations (defaults to `FALSE`)
+#' @returns An ANSMstat object with the results from applying the function
+#' @examples
+#' # Example 11.3 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' spearman.beta(ch11$reportedtime, ch11$parentlimit, H0 = 1)
+#' spearman.beta(ch11$reportedtime, ch11$parentlimit, H0 = 1, do.CI = TRUE)
+#' 
 #' @importFrom stats lm complete.cases median approx qnorm
+#' @export
 spearman.beta <-
   function(y, x, H0 = NULL, alternative = c("two.sided", "less", "greater"),
            CI.width = 0.95, max.exact.cases = 10, nsims.mc = 100000,

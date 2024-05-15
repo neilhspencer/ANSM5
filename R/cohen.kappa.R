@@ -1,4 +1,30 @@
+#' Calculate Cohen's kappa
+#'
+#' @description
+#' `cohen.kappa()` calculates Cohen's kappa and is used in chapter 10 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param y1 Factor of same length as y2, blocks and same levels as y2 and (if blocks not NULL) with 2 levels
+#' @param y2 Factor of same length as y1, blocks and same levels as y1 and (if blocks not NULL) with 2 levels
+#' @param blocks Factor of same length as y1, y2 or NULL (defaults to `NULL`)
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param CI.width Confidence interval width (defaults to `0.95`)
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `10`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `100000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @param do.CI Boolean indicating whether or not to perform confidence interval calculations (defaults to `FALSE`)
+#' @param do.mc Boolean indicating whether or not to perform Monte Carlo calculations (defaults to `FALSE`)
+#' @returns An ANSMstat object with the results from applying the function
+#' @examples
+#' # Example 10.11 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' cohen.kappa(ch10$dentistA, ch10$dentistB, do.asymp = TRUE, alternative = "greater")
+#'
+#' # Exercise 10.12 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' cohen.kappa(ch10$observerA, ch10$observerB, do.asymp = TRUE)
+#'
 #' @importFrom stats complete.cases pnorm pchisq quantile
+#' @export
 cohen.kappa <-
   function(y1, y2, blocks = NULL,
            alternative = c("two.sided", "less", "greater"), CI.width = 0.95,

@@ -1,4 +1,24 @@
+#' Perform Cox-Stuart test
+#' 
+#' @description
+#' `cox.stuart()` performs the Cox-Stuart test and is used in chapters 4 and 10 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' 
+#' @param x Numeric vector
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param cont.corr Boolean indicating whether or not to use continuity correction (defaults to `TRUE`)
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `10000000`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 4.13 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' cox.stuart(ch4$precipitation)
+#' 
+#' # Exercise 10.5 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' cox.stuart(ch10$age.at.death, alternative = "less")
+#' 
 #' @importFrom stats complete.cases
+#' @export
 cox.stuart <-
   function(x, alternative = c("two.sided", "less", "greater"), cont.corr = TRUE,
            max.exact.cases = 10000000, do.asymp = FALSE, do.exact = TRUE) {

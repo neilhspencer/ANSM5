@@ -1,6 +1,28 @@
+#' Perform Cochran Q test
+#'
+#' @description
+#' `cochran.q()` performs the Cochran Q test and is used in chapter 7 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param y Binary vector of same length as groups, blocks
+#' @param groups Factor of same length as y, blocks with levels such that length(y) == nlevels(groups) * nlevels(blocks)
+#' @param blocks Factor of same length as y, groups with levels such that length(y) == nlevels(groups) * nlevels(blocks)
+#' @param max.exact.perms Maximum number of permutations allowed for exact calculations (defaults to `100000`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `100000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 7.8 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' cochran.q(ch7$outcome, ch7$climb, ch7$member, do.exact = FALSE, do.asymp = TRUE)
+#'
+#' # Exercise 7.14 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' cochran.q(ch7$soc.media.use, ch7$participant, ch7$day, do.exact = FALSE, do.asymp = TRUE)
+#'
 #' @importFrom stats complete.cases pf pchisq
+#' @export
 cochran.q <-
-  function(y, groups, blocks, ..., max.exact.perms = 100000, nsims.mc = 100000,
+  function(y, groups, blocks, max.exact.perms = 100000, nsims.mc = 100000,
            seed = NULL, do.asymp = FALSE, do.exact = TRUE) {
     stopifnot(is.vector(y), is.numeric(y), all(y == 0 | y == 1),
               is.factor(groups), is.factor(blocks),

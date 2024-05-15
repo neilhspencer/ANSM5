@@ -1,4 +1,22 @@
+#' Perform Hodges-Ajne test
+#'
+#' @description
+#' `hodges.ajne()` performs the Hodges-Ajne test and is used in chapter 4 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param x Numeric vector
+#' @param alternative Type of alternative hypothesis (defaults to `c("two.sided")`)
+#' @param minx Minimum value for x (defaults to `0`)
+#' @param maxx Maximum value for x (defaults to `360`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 4.16 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' hodges.ajne(ch4$times.as.degrees)
+#'
+#' # Exercise 4.14 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' hodges.ajne(ch4$board.angles)
+#'
 #' @importFrom stats complete.cases
+#' @export
 hodges.ajne <-
   function(x, alternative = c("two.sided"), minx = 0, maxx = 360) {
     stopifnot(is.vector(x), is.numeric(x), length(x) > 1)

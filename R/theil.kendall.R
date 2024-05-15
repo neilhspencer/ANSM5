@@ -1,4 +1,32 @@
+#' Calculate Theil-Kendall beta
+#'
+#' @description
+#' `theil.kendall()` calculates the Theil-Kendall beta and is used in chapter 11 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param y Numeric vector of same length as x
+#' @param x Numeric vector of same length as y
+#' @param H0 Null hypothesis value (defaults to `NULL`)
+#' @param do.abbreviated Boolean indicating whether or not to use abbreviated Theil procedure (defaults to `FALSE`)
+#' @param do.alpha Boolean indicating whether or not to report estimate of alpha (defaults to `FALSE`)
+#' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
+#' @param CI.width Confidence interval width (defaults to `0.95`)
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `10`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `100000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @param do.CI Boolean indicating whether or not to perform confidence interval calculations (defaults to `FALSE`)
+#' @param do.mc Boolean indicating whether or not to perform Monte Carlo calculations (defaults to `FALSE`)
+#' @returns An ANSMstat object with the results from applying the function
+#' @examples
+#' # Example 11.6 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' theil.kendall(ch11$reportedtime, ch11$parentlimit, do.alpha = TRUE)
+#'
+#' # Exercise 11.10 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' theil.kendall(ch11$N.Scotland, ch11$SW.England)
+#'
 #' @importFrom stats complete.cases median pnorm quantile
+#' @export
 theil.kendall <-
   function(y, x, H0 = NULL, do.abbreviated = FALSE, do.alpha = FALSE,
            alternative = c("two.sided", "less", "greater"), CI.width = 0.95,
@@ -244,7 +272,7 @@ theil.kendall <-
       stat.note <- paste0("Estimate of alpha using median of d_i: ",
                           sprintf("%.5f", alpha1))
       stat.note <- paste0(stat.note, "\n")
-      stat.note <- paste0(stat.note, "Hodges–Lehmann estimator of alpha: ",
+      stat.note <- paste0(stat.note, "Hodges-Lehmann estimator of alpha: ",
                           sprintf("%.5f", alpha2))
       stat.note <- paste0(stat.note, "\n")
     }
@@ -253,7 +281,7 @@ theil.kendall <-
         stat.note <- paste0(stat.note, "\n")
       }
       stat.note <- paste0(stat.note,
-                         "Neither exact, asymptotic nor Monte Carlo test requested")
+                          "Neither exact, asymptotic nor Monte Carlo test requested")
     }else if (do.exact && n > max.exact.cases) {
       if (!is.null(stat.note)){
         stat.note <- paste0(stat.note, "\n")

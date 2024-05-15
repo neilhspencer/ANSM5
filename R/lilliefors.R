@@ -1,4 +1,22 @@
+#' Performs Lilliefors test of Normality
+#' 
+#' @description
+#' `lilliefors()` performs Lilliefors test of Normality and is used in chapters 4, 5 and 6 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' 
+#' @param x Numeric vector
+#' @param alternative Type of alternative hypothesis (defaults to `c("two.sided")`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `10000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 4.4 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' lilliefors(ch4$ages,seed = 1)
+#' 
+#' # Exercise 6.15 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' lilliefors(ch6$doseI.2, seed = 1)
+#' 
 #' @importFrom stats complete.cases rnorm sd
+#' @export
 lilliefors <-
   function(x, alternative = c("two.sided"), nsims.mc = 10000, seed = NULL) {
     stopifnot(is.vector(x), is.numeric(x),

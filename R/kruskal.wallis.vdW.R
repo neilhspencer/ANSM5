@@ -1,5 +1,24 @@
+#' Perform Kruskal-Wallis test with van der Waerden scores
+#'
+#' @description
+#' `kruskal.wallis.vdW()` performs the Kruskal-Wallis test with van der Waerden scores and is used in chapter 7 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' @param x Numeric vector of same length as g
+#' @param g Factor of same length as x
+#' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `15`)
+#' @param nsims.mc Number of Monte Carlo simulations to be performed (defaults to `10000`)
+#' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
+#' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)
+#' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
+#' @returns An ANSMtest object with the results from applying the function
+#' @examples
+#' # Example 7.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' kruskal.wallis.vdW(ch7$age, ch7$positions)
+#' kruskal.wallis.vdW(ch7$age, ch7$positions, do.exact = FALSE, do.asymp = TRUE)
+#'
 #' @importFrom stats complete.cases
 #' @importFrom utils combn
+#' @export
 kruskal.wallis.vdW <-
   function(x, g, max.exact.cases = 15, nsims.mc = 10000, seed = NULL,
            do.asymp = FALSE, do.exact = TRUE) {
