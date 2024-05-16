@@ -1,8 +1,8 @@
 #' Perform Cox-Stuart test
-#' 
+#'
 #' @description
 #' `cox.stuart()` performs the Cox-Stuart test and is used in chapters 4 and 10 of `Applied Nonparametric Statistical Methods` (5th edition)
-#' 
+#'
 #' @param x Numeric vector
 #' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
 #' @param cont.corr Boolean indicating whether or not to use continuity correction (defaults to `TRUE`)
@@ -13,10 +13,10 @@
 #' @examples
 #' # Example 4.13 from `Applied Nonparametric Statistical Methods` (5th edition)
 #' cox.stuart(ch4$precipitation)
-#' 
+#'
 #' # Exercise 10.5 from `Applied Nonparametric Statistical Methods` (5th edition)
 #' cox.stuart(ch10$age.at.death, alternative = "less")
-#' 
+#'
 #' @importFrom stats complete.cases
 #' @export
 cox.stuart <-
@@ -74,10 +74,10 @@ cox.stuart <-
     #carry out test
     H0 <- 0
     do.CI <- FALSE
-    result <- sign.test(diffs, H0 = H0, alternative = alternative,
-                        cont.corr = cont.corr,
-                        max.exact.cases = max.exact.cases, do.asymp = do.asymp,
-                        do.exact = do.exact, do.CI = do.CI)
+    result <- sgn.test(diffs, H0 = H0, alternative = alternative,
+                       cont.corr = cont.corr,
+                       max.exact.cases = max.exact.cases, do.asymp = do.asymp,
+                       do.exact = do.exact, do.CI = do.CI)
     H0 <- paste0("H0: no monotonic trend\n",
                  "H1: montonic trend exists\n")
     pval.exact <- result$pval.exact
