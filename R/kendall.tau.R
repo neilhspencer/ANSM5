@@ -15,7 +15,8 @@
 #' @returns An ANSMstat object with the results from applying the function
 #' @examples
 #' # Example 10.8 from `Applied Nonparametric Statistical Methods` (5th edition)
-#' kendall.tau(ch10$death.year, ch10$age.at.death, alternative = "greater", do.asymp = TRUE, do.exact = FALSE)
+#' kendall.tau(ch10$death.year, ch10$age.at.death, alternative = "greater",
+#'   do.asymp = TRUE, do.exact = FALSE)
 #'
 #' # Example 10.9 from `Applied Nonparametric Statistical Methods` (5th edition)
 #' kendall.tau(ch10$Canadian, ch10$Australian)

@@ -18,8 +18,8 @@
 #'
 #' # Example 13.12 from `Applied Nonparametric Statistical Methods` (5th edition)
 #' chemo.side.effect.3 <- ch13$chemo.side.effect
-#' levels(chemo.side.effect.3) <-
-#'   list("Side-effect" = c("Hair loss", "Visual impairment", "Hair loss & Visual impairment"), "None" = "None")
+#' levels(chemo.side.effect.3) <- list("Side-effect" = c("Hair loss",
+#'   "Visual impairment", "Hair loss & Visual impairment"), "None" = "None")
 #' lik.ratio(ch13$chemo.drug, chemo.side.effect.3, seed = 1)
 #'
 #' @importFrom stats complete.cases chisq.test r2dtable pchisq
