@@ -1,7 +1,7 @@
 #' Perform Chi-squared test
 #'
 #' @description
-#' `chisq.test.ANSM()` is a wrapper for stats::chisq.test - performs the Chi-squared test and is used in chapters 12 and 13 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `chisqtest.ANSM()` is a wrapper for stats::chisq.test - performs the Chi-squared test and is used in chapters 12 and 13 of `Applied Nonparametric Statistical Methods` (5th edition)
 #'
 #' @param x Factor of same length as y, or table
 #' @param y Factor of same length as x (or NULL if x is table) (defaults to `NULL`)
@@ -16,15 +16,15 @@
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
 #' # Example 12.1 from `Applied Nonparametric Statistical Methods` (5th edition)
-#' chisq.test.ANSM(ch12$feedback.freq, ch12$PPI.person, do.exact = FALSE, do.asymp = TRUE)
+#' chisqtest.ANSM(ch12$feedback.freq, ch12$PPI.person, do.exact = FALSE, do.asymp = TRUE)
 #'
 #' # Exercise 13.7 from `Applied Nonparametric Statistical Methods` (5th edition)
-#' chisq.test.ANSM(ch13$medicine[ch13$location == "Rural"],
+#' chisqtest.ANSM(ch13$medicine[ch13$location == "Rural"],
 #'   ch13$response[ch13$location == "Rural"], seed = 1)
 #'
 #' @importFrom stats complete.cases chisq.test
 #' @export
-chisq.test.ANSM <-
+chisqtest.ANSM <-
   function(x, y = NULL, p = NULL, cont.corr = TRUE, max.exact.cases = 10,
            nsims.mc = 100000, seed = NULL, do.exact = TRUE, do.asymp = FALSE,
            do.mc = FALSE) {

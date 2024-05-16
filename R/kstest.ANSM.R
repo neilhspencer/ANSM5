@@ -1,7 +1,7 @@
 #' Perform Smirnov test and Kolgomorov test
 #'
 #' @description
-#' `ks.test.ANSM()` is a wrapper for stats::ks.test - performs the Smirnov test and Kolgomorov test and is used in chapters 4, 6 and 9 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `kstest.ANSM()` is a wrapper for stats::ks.test - performs the Smirnov test and Kolgomorov test and is used in chapters 4, 6 and 9 of `Applied Nonparametric Statistical Methods` (5th edition)
 #'
 #' @param x Numeric vector
 #' @param y Numeric vector or a character string naming a cumulative distribution function or an actual cumulative distribution function
@@ -13,14 +13,14 @@
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
 #' # Exercise 4.3 from `Applied Nonparametric Statistical Methods` (5th edition)
-#' #ks.test.ANSM(ch4$visiting.supporters, "pexp", rate = 2600)
+#' #kstest.ANSM(ch4$visiting.supporters, "pexp", rate = 2600)
 #'
 #' # Exercise 9.2 from `Applied Nonparametric Statistical Methods` (5th edition)
-#' #ks.test.ANSM(ch9$boys.toothtime, ch9$girls.toothtime)
+#' #kstest.ANSM(ch9$boys.toothtime, ch9$girls.toothtime)
 #'
 #' @importFrom stats complete.cases ks.test
 #' @export
-ks.test.ANSM <-
+kstest.ANSM <-
   function(x, y, ..., alternative = c("two.sided", "less", "greater"),
            max.exact.cases = 1000, do.asymp = FALSE, do.exact = TRUE) {
     stopifnot(is.vector(x), is.numeric(x),

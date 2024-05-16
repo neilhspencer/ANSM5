@@ -1,7 +1,7 @@
 #' Perform Range test
 #'
 #' @description
-#' `range.test()` performs the Range test and is used in chapter 4 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `rng.test()` performs the Range test and is used in chapter 4 of `Applied Nonparametric Statistical Methods` (5th edition)
 #'
 #' @param x Numeric vector
 #' @param alternative Type of alternative hypothesis (defaults to `c("two.sided")`)
@@ -10,14 +10,14 @@
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
 #' # Example 4.17 from `Applied Nonparametric Statistical Methods` (5th edition)
-#' #range.test(ch4$dates.as.degrees)
+#' #rng.test(ch4$dates.as.degrees)
 #'
 #' # Exercise 4.13 from `Applied Nonparametric Statistical Methods` (5th edition)
-#' #range.test(ch4$accident.bearings)
+#' #rng.test(ch4$accident.bearings)
 #'
 #' @importFrom stats complete.cases
 #' @export
-range.test <-
+rng.test <-
   function(x, alternative = c("two.sided"), minx = 0, maxx = 360) {
     stopifnot(is.vector(x), is.numeric(x), length(x) > 1)
     alternative <- match.arg(alternative)

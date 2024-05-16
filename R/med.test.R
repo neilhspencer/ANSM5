@@ -1,7 +1,7 @@
 #' Perform Median test
 #'
 #' @description
-#' `median.test()` performs the Median test and is used in chapters 6 and 7 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `med.test()` performs the Median test and is used in chapters 6 and 7 of `Applied Nonparametric Statistical Methods` (5th edition)
 #'
 #' @param x Numeric vector of same length as y
 #' @param y Numeric vector, or factor of same length as x
@@ -15,14 +15,14 @@
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
 #' # Example 6.7 from `Applied Nonparametric Statistical Methods` (5th edition)
-#' #median.test(ch6$males, ch6$females)
+#' #med.test(ch6$males, ch6$females)
 #'
 #' # Example 7.5 from `Applied Nonparametric Statistical Methods` (5th edition)
-#' #median.test(ch7$time, ch7$surgeon, do.exact = FALSE, do.asymp = TRUE)
+#' #med.test(ch7$time, ch7$surgeon, do.exact = FALSE, do.asymp = TRUE)
 #'
 #' @importFrom stats complete.cases median chisq.test
 #' @export
-median.test <-
+med.test <-
   function(x, y, H0 = NULL, alternative=c("two.sided", "less", "greater"),
            CI.width = 0.95, max.exact.cases = 1000,
            do.asymp = FALSE, do.exact = TRUE, do.CI = TRUE) {
