@@ -22,7 +22,8 @@
 #' wilcoxon.mann.whitney(ch6$groupA, ch6$groupB)
 #'
 #' # Exercise 12.4 from `Applied Nonparametric Statistical Methods` (5th edition)
-#' wilcoxon.mann.whitney(feedback.satisfaction.Representative, feedback.satisfaction.Researcher,
+#' wilcoxon.mann.whitney(ch12$feedback.satisfaction[ch12$PPI.person.2 == "Representative"],
+#'   ch12$feedback.satisfaction[ch12$PPI.person.2 == "Researcher"],
 #'   do.exact = FALSE, do.asymp = TRUE)
 #'
 #' @importFrom stats complete.cases wilcox.test
