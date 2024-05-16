@@ -52,9 +52,10 @@ An ANSMstat object with the results from applying the function
 }
 \examples{
 # Example 10.11 from `Applied Nonparametric Statistical Methods` (5th edition)
-cohen.kappa(ch10$dentistA, ch10$dentistB, do.asymp = TRUE, alternative = "greater")
+cohen.kappa(ch10$dentistA, ch10$dentistB, do.asymp = TRUE, do.exact = FALSE,
+  alternative = "greater")
 
-# Exercise 10.12 from `Applied Nonparametric Statistical Methods` (5th edition)
-cohen.kappa(ch10$observerA, ch10$observerB, do.asymp = TRUE)
+# Example 10.12 from `Applied Nonparametric Statistical Methods` (5th edition)
+cohen.kappa(ch10$questionnaire, ch10$demonstration, ch10$items)
 
 }

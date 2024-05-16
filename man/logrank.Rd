@@ -37,12 +37,9 @@ An ANSMtest object with the results from applying the function
 }
 \examples{
 # Example 9.6 from `Applied Nonparametric Statistical Methods` (5th edition)
-logrank(ch9$samplesAB.survtime, ch9$samplesAB.censor, ch9$samplesAB,
-  score.censored = FALSE, max.exact.perms = 1, seed = 1)
+logrank(ch9$samplesAB.survtime, ch9$samplesAB.censor, ch9$samplesAB, score.censored = FALSE)
 
-# Exercise 9.6 from `Applied Nonparametric Statistical Methods` (5th edition)
-logrank(c(ch9$regimeA.survtime, ch9$regimeB.survtime), c(ch9$regimeA.censor, ch9$regimeB.censor),
-  factor(c(rep("RegimeA", 12), rep("RegimeB", 13))),
-  score.censored = FALSE, seed = 1, nsims.mc = 100000)
+# Exercise 9.7 from `Applied Nonparametric Statistical Methods` (5th edition)
+logrank(ch9$samplesXYZ.survtime, ch9$samplesXYZ.censor, ch9$samplesXYZ)
 
 }

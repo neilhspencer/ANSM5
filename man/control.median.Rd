@@ -52,6 +52,6 @@ An ANSMtest object with the results from applying the function
 control.median(ch6$sampleI, ch6$sampleII, alternative = "greater")
 
 # Exercise 9.8 from `Applied Nonparametric Statistical Methods` (5th edition)
-control.median(ch9$bulbA, ch9$bulbB, alternative = "greater")
+control.median(ch9$bulbA, ch9$bulbB, alternative = "greater", nsims = 1000)
 
 }

@@ -42,8 +42,10 @@ An ANSMtest object with the results from applying the function
 # Example 12.2 from `Applied Nonparametric Statistical Methods` (5th edition)
 lik.ratio(ch12$infection.site, ch12$district, do.exact = FALSE, do.asymp = TRUE)
 
-# Exercise 13.7 from `Applied Nonparametric Statistical Methods` (5th edition)
-lik.ratio(ch13$medicine[ch13$location == "Rural"], ch13$response[ch13$location == "Rural"],
-  seed = 1)
+# Example 13.12 from `Applied Nonparametric Statistical Methods` (5th edition)
+chemo.side.effect.3 <- ch13$chemo.side.effect
+levels(chemo.side.effect.3) <- list("Side-effect" = c("Hair loss",
+  "Visual impairment", "Hair loss & Visual impairment"), "None" = "None")
+lik.ratio(ch13$chemo.drug, chemo.side.effect.3, seed = 1)
 
 }

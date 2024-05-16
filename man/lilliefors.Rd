@@ -23,9 +23,9 @@ An ANSMtest object with the results from applying the function
 }
 \examples{
 # Example 4.4 from `Applied Nonparametric Statistical Methods` (5th edition)
-lilliefors(ch4$ages,seed = 1)
+lilliefors(ch4$ages, seed = 1)
 
 # Exercise 6.15 from `Applied Nonparametric Statistical Methods` (5th edition)
-lilliefors(ch6$doseI.2, seed = 1)
+lilliefors(ch6$doseI.2, seed = 1, nsims = 1000)
 
 }

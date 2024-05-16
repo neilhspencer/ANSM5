@@ -50,6 +50,6 @@ jonckheere.terpstra(ch7$dementia.age, ch7$features, alternative = "greater",
   do.exact = FALSE, do.asymp = TRUE, do.asymp.ties.adjust = FALSE)
 
 # Exercise 12.6 from `Applied Nonparametric Statistical Methods` (5th edition)
-jonckheere.terpstra(ch12$ethnic.group, ch12$diabetes.status, seed = 1)
+jonckheere.terpstra(ch12$ethnic.group, ch12$diabetes.status, do.exact = FALSE, do.asymp = TRUE)
 
 }
