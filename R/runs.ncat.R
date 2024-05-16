@@ -1,8 +1,8 @@
 #' Perform Runs test for three or more categories
-#' 
+#'
 #' @description
 #' `runs.ncat()` performs the Runs test for three or more categories and is used in chapters 4 and 7 of `Applied Nonparametric Statistical Methods` (5th edition)
-#' 
+#'
 #' @param x Vector or factor
 #' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
 #' @param cont.corr Boolean indicating whether or not to use continuity correction (defaults to `TRUE`)
@@ -14,10 +14,10 @@
 #' @examples
 #' # Example 4.15 from `Applied Nonparametric Statistical Methods` (5th edition)
 #' runs.ncat(ch4$births, alternative = "less")
-#' 
+#'
 #' # Exercise 7.16 from `Applied Nonparametric Statistical Methods` (5th edition)
 #' runs.ncat(ch7$regions[order(ch7$affordability)], alternative = "less")
-#' 
+#'
 #' @importFrom stats complete.cases pnorm
 #' @export
 runs.ncat <-
@@ -65,7 +65,9 @@ runs.ncat <-
     if (is.factor(x)){
       x <- as.vector(x)
     }else{
-      x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
+      if (is.numeric(x)){
+        x <- round(x, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
+      }
     }
     n <- length(x)
     k <- length(unique(x))
