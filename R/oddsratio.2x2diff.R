@@ -1,7 +1,7 @@
 #' Perform test for difference in odds ratios
 #'
 #' @description
-#' `odds.ratio.2x2diff()` performs the test for difference in odds ratios and is used in chapter 13 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `oddsratio.2x2diff()` performs the test for difference in odds ratios and is used in chapter 13 of `Applied Nonparametric Statistical Methods` (5th edition)
 #'
 #' @param x Binary factor of same length as y, z
 #' @param y Binary factor of same length as x, z
@@ -18,14 +18,14 @@
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
 #' # Example 13.2 from `Applied Nonparametric Statistical Methods` (5th edition)
-#' odds.ratio.2x2diff(ch13$physical.activity, ch13$tv.viewing, ch13$gender,
+#' oddsratio.2x2diff(ch13$physical.activity, ch13$tv.viewing, ch13$gender,
 #'   do.exact = FALSE, do.asymp = TRUE)
-#' odds.ratio.2x2diff(ch13$physical.activity, ch13$tv.viewing, ch13$gender,
-#'   do.exact = FALSE, do.mc = TRUE, seed = 1)
+#' oddsratio.2x2diff(ch13$physical.activity, ch13$tv.viewing, ch13$gender,
+#'   do.exact = FALSE, do.mc = TRUE, seed = 1, nsims = 10000)
 #'
 #' @importFrom stats complete.cases r2dtable quantile pnorm qnorm
 #' @export
-odds.ratio.2x2diff <-
+oddsratio.2x2diff <-
   function(x, y, z, alternative = c("two.sided", "less", "greater"),
            CI.width = 0.95, max.exact.perms = 1000000, nsims.mc = 100000,
            seed = NULL, do.exact = TRUE, do.asymp = FALSE, do.mc = FALSE,
