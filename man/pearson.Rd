@@ -46,6 +46,6 @@ An ANSMstat object with the results from applying the function
 pearson(ch10$q1, ch10$q2, alternative = "greater", do.asymp = TRUE, do.exact = FALSE)
 
 # Example 11.2 from `Applied Nonparametric Statistical Methods` (5th edition)
-pearson(ch11$parentlimit, ch11$reportedtime - H0 * ch11$parentlimit, alternative = "two.sided")
+pearson(ch11$parentlimit, ch11$reportedtime - 1 * ch11$parentlimit, alternative = "two.sided")
 
 }
