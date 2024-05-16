@@ -210,7 +210,7 @@ wilcoxon.mann.whitney <-
     }
 
     #Monte Carlo p-value
-    if(do.mc | (do.exact && is.null(CI.exact.lower))){
+    if(do.mc | (do.exact && do.CI && is.null(CI.exact.lower))){
       pval.mc.stat <- stat
       stat.mc.1 <- wilcox.test(x, y, exact = FALSE, correct = cont.corr,
                               conf.int = FALSE)$statistic
