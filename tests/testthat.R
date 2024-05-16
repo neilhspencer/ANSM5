@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat)
-library(ANSM)
+library(ANSM5)
 
-test_check("ANSM")
+test_check("ANSM5")
