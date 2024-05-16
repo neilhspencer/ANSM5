@@ -14,10 +14,10 @@
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
 #' # Example 13.8 from `Applied Nonparametric Statistical Methods` (5th edition)
-#' linear.by.linear( ch13$dose, ch13$dose.side.effect, do.mc = FALSE, do.asymp = TRUE)
+#' linear.by.linear(ch13$dose, ch13$dose.side.effect, do.mc = FALSE, do.asymp = TRUE)
 #'
-#' # Exercise 13.11 from `Applied Nonparametric Statistical Methods` (5th edition)
-#' linear.by.linear(ch13$laid.off, ch13$employee.ages.2, seed = 1)
+#' # Exercise 13.4 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' linear.by.linear(ch13$SBP, ch13$cholesterol, seed = 1)
 #'
 #' @importFrom stats complete.cases r2dtable pnorm
 #' @importFrom utils capture.output

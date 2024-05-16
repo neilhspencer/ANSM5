@@ -1,8 +1,8 @@
 #' Perform Control median test
-#' 
+#'
 #' @description
 #' `control.median()` performs the Control median test and is used in chapters 6 and 9 of `Applied Nonparametric Statistical Methods` (5th edition)
-#' 
+#'
 #' @param x Numeric vector
 #' @param y Numeric vector
 #' @param H0 Null hypothesis value (defaults to `NULL`)
@@ -18,10 +18,10 @@
 #' @examples
 #' # Example 6.9 from `Applied Nonparametric Statistical Methods` (5th edition)
 #' control.median(ch6$sampleI, ch6$sampleII, alternative = "greater")
-#' 
+#'
 #' # Exercise 9.8 from `Applied Nonparametric Statistical Methods` (5th edition)
-#' control.median(ch9$bulbA, ch9$bulbB, alternative = "greater")
-#' 
+#' control.median(ch9$bulbA, ch9$bulbB, alternative = "greater", nsims = 1000)
+#'
 #' @importFrom stats complete.cases median pnorm
 #' @export
 control.median <-

@@ -22,7 +22,7 @@
 #'
 #' # Exercise 9.5 from `Applied Nonparametric Statistical Methods` (5th edition)
 #' gehan.wilcoxon(ch9$regimeA.survtime, ch9$regimeB.survtime,
-#'   ch9$regimeA.censor, ch9$regimeB.censor, seed = 1)
+#'   ch9$regimeA.censor, ch9$regimeB.censor, do.exact = FALSE, do.asymp = TRUE)
 #'
 #' @importFrom stats complete.cases pnorm
 #' @importFrom utils combn
