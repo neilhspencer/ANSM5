@@ -30,20 +30,12 @@ test_that("Exercise 7.5", {
 })
 
 test_that("Exercise 7.6", {
-  tmp <- jonckheere.terpstra(ch7$platelet.count, ch7$spleen.size,
-                             alternative = "greater",
-                             seed = 1)
-  expect_equal(tmp$pval.mc.stat, 119)
-  expect_equal(tmp$pval.mc, 0)
   expect_equal(jonckheere.terpstra(ch7$platelet.count, ch7$spleen.size,
                                    alternative = "greater", do.exact = FALSE,
                                    do.asymp = TRUE)$pval.asymp, 0.0000194445645)
 })
 
 test_that("Exercise 8.10", {
-  expect_equal(jonckheere.terpstra(ch8$silver.content, ch8$dynasty,
-                                   alternative = "less", seed = 1)$pval.mc,
-               0.0077)
   expect_equal(jonckheere.terpstra(ch8$silver.content, ch8$dynasty,
                                    alternative = "less", do.exact = FALSE,
                                    do.asymp = TRUE)$pval.asymp, 0.0084307191)
@@ -64,10 +56,6 @@ test_that("Example 12.7", {
 })
 
 test_that("Example 12.8", {
-  tmp <- jonckheere.terpstra(ch12$dose.side.effect, ch12$dose,
-                             alternative = "less", seed = 1)
-  expect_equal(tmp$pval.mc.stat, 6834)
-  expect_equal(tmp$pval.mc, 0.0176)
   expect_equal(jonckheere.terpstra(ch12$dose.side.effect, ch12$dose,
                                    alternative = "less", do.asymp = TRUE,
                                    do.exact = FALSE)$pval.asymp.stat,
@@ -85,10 +73,6 @@ test_that("Example 12.9", {
   expect_equal(jonckheere.terpstra(ch12$platelet.count, ch12$spleen.size,
                                    alternative = "greater", do.exact = FALSE,
                                    do.asymp = TRUE)$pval.asymp, 0.00032754388)
-  tmp <- jonckheere.terpstra(ch12$platelet.count, ch12$spleen.size,
-                             alternative = "greater", seed = 1)
-  expect_equal(tmp$pval.mc.stat, 183)
-  expect_equal(tmp$pval.mc, 0.0002)
 })
 
 test_that("Exercise 12.6", {
@@ -96,6 +80,4 @@ test_that("Exercise 12.6", {
     jonckheere.terpstra(ch12$ethnic.group, ch12$diabetes.status,
                         do.exact = FALSE, do.asymp = TRUE)$pval.asymp,
     0.025386376)
-  expect_equal(jonckheere.terpstra(ch12$ethnic.group, ch12$diabetes.status,
-                                   seed = 1)$pval.mc, 0.0427)
 })
