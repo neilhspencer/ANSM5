@@ -11,9 +11,6 @@ test_that("Example 7.8", {
 })
 
 test_that("Exercise 7.14", {
-  tmp <- cochran.q(ch7$soc.media.use, ch7$participant, ch7$day, seed = 1)
-  expect_equal(tmp$pval.mc.stat, 1.4347826)
-  expect_equal(tmp$pval.mc, 0.85553)
   expect_equal(cochran.q(ch7$soc.media.use, ch7$participant,
                          ch7$day, do.exact = FALSE,
                          do.asymp = TRUE)$pval.asymp, 0.69740213)

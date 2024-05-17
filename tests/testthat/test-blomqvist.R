@@ -1,8 +1,7 @@
 test_that("Example 10.9", {
-  expect_equal(blomqvist(ch10$q1, ch10$q2, alternative = "greater")$stat,
-               0.66666667)
-  expect_equal(blomqvist(ch10$q1, ch10$q2, alternative = "greater")$pval.exact,
-               0.04004329)
+  tmp <- blomqvist(ch10$q1, ch10$q2, alternative = "greater")
+  expect_equal(tmp$stat, 0.66666667)
+  expect_equal(tmp$pval.exact, 0.04004329)
 })
 
 test_that("Exercise 10.6", {

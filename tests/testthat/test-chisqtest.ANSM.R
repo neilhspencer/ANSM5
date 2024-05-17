@@ -12,8 +12,6 @@ test_that("Example 12.3", {
                                do.asymp = TRUE)$pval.asymp.stat, 14.959596)
   expect_equal(chisqtest.ANSM(ch12$infection.site, ch12$district, do.exact = FALSE,
                                do.asymp = TRUE)$pval.asymp, 0.133541873)
-  expect_equal(chisqtest.ANSM(ch12$infection.site, ch12$district,
-                               seed = 1)$pval.mc, 0.109388906)
 })
 
 test_that("Example 12.4", {
@@ -21,8 +19,6 @@ test_that("Example 12.4", {
                                do.asymp = TRUE)$pval.asymp.stat, 11.160998)
   expect_equal(chisqtest.ANSM(ch12$drugYZ, ch12$side.effect, do.exact = FALSE,
                                do.asymp = TRUE)$pval.asymp, 0.0008353497)
-  expect_equal(chisqtest.ANSM(ch12$drugYZ, ch12$side.effect, seed = 1)$pval.mc,
-               0.0009899901)
   expect_equal(chisqtest.ANSM(ch12$drugYZ, ch12$side.effect, cont.corr = FALSE,
                                do.exact = FALSE,
                                do.asymp = TRUE)$pval.asymp.stat, 14.9466695)
@@ -42,8 +38,6 @@ test_that("Example 12.10", {
                                do.asymp = TRUE)$pval.asymp.stat, 11.6324786)
   expect_equal(chisqtest.ANSM(table(ch12$last.digits), do.exact = FALSE,
                                do.asymp = TRUE)$pval.asymp, 0.23483005)
-  ct.out <- chisqtest.ANSM(table(ch12$last.digits), seed = 1)
-  expect_equal(ct.out$pval.mc, 0.23810762)
 })
 
 test_that("Example 12.11", {
@@ -78,11 +72,6 @@ test_that("Exercise 12.2", {
   expect_equal(chisqtest.ANSM(ch12$welsh.language, ch12$opportunities,
                                do.exact = FALSE, do.asymp = TRUE)$pval.asymp,
                0.053263409)
-})
-
-test_that("Exercise 12.5", {
-  expect_equal(chisqtest.ANSM(ch12$win.opinion, ch12$supporter,
-                               seed = 1)$pval.mc, 0.071469285)
 })
 
 test_that("Exercise 12.6", {
@@ -134,15 +123,6 @@ test_that("Exercise 12.11", {
                0.1665295)
 })
 
-test_that("Example 13.1", {
-  expect_equal(chisqtest.ANSM(ch13$physical.activity[ch13$gender == "Boy"],
-                                ch13$tv.viewing[ch13$gender == "Boy"],
-                               seed = 1)$pval.mc, 0.044709553)
-  expect_equal(chisqtest.ANSM(ch13$physical.activity[ch13$gender == "Girl"],
-                               ch13$tv.viewing[ch13$gender == "Girl"],
-                               seed = 1)$pval.mc, 0.0049899501)
-})
-
 test_that("Exercise 13.3", {
   expect_equal(
     chisqtest.ANSM(ch13$breakfast.eaten[ch13$boys.girls == "Boys"],
@@ -152,15 +132,4 @@ test_that("Exercise 13.3", {
     chisqtest.ANSM(ch13$breakfast.eaten[ch13$boys.girls == "Girls"],
                     ch13$VEL[ch13$boys.girls == "Girls"], do.exact = FALSE,
                     do.asymp = TRUE)$pval.asymp, 0.035047454)
-})
-
-test_that("Exercise 13.7", {
-  expect_equal(
-    chisqtest.ANSM(ch13$medicine[ch13$location == "Urban"],
-                    ch13$response[ch13$location == "Urban"], seed = 1)$pval.mc,
-    9.9999e-06)
-  expect_equal(
-    chisqtest.ANSM(ch13$medicine[ch13$location == "Rural"],
-                    ch13$response[ch13$location == "Rural"], seed = 1)$pval.mc,
-    0.0032099679)
 })

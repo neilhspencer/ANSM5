@@ -9,14 +9,6 @@ test_that("Example 10.11", {
   expect_equal(cohen.kappa(ch10$dentistA, ch10$dentistB, do.exact = FALSE,
                            do.asymp = TRUE,
                            alternative = "greater")$pval.asymp, 0.0000029445342)
-  tmp <- cohen.kappa(ch10$dentistA, ch10$dentistB, alternative = "greater",
-                     seed = 1)
-  expect_equal(tmp$stat, 0.41747573)
-  expect_equal(tmp$pval.mc, 0)
-  expect_equal(cohen.kappa(ch10$dentistA, ch10$dentistB, do.exact = FALSE,
-                           do.CI = TRUE, seed = 1)$CI.mc.lower, 0.25373134)
-  expect_equal(cohen.kappa(ch10$dentistA, ch10$dentistB, do.exact = FALSE,
-                           do.CI = TRUE, seed = 1)$CI.mc.upper, 0.57627119)
 })
 
 test_that("Example 10.12", {

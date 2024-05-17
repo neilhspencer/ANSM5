@@ -1,18 +1,13 @@
 test_that("Example 4.2", {
-  expect_equal(suppressWarnings(
-    kstest.ANSM(ch4$breaks, "punif", min = 0, max = 6,
-                 alternative = "two.sided")$pval.exact.stat), 0.183333333)
-  expect_equal(suppressWarnings(
-    kstest.ANSM(ch4$breaks, "punif", min = 0, max = 6,
-                 alternative = "two.sided")$pval.exact), 0.45829257)
-  expect_equal(suppressWarnings(
-    kstest.ANSM(ch4$breaks, "punif", min = 0, max = 6,
-                 alternative = "two.sided", do.asymp = TRUE)$pval.asymp.stat),
-    0.183333333)
-  expect_equal(suppressWarnings(
-    kstest.ANSM(ch4$breaks, "punif", min = 0, max = 6,
-                 alternative = "two.sided", do.asymp = TRUE)$pval.asymp),
-    0.51214416)
+  tmp <- suppressWarnings(kstest.ANSM(ch4$breaks, "punif", min = 0, max = 6,
+                                       alternative = "two.sided"))
+  expect_equal(tmp$pval.exact.stat, 0.183333333)
+  expect_equal(tmp$pval.exact, 0.45829257)
+  tmp <- suppressWarnings(kstest.ANSM(ch4$breaks, "punif", min = 0, max = 6,
+                                      alternative = "two.sided",
+                                      do.exact = FALSE, do.asymp = TRUE))
+  expect_equal(tmp$pval.asymp.stat, 0.183333333)
+  expect_equal(tmp$pval.asymp, 0.51214416)
 })
 
 test_that("Exercise 4.2", {

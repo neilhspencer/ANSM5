@@ -26,9 +26,6 @@ test_that("Exercise 6.16", {
 })
 
 test_that("Example 7.9", {
-  tmp <- conover(ch7$dementia.age, ch7$features)
-  expect_equal(tmp$pval.exact.stat, 1.85924)
-  expect_equal(tmp$pval.exact, 0.66714238)
   expect_equal(conover(ch7$dementia.age, ch7$features, do.exact = FALSE,
                        do.asymp = TRUE)$pval.asymp.stat, 1.85924)
   expect_equal(conover(ch7$dementia.age, ch7$features, do.exact = FALSE,

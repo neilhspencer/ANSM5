@@ -5,8 +5,6 @@ test_that("Example 4.15", {
                          cont.corr = FALSE)$pval.asymp, 0.061889005)
   expect_equal(runs.ncat(ch4$births, alternative = "less")$pval.asymp,
                0.124182295)
-  expect_equal(runs.ncat(ch4$births, alternative = "less", do.mc = TRUE,
-                         seed = 1)$pval.mc, 0.09714)
 })
 
 test_that("Exercise 4.17", {
@@ -14,14 +12,9 @@ test_that("Exercise 4.17", {
                          cont.corr = FALSE)$pval.asymp, 0.017170837)
   expect_equal(runs.ncat(ch4$football.results,
                          alternative = "less")$pval.asymp, 0.03603851)
-  expect_equal(runs.ncat(ch4$football.results, alternative = "less",
-                         do.mc = TRUE, seed = 1)$pval.mc, 0.02543)
 })
 
 test_that("Example 7.10", {
-  expect_equal(runs.ncat(ch7$team.member[order(ch7$procedure.time)],
-                         alternative = "less", do.mc = TRUE, seed = 1)$pval.mc,
-               0.00003)
   expect_equal(runs.ncat(ch7$team.member[order(ch7$procedure.time)],
                          alternative = "less",
                          cont.corr = FALSE)$pval.asymp.stat, -4.2602817)

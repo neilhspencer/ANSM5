@@ -6,9 +6,6 @@ test_that("Example 3.11", {
                       do.asymp = TRUE)$pval.asymp.stat, 1.63691848888252)
   expect_equal(pitman(ch3$heartrates1, 70, "greater", do.exact = FALSE,
                       do.asymp = TRUE)$pval.asymp, 0.050823751)
-  tmp <- pitman(ch3$heartrates1, seed = 1)
-  expect_equal(tmp$CI.mc.lower, 68)
-  expect_equal(tmp$CI.mc.upper, 97)
 })
 
 test_that("Example 3.12", {

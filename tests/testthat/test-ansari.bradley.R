@@ -1,10 +1,11 @@
 test_that("Example 6.12", {
-  expect_equal(ansari.bradley(ch6$typeA, ch6$typeB)$pval.exact.stat, 30)
-  expect_equal(ansari.bradley(ch6$typeA, ch6$typeB)$pval.exact,
+  tmp <- ansari.bradley(ch6$typeA, ch6$typeB)
+  expect_equal(tmp$pval.exact.stat, 30)
+  expect_equal(tmp$pval.exact,
                0.143732635)
-  expect_equal(ansari.bradley(ch6$typeA, ch6$typeB,
+  expect_equal(ansari.bradley(ch6$typeA, ch6$typeB, do.exact = FALSE,
                               do.asymp = TRUE)$pval.asymp.stat, 30)
-  expect_equal(ansari.bradley(ch6$typeA, ch6$typeB,
+  expect_equal(ansari.bradley(ch6$typeA, ch6$typeB, do.exact = FALSE,
                               do.asymp = TRUE)$pval.asymp, 0.121413624)
 })
 

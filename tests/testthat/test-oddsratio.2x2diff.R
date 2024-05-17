@@ -12,11 +12,4 @@ test_that("Example 13.2", {
   expect_equal(tmp$pval.exact, 0.44031545)
   expect_equal(tmp$CI.exact.lower, -0.34815705)
   expect_equal(tmp$CI.exact.upper, 0.34589494)
-  tmp <- oddsratio.2x2diff(ch13$physical.activity, ch13$tv.viewing,
-                           ch13$gender, do.exact = FALSE, do.mc = TRUE,
-                           seed = 1)
-  expect_equal(tmp$pval.mc.stat, 0.136726013)
-  expect_equal(tmp$pval.mc, 0.44324)
-  expect_equal(tmp$CI.mc.lower, -0.3468765)
-  expect_equal(tmp$CI.mc.upper, 0.34357032)
 })

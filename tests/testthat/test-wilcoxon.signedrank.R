@@ -1,8 +1,8 @@
 test_that("Example 3.4", {
-  expect_equal(wilcoxon.signedrank(ch3$heartrates1, 70, "greater")$pval.exact.stat,
+  tmp <- wilcoxon.signedrank(ch3$heartrates1, 70, "greater")
+  expect_equal(tmp$pval.exact.stat,
                "4 (sum of negative ranks), 24 (sum of positive ranks)")
-  expect_equal(wilcoxon.signedrank(ch3$heartrates1, 70,
-                                   "greater")$pval.exact, 0.0546875)
+  expect_equal(tmp$pval.exact, 0.0546875)
 })
 
 test_that("Example 3.5", {
