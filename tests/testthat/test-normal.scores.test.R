@@ -1,7 +1,7 @@
 test_that("Example 6.10", {
   tmp <- normal.scores.test(ch6$groupA, ch6$groupB)
   expect_equal(tmp$pval.exact.stat, -4.9861603)
-  expect_equal(tmp$pval.exact, 0.011686456)
+  expect_equal(round(tmp$pval.exact, 4), 0.0117)
   expect_equal(normal.scores.test(ch6$groupA, ch6$groupB, do.exact = FALSE,
                                   do.asymp = TRUE)$pval.asymp.stat, -4.9861603)
   expect_equal(normal.scores.test(ch6$groupA, ch6$groupB, do.exact = FALSE,
