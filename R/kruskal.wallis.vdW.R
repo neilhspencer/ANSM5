@@ -78,6 +78,7 @@ kruskal.wallis.vdW <-
 
     #calculate test statistic
     T <- ((n - 1) * (sum(by(vdW, g, sum) ** 2 / table_g) - c)) / (sr - c)
+    T <- round(T, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
 
     #exact p-value
     if (do.exact && n <= max.exact.cases){
@@ -112,6 +113,7 @@ kruskal.wallis.vdW <-
         }
       }
       combins$T <- ((n - 1) * (combins$T - c)) / (sr - c)
+	  combins$T <- round(combins$T, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
       pval.exact <- sum(combins$T >= T) / dim(combins)[1]
       pval.exact.stat <- T
     }

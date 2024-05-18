@@ -82,6 +82,7 @@ normal.scores.test <-
     #allocate ranks and calculate statistics
     xyranks <- rank(xy, ties.method = "average")
     vdW <- qnorm(xyranks / (n.xy + 1))
+    vdW <- round(vdW, -floor(log10(sqrt(.Machine$double.eps)))) #handle floating point issues
     vdW.x <- sum(vdW[1:n.x])
     vdW.y <- sum(vdW[(n.x + 1):n.xy])
     if (vdW.x < vdW.y){
