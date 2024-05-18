@@ -1,5 +1,5 @@
 Package: ANSM5
-Title: Package To Accompany Applied Nonparametric Statistical Methods, 5th Edition
+Title: Applied Nonparametric Statistical Methods, 5th Edition
 Version: 0.0.0.9000
 Authors@R: 
     person("Neil", "Spencer", , "neilhspencer@gmail.com", role = c("aut", "cre", "cph"),
