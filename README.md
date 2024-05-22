@@ -6,9 +6,10 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The ANSM5 package provides a number of functions to accompany the book
-“Applied Nonparametric Statistical Methods” (5th edition), the revisions
-from the 4th edition including a move from describing the output from a
+The ANSM5 package provides a number of functions and data to accompany
+the book “Applied Nonparametric Statistical Methods”, 5th edition
+(Smeeton, Spencer & Sprent, 2024, Taylor Francis), the revisions from
+the 4th edition including a move from describing the output from a
 miscellany of statistical software packages to using R. While the output
 from many of the functions can also be obtained using a range of
 pre-existing R functions, this package provides functions in a unified
