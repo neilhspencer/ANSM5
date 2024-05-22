@@ -1,3 +1,11 @@
+#' Prints an ANSMstat object
+#'
+#' @description
+#' `print.ANSMstat()` prints the output contained in an ANSMstat object
+#'
+#' @param x An ANSMstat object
+#' @param ... Further arguments relevant to the default `print` function
+#'
 #' @export
 print.ANSMstat <- function(x, ...) {
   #print space

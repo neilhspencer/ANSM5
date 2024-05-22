@@ -1,3 +1,13 @@
+#' Creates matrix of permutations
+#'
+#' @description
+#' `perms()` creates a matrix containing all permutations of an integer number of items
+#'
+#' @param n Integer
+#' @returns A matrix
+#'
+#' @keywords internal
+#' @noRd
 perms <-
   function(n){
     if(n == 1){

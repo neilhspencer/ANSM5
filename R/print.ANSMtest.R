@@ -1,3 +1,11 @@
+#' Prints an ANSMtest object
+#'
+#' @description
+#' `print.ANSMtest()` prints the output contained in an ANSMtest object
+#'
+#' @param x An ANSMtest object
+#' @param ... Further arguments relevant to the default `print` function
+#'
 #' @export
 print.ANSMtest <- function(x, ...) {
   #print space
