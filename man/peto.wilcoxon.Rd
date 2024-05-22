@@ -39,7 +39,8 @@ An ANSMtest object with the results from applying the function
 \code{peto.wilcoxon()} performs the Peto-Wilcoxon test and is used in chapter 9 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
 }
 \examples{
-#  from `Applied Nonparametric Statistical Methods` (5th edition)
-
+# Example 9.4 from `Applied Nonparametric Statistical Methods` (5th edition)
+peto.wilcoxon(ch9$sampleI.survtime, ch9$sampleII.survtime,
+  ch9$sampleI.censor, ch9$sampleII.censor, alternative = "less")
 
 }
