@@ -1,18 +1,18 @@
 #' Perform Shapiro-Wilk test of Normality
-#' 
+#'
 #' @description
-#' `shapirotest.ANSM()` is a wrapper for stats::shapiro.test - performs the Shapiro-Wilk test of Normality and is used in chapters 4 and 5 of `Applied Nonparametric Statistical Methods` (5th edition)
-#' 
+#' `shapirotest.ANSM()` is a wrapper for shapiro.test() from the `stats` package - performs the Shapiro-Wilk test of Normality and is used in chapters 4 and 5 of `Applied Nonparametric Statistical Methods` (5th edition)
+#'
 #' @param x Numeric vector
 #' @param alternative Type of alternative hypothesis (defaults to `c("two.sided")`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
 #' # Example 4.4 from `Applied Nonparametric Statistical Methods` (5th edition)
 #' shapirotest.ANSM(ch4$ages)
-#' 
+#'
 #' # Example 5.3 from `Applied Nonparametric Statistical Methods` (5th edition)
 #' shapirotest.ANSM(ch5$bp.incorrect)
-#' 
+#'
 #' @importFrom stats complete.cases shapiro.test
 #' @export
 shapirotest.ANSM <-

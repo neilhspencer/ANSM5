@@ -19,7 +19,7 @@ kstest.ANSM(
 
 \item{y}{Numeric vector or a character string naming a cumulative distribution function or an actual cumulative distribution function}
 
-\item{...}{For the default method of \code{ks.test}, parameters of the distribution specified (as a character string) by y. Otherwise, further arguments to be passed to or from methods.}
+\item{...}{For the default method of \code{ks.test}, parameters of the distribution specified (as a character string) by y. Otherwise, further arguments to be passed to or from methods}
 
 \item{alternative}{Type of alternative hypothesis (defaults to \code{two.sided})}
 
@@ -33,7 +33,7 @@ kstest.ANSM(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{kstest.ANSM()} is a wrapper for stats::ks.test - performs the Smirnov test and Kolgomorov test and is used in chapters 4, 6 and 9 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{kstest.ANSM()} is a wrapper for ks.test() from the \code{stats} package - performs the Smirnov test and Kolgomorov test and is used in chapters 4, 6 and 9 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
 }
 \examples{
 # Exercise 4.3 from `Applied Nonparametric Statistical Methods` (5th edition)

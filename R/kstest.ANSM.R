@@ -1,11 +1,11 @@
 #' Perform Smirnov test and Kolgomorov test
 #'
 #' @description
-#' `kstest.ANSM()` is a wrapper for stats::ks.test - performs the Smirnov test and Kolgomorov test and is used in chapters 4, 6 and 9 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `kstest.ANSM()` is a wrapper for ks.test() from the `stats` package - performs the Smirnov test and Kolgomorov test and is used in chapters 4, 6 and 9 of `Applied Nonparametric Statistical Methods` (5th edition)
 #'
 #' @param x Numeric vector
 #' @param y Numeric vector or a character string naming a cumulative distribution function or an actual cumulative distribution function
-#' @param ... For the default method of `ks.test`, parameters of the distribution specified (as a character string) by y. Otherwise, further arguments to be passed to or from methods.
+#' @param ... For the default method of `ks.test`, parameters of the distribution specified (as a character string) by y. Otherwise, further arguments to be passed to or from methods
 #' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
 #' @param max.exact.cases Maximum number of cases allowed for exact calculations (defaults to `1000`)
 #' @param do.asymp Boolean indicating whether or not to perform asymptotic calculations (defaults to `FALSE`)

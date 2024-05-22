@@ -30,7 +30,7 @@ fishertest.ANSM(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{fishertest.ANSM()} is a wrapper for stats::fisher.test - performs the Fisher exact test and is used in chapters 6, 12 and 13 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{fishertest.ANSM()} is a wrapper for fisher.test() from the \code{stats} package - performs the Fisher exact test and is used in chapters 6, 12 and 13 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
 }
 \examples{
 # Example 6.7 from `Applied Nonparametric Statistical Methods` (5th edition)

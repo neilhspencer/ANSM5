@@ -42,7 +42,7 @@ chisqtest.ANSM(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{chisqtest.ANSM()} is a wrapper for stats::chisq.test - performs the Chi-squared test and is used in chapters 12 and 13 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{chisqtest.ANSM()} is a wrapper for chisq.test() from the \code{stats} package - performs the Chi-squared test and is used in chapters 12 and 13 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
 }
 \examples{
 # Example 12.1 from `Applied Nonparametric Statistical Methods` (5th edition)
