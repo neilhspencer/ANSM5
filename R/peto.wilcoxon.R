@@ -13,8 +13,9 @@
 #' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' #  from `Applied Nonparametric Statistical Methods` (5th edition)
-#'
+#' # Example 9.4 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' peto.wilcoxon(ch9$sampleI.survtime, ch9$sampleII.survtime,
+#'   ch9$sampleI.censor, ch9$sampleII.censor, alternative = "less")
 #'
 #' @importFrom stats complete.cases
 #' @importFrom utils combn
