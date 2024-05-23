@@ -33,7 +33,7 @@ This is a basic example which shows you how to solve a common problem:
 ``` r
 library(ANSM5)
 
-#From Example 3.1 in `Applied Nonparametric Statistical Methods` (5th edition)
+#From Example 3.1 in "Applied Nonparametric Statistical Methods" (5th edition)
 sgn.test(ch3$sampleI, 110)
 #> 
 #> Sign test for ch3$sampleI 
@@ -45,7 +45,7 @@ sgn.test(ch3$sampleI, 110)
 #> Exact 95% Confidence Interval (97.852% achieved) 
 #> (11.00000, 151.00000)
 
-#From Example 6.1 in `Applied Nonparametric Statistical Methods` (5th edition)
+#From Example 6.1 in "Applied Nonparametric Statistical Methods" (5th edition)
 wilcoxon.mann.whitney(ch6$groupA, ch6$groupB)
 #> 
 #> Wilcoxon-Mann-Whitney test for ch6$groupA and ch6$groupB
@@ -60,7 +60,7 @@ wilcoxon.mann.whitney(ch6$groupA, ch6$groupB)
 #> Exact 95% Confidence Interval 
 #> (-13.00000, -2.00000)
 
-#From Example 7.6 in `Applied Nonparametric Statistical Methods` (5th edition)
+#From Example 7.6 in "Applied Nonparametric Statistical Methods" (5th edition)
 friedman(ch7$pulse, ch7$time.period, ch7$student)
 #> 
 #> Friedman test for ch7$pulse and ch7$time.period (as groups) with ch7$student (as blocks)

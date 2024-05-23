@@ -36,12 +36,12 @@ This is a basic example which shows you how to solve a common problem:
 ```{r example}
 library(ANSM5)
 
-#From Example 3.1 in `Applied Nonparametric Statistical Methods` (5th edition)
+#From Example 3.1 in "Applied Nonparametric Statistical Methods" (5th edition)
 sgn.test(ch3$sampleI, 110)
 
-#From Example 6.1 in `Applied Nonparametric Statistical Methods` (5th edition)
+#From Example 6.1 in "Applied Nonparametric Statistical Methods" (5th edition)
 wilcoxon.mann.whitney(ch6$groupA, ch6$groupB)
 
-#From Example 7.6 in `Applied Nonparametric Statistical Methods` (5th edition)
+#From Example 7.6 in "Applied Nonparametric Statistical Methods" (5th edition)
 friedman(ch7$pulse, ch7$time.period, ch7$student)
 ```
