@@ -8,7 +8,7 @@
 #' @param CI.width Confidence interval width (defaults to `0.95`)
 #' @param nsims.bs Number of bootstrap samples to be taken (defaults to `10000`)
 #' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
-#' @returns An A list object object with the results from applying the function
+#' @returns A list object object with the results from applying the function
 #' @examples
 #' # Example 14.5 from `Applied Nonparametric Statistical Methods` (5th edition)
 #' bs(ch14$example14.2, nsims.bs = 2000, CI.width = 0.95, seed = 1)
