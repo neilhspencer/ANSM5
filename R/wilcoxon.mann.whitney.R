@@ -1,7 +1,7 @@
 #' Perform Wilcoxon-Mann-Whitney test
 #'
 #' @description
-#' `wilcoxon.mann.whitney()` performs the Wilcoxon-Mann-Whitney test and is used in chapters 6, 8, 9 and 12 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `wilcoxon.mann.whitney()` performs the Wilcoxon-Mann-Whitney test and is used in chapters 6, 8, 9 and 12 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param x Numeric vector, or factor with same levels as y
 #' @param y Numeric vector, or factor with same levels as x
@@ -18,10 +18,10 @@
 #' @param do.CI Boolean indicating whether or not to perform confidence interval calculations (defaults to `TRUE`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Examples 6.1 and 6.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Examples 6.1 and 6.2 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' wilcoxon.mann.whitney(ch6$groupA, ch6$groupB)
 #'
-#' # Exercise 12.4 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Exercise 12.4 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' wilcoxon.mann.whitney(ch12$feedback.satisfaction[ch12$PPI.person.2 == "Representative"],
 #'   ch12$feedback.satisfaction[ch12$PPI.person.2 == "Researcher"],
 #'   do.exact = FALSE, do.asymp = TRUE)

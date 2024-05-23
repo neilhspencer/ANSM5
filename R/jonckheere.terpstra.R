@@ -1,7 +1,7 @@
 #' Perform Jonckheere-Terpstra test
 #'
 #' @description
-#' `jonckheere.terpstra()` performs the Jonckheere-Terpstra test and is used in chapters 7, 8 and 12 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `jonckheere.terpstra()` performs the Jonckheere-Terpstra test and is used in chapters 7, 8 and 12 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param x Numeric vector or factor of same length as g
 #' @param g Factor of same length as x
@@ -15,11 +15,11 @@
 #' @param do.asymp.ties.adjust Boolean indicating whether or not to use adjustment for ties in data (defaults to `TRUE`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Example 7.3 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 7.3 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' jonckheere.terpstra(ch7$dementia.age, ch7$features, alternative = "greater",
 #'   do.exact = FALSE, do.asymp = TRUE, do.asymp.ties.adjust = FALSE)
 #'
-#' # Exercise 12.6 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Exercise 12.6 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' jonckheere.terpstra(ch12$ethnic.group, ch12$diabetes.status, do.exact = FALSE, do.asymp = TRUE)
 #'
 #' @importFrom stats complete.cases

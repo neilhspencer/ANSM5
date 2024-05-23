@@ -48,10 +48,10 @@ spearman.beta(
 An ANSMstat object with the results from applying the function
 }
 \description{
-\code{spearman.beta()} calculates the Spearman beta and is used in chapter 11 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{spearman.beta()} calculates the Spearman beta and is used in chapter 11 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 11.3 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 11.3 from "Applied Nonparametric Statistical Methods" (5th edition)
 spearman.beta(ch11$reportedtime, ch11$parentlimit, H0 = 1)
 spearman.beta(ch11$reportedtime, ch11$parentlimit, H0 = 1, do.CI = TRUE)
 

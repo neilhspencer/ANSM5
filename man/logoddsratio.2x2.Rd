@@ -36,10 +36,10 @@ logoddsratio.2x2(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{logoddsratio.2x2()} performs the Log odds ratio test and is used in chapter 13 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{logoddsratio.2x2()} performs the Log odds ratio test and is used in chapter 13 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Exercise 13.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 13.2 from "Applied Nonparametric Statistical Methods" (5th edition)
 #logoddsratio.2x2(ch13$physical.activity[ch13$gender == "Boy"],
 #  ch13$tv.viewing[ch13$gender == "Boy"], do.exact = FALSE, do.asymp = TRUE)
 #logoddsratio.2x2(ch13$physical.activity[ch13$gender == "Girl"],

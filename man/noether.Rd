@@ -17,13 +17,13 @@ noether(p1, alpha = 0.05, power = 0.9)
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{noether()} calculates the Noether approximation and is used in chapter 5 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{noether()} calculates the Noether approximation and is used in chapter 5 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Exercise 5.8 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 5.8 from "Applied Nonparametric Statistical Methods" (5th edition)
 noether(p1 = 0.7534, alpha = 0.05, power = 0.9)
 
-# Exercise 5.16 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 5.16 from "Applied Nonparametric Statistical Methods" (5th edition)
 noether(p1 = 0.8, alpha = 0.025, power = 0.9)
 
 }

@@ -1,8 +1,8 @@
 #' Calculate Blomqvist coefficient
-#' 
+#'
 #' @description
-#' `blomqvist()` calculates the Blomqvist coefficient and is used in chapter 10 of `Applied Nonparametric Statistical Methods` (5th edition)
-#' 
+#' `blomqvist()` calculates the Blomqvist coefficient and is used in chapter 10 of "Applied Nonparametric Statistical Methods" (5th edition)
+#'
 #' @param x Numeric vector of same length as y
 #' @param y Numeric vector of same length as x
 #' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
@@ -13,12 +13,12 @@
 #' @param do.mc Boolean indicating whether or not to perform Monte Carlo calculations (defaults to `FALSE`)
 #' @returns An ANSMstat object with the results from applying the function
 #' @examples
-#' # Example 10.9 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 10.9 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' blomqvist(ch10$q1, ch10$q2, alternative = "greater")
-#' 
-#' # Exercise 10.7 from `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' # Exercise 10.7 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' blomqvist(ch10$ERA, ch10$SSS)
-#' 
+#'
 #' @importFrom stats complete.cases median fisher.test
 #' @export
 blomqvist <-

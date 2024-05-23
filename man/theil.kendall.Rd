@@ -54,13 +54,13 @@ theil.kendall(
 An ANSMstat object with the results from applying the function
 }
 \description{
-\code{theil.kendall()} calculates the Theil-Kendall beta and is used in chapter 11 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{theil.kendall()} calculates the Theil-Kendall beta and is used in chapter 11 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 11.6 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 11.6 from "Applied Nonparametric Statistical Methods" (5th edition)
 theil.kendall(ch11$reportedtime, ch11$parentlimit, do.alpha = TRUE)
 
-# Exercise 11.10 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 11.10 from "Applied Nonparametric Statistical Methods" (5th edition)
 theil.kendall(ch11$N.Scotland, ch11$SW.England)
 
 }

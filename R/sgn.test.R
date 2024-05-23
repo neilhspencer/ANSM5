@@ -1,7 +1,7 @@
 #' Perform Sign test
 #'
 #' @description
-#' `sgn.test()` performs the Sign test and is used in chapters 3, 4, 5 and 6 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `sgn.test()` performs the Sign test and is used in chapters 3, 4, 5 and 6 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param x Numeric vector, or binary factor and H0 is NULL
 #' @param H0 Null hypothesis value (defaults to `NULL`)
@@ -14,10 +14,10 @@
 #' @param do.CI Boolean indicating whether or not to perform confidence interval calculations (defaults to `TRUE`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Example 3.1 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 3.1 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' #sgn.test(ch3$sampleI, 110)
 #'
-#' # Exercise 6.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Exercise 6.2 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' #sgn.test(ch5$LVF - ch5$RVF, 0)
 #'
 #' @importFrom stats complete.cases dbinom pbinom pnorm qnorm

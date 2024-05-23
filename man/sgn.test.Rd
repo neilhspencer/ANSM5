@@ -39,13 +39,13 @@ sgn.test(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{sgn.test()} performs the Sign test and is used in chapters 3, 4, 5 and 6 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{sgn.test()} performs the Sign test and is used in chapters 3, 4, 5 and 6 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 3.1 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 3.1 from "Applied Nonparametric Statistical Methods" (5th edition)
 #sgn.test(ch3$sampleI, 110)
 
-# Exercise 6.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 6.2 from "Applied Nonparametric Statistical Methods" (5th edition)
 #sgn.test(ch5$LVF - ch5$RVF, 0)
 
 }

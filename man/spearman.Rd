@@ -39,13 +39,13 @@ spearman(
 An ANSMstat object with the results from applying the function
 }
 \description{
-\code{spearman()} calculates the Spearman correlation and is used in chapter 10 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{spearman()} calculates the Spearman correlation and is used in chapter 10 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 10.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 10.2 from "Applied Nonparametric Statistical Methods" (5th edition)
 spearman(ch10$q1, ch10$q2, alternative = "greater", do.asymp = TRUE, do.exact = FALSE)
 
-# Exercise 10.1 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 10.1 from "Applied Nonparametric Statistical Methods" (5th edition)
 spearman(ch10$ERA, ch10$ESMS, do.exact = FALSE)
 
 }

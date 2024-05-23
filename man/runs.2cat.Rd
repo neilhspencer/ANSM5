@@ -27,13 +27,13 @@ runs.2cat(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{runs.2cat()} performs the Runs test for two categories and is used in chapters 4, 5 and 6 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{runs.2cat()} performs the Runs test for two categories and is used in chapters 4, 5 and 6 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 4.14 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 4.14 from "Applied Nonparametric Statistical Methods" (5th edition)
 runs.2cat(ch4$tosses1, do.exact = FALSE, do.asymp = TRUE)
 
-# Exercise 6.17 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 6.17 from "Applied Nonparametric Statistical Methods" (5th edition)
 runs.2cat(ch6$twins, alternative = "greater")
 
 }

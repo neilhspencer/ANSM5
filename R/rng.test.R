@@ -1,7 +1,7 @@
 #' Perform Range test
 #'
 #' @description
-#' `rng.test()` performs the Range test and is used in chapter 4 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `rng.test()` performs the Range test and is used in chapter 4 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param x Numeric vector
 #' @param alternative Type of alternative hypothesis (defaults to `c("two.sided")`)
@@ -9,10 +9,10 @@
 #' @param maxx Maximum value for x (defaults to `360`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Example 4.17 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 4.17 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' #rng.test(ch4$dates.as.degrees)
 #'
-#' # Exercise 4.13 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Exercise 4.13 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' #rng.test(ch4$accident.bearings)
 #'
 #' @importFrom stats complete.cases

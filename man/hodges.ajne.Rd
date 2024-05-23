@@ -19,13 +19,13 @@ hodges.ajne(x, alternative = c("two.sided"), minx = 0, maxx = 360)
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{hodges.ajne()} performs the Hodges-Ajne test and is used in chapter 4 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{hodges.ajne()} performs the Hodges-Ajne test and is used in chapter 4 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 4.16 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 4.16 from "Applied Nonparametric Statistical Methods" (5th edition)
 hodges.ajne(ch4$times.as.degrees)
 
-# Exercise 4.14 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 4.14 from "Applied Nonparametric Statistical Methods" (5th edition)
 hodges.ajne(ch4$board.angles)
 
 }

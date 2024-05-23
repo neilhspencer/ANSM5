@@ -39,13 +39,13 @@ binom(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{binom()} performs the Binomial test and calculates the Binomial confidence interval and is used in chapters 4, 5 and 13 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{binom()} performs the Binomial test and calculates the Binomial confidence interval and is used in chapters 4, 5 and 13 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 4.6 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 4.6 from "Applied Nonparametric Statistical Methods" (5th edition)
 binom(3, 20)
 
-# Exercise 5.8 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 5.8 from "Applied Nonparametric Statistical Methods" (5th edition)
 binom(24, 40, 0.5)
 
 }

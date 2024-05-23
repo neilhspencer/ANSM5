@@ -1,7 +1,7 @@
 #' Perform Fisher exact test
 #'
 #' @description
-#' `fishertest.ANSM()` is a wrapper for fisher.test() from the `stats` package - performs the Fisher exact test and is used in chapters 6, 12 and 13 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `fishertest.ANSM()` is a wrapper for fisher.test() from the `stats` package - performs the Fisher exact test and is used in chapters 6, 12 and 13 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param x Numeric vector or factor
 #' @param y Numeric vector or factor
@@ -11,10 +11,10 @@
 #' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Example 6.7 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 6.7 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' fishertest.ANSM(ch6$males, ch6$females)
 #'
-#' # Exercise 13.10 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Exercise 13.10 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' fishertest.ANSM(ch13$laid.off, ch13$employee.ages)
 #'
 #' @importFrom stats complete.cases median

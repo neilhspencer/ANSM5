@@ -11,13 +11,13 @@ A list with 18 data vectors
 }
 }
 \source{
-\verb{Applied Nonparametric Statistical Methods} (5th edition)
+"Applied Nonparametric Statistical Methods" (5th edition)
 }
 \usage{
 ch11
 }
 \description{
-Data used in Chapter 11 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+Data used in Chapter 11 of "Applied Nonparametric Statistical Methods" (5th edition)
 \itemize{
 \item parentlimit (used in examples 11.2, 11.3, 11.4, 11.6)
 \item reportedtime (used in examples 11.2, 11.3, 11.4, 11.6)

@@ -1,7 +1,7 @@
 #' Perform Kruskal-Wallis test with van der Waerden scores
 #'
 #' @description
-#' `kruskal.wallis.vdW()` performs the Kruskal-Wallis test with van der Waerden scores and is used in chapter 7 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `kruskal.wallis.vdW()` performs the Kruskal-Wallis test with van der Waerden scores and is used in chapter 7 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param x Numeric vector of same length as g
 #' @param g Factor of same length as x
@@ -12,7 +12,7 @@
 #' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Example 7.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 7.2 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' kruskal.wallis.vdW(ch7$age, ch7$positions)
 #' kruskal.wallis.vdW(ch7$age, ch7$positions, do.exact = FALSE, do.asymp = TRUE)
 #'

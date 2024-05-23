@@ -45,13 +45,13 @@ control.median(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{control.median()} performs the Control median test and is used in chapters 6 and 9 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{control.median()} performs the Control median test and is used in chapters 6 and 9 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 6.9 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 6.9 from "Applied Nonparametric Statistical Methods" (5th edition)
 control.median(ch6$sampleI, ch6$sampleII, alternative = "greater")
 
-# Exercise 9.8 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 9.8 from "Applied Nonparametric Statistical Methods" (5th edition)
 control.median(ch9$bulbA, ch9$bulbB, alternative = "greater", nsims = 1000)
 
 }

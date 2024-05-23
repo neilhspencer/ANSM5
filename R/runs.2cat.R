@@ -1,7 +1,7 @@
 #' Perform Runs test for two categories
 #'
 #' @description
-#' `runs.2cat()` performs the Runs test for two categories and is used in chapters 4, 5 and 6 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `runs.2cat()` performs the Runs test for two categories and is used in chapters 4, 5 and 6 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param x Vector with two unique values
 #' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
@@ -10,10 +10,10 @@
 #' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Example 4.14 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 4.14 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' runs.2cat(ch4$tosses1, do.exact = FALSE, do.asymp = TRUE)
 #'
-#' # Exercise 6.17 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Exercise 6.17 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' runs.2cat(ch6$twins, alternative = "greater")
 #'
 #' @importFrom stats complete.cases pnorm

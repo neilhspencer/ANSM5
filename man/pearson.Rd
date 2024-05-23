@@ -39,13 +39,13 @@ pearson(
 An ANSMstat object with the results from applying the function
 }
 \description{
-\code{pearson()} calculates the Pearson correlation and is used in chapters 10 and 11 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{pearson()} calculates the Pearson correlation and is used in chapters 10 and 11 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Section 10.1.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Section 10.1.2 from "Applied Nonparametric Statistical Methods" (5th edition)
 pearson(ch10$q1, ch10$q2, alternative = "greater", do.asymp = TRUE, do.exact = FALSE)
 
-# Example 11.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 11.2 from "Applied Nonparametric Statistical Methods" (5th edition)
 pearson(ch11$parentlimit, ch11$reportedtime - 1 * ch11$parentlimit, alternative = "two.sided")
 
 }

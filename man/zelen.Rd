@@ -21,13 +21,13 @@ zelen(x, y, z, max.exact.perms = 1e+06, do.exact = TRUE)
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{zelen()} performs the Zelen test and is used in chapter 13 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{zelen()} performs the Zelen test and is used in chapter 13 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Section 13.2.5 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Section 13.2.5 from "Applied Nonparametric Statistical Methods" (5th edition)
 zelen(ch13$drug, ch13$side.effects, ch13$age.group)
 
-# Example 13.3 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 13.3 from "Applied Nonparametric Statistical Methods" (5th edition)
 zelen(ch13$machine, ch13$output.status, ch13$material.source)
 
 }

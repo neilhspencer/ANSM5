@@ -39,13 +39,13 @@ med.test(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{med.test()} performs the Median test and is used in chapters 6 and 7 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{med.test()} performs the Median test and is used in chapters 6 and 7 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 6.7 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 6.7 from "Applied Nonparametric Statistical Methods" (5th edition)
 #med.test(ch6$males, ch6$females)
 
-# Example 7.5 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 7.5 from "Applied Nonparametric Statistical Methods" (5th edition)
 #med.test(ch7$time, ch7$surgeon, do.exact = FALSE, do.asymp = TRUE)
 
 }

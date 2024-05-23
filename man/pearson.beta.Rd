@@ -48,10 +48,10 @@ pearson.beta(
 An ANSMstat object with the results from applying the function
 }
 \description{
-\code{pearson.beta()} calculates the Pearson beta and is used in chapter 11 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{pearson.beta()} calculates the Pearson beta and is used in chapter 11 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 11.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 11.2 from "Applied Nonparametric Statistical Methods" (5th edition)
 pearson.beta(ch11$reportedtime, ch11$parentlimit, H0 = 1)
 pearson.beta(ch11$reportedtime[1:6], ch11$parentlimit[1:6], H0 = 1)
 

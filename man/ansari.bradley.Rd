@@ -33,13 +33,13 @@ ansari.bradley(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{ansari.bradley()} performs the Ansari-Bradley test and is used in chapter 6 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{ansari.bradley()} performs the Ansari-Bradley test and is used in chapter 6 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 6.12 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 6.12 from "Applied Nonparametric Statistical Methods" (5th edition)
 ansari.bradley(ch6$typeA, ch6$typeB)
 
-# Exercise 6.16 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 6.16 from "Applied Nonparametric Statistical Methods" (5th edition)
 ansari.bradley(ch6$travel, ch6$politics)
 
 }

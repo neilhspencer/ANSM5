@@ -1,7 +1,7 @@
 #' Perform Kendall's tau
 #'
 #' @description
-#' `kendall.tau()` performs the Kendall's tau and is used in chapter 10 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `kendall.tau()` performs the Kendall's tau and is used in chapter 10 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param x Numeric vector of same length as y
 #' @param y Numeric vector of same length as x
@@ -14,11 +14,11 @@
 #' @param do.mc Boolean indicating whether or not to perform Monte Carlo calculations (defaults to `FALSE`)
 #' @returns An ANSMstat object with the results from applying the function
 #' @examples
-#' # Example 10.8 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 10.8 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' kendall.tau(ch10$death.year, ch10$age.at.death, alternative = "greater",
 #'   do.asymp = TRUE, do.exact = FALSE)
 #'
-#' # Example 10.9 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 10.9 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' kendall.tau(ch10$Canadian, ch10$Australian)
 #'
 #' @importFrom stats complete.cases cor pnorm

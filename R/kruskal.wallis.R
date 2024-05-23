@@ -1,7 +1,7 @@
 #' Perform Kruskal-Wallis test
 #'
 #' @description
-#' `kruskal.wallis()` performs the Kruskal-Wallis test and is used in chapters 7 and 12 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `kruskal.wallis()` performs the Kruskal-Wallis test and is used in chapters 7 and 12 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param x Numeric vector or factor of same length as g
 #' @param g Factor of same length as x
@@ -13,10 +13,10 @@
 #' @param do.mc Boolean indicating whether or not to perform Monte Carlo calculations (defaults to `FALSE`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Example 7.1 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 7.1 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' kruskal.wallis(ch7$affordability, ch7$regions, do.exact = FALSE, do.asymp = TRUE)
 #'
-#' # Exercise 7.16 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Exercise 7.16 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' kruskal.wallis(ch7$affordability, ch7$regions)
 #'
 #' @importFrom stats complete.cases

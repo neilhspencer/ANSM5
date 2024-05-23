@@ -11,13 +11,13 @@ A list with 29 data vectors
 }
 }
 \source{
-\verb{Applied Nonparametric Statistical Methods} (5th edition)
+"Applied Nonparametric Statistical Methods" (5th edition)
 }
 \usage{
 ch8
 }
 \description{
-Data used in Chapter 8 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+Data used in Chapter 8 of "Applied Nonparametric Statistical Methods" (5th edition)
 \itemize{
 \item plant.weight (used in example 8.2)
 \item growth.hormone (used in examples 8.6, 8.7)

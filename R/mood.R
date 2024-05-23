@@ -1,7 +1,7 @@
 #' Perform Mood test
 #'
 #' @description
-#' `mood()` performs the Mood test and is used in chapter 6 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `mood()` performs the Mood test and is used in chapter 6 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param x Numeric vector
 #' @param y Numeric vector
@@ -12,7 +12,7 @@
 #' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Example 6.12 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 6.12 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' mood(ch6$typeA, ch6$typeB)
 #' mood(ch6$typeA, ch6$typeB, do.exact = FALSE, do.asymp = TRUE)
 #'

@@ -48,10 +48,10 @@ oddsratio.2x2diff(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{oddsratio.2x2diff()} performs the test for difference in odds ratios and is used in chapter 13 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{oddsratio.2x2diff()} performs the test for difference in odds ratios and is used in chapter 13 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 13.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 13.2 from "Applied Nonparametric Statistical Methods" (5th edition)
 oddsratio.2x2diff(ch13$physical.activity, ch13$tv.viewing, ch13$gender,
   do.exact = FALSE, do.asymp = TRUE)
 oddsratio.2x2diff(ch13$physical.activity, ch13$tv.viewing, ch13$gender,

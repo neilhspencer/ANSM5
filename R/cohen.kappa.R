@@ -1,7 +1,7 @@
 #' Calculate Cohen's kappa
 #'
 #' @description
-#' `cohen.kappa()` calculates Cohen's kappa and is used in chapter 10 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `cohen.kappa()` calculates Cohen's kappa and is used in chapter 10 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param y1 Factor of same length as y2, blocks and same levels as y2 and (if blocks not NULL) with 2 levels
 #' @param y2 Factor of same length as y1, blocks and same levels as y1 and (if blocks not NULL) with 2 levels
@@ -17,11 +17,11 @@
 #' @param do.mc Boolean indicating whether or not to perform Monte Carlo calculations (defaults to `FALSE`)
 #' @returns An ANSMstat object with the results from applying the function
 #' @examples
-#' # Example 10.11 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 10.11 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' cohen.kappa(ch10$dentistA, ch10$dentistB, do.asymp = TRUE, do.exact = FALSE,
 #'   alternative = "greater")
 #'
-#' # Example 10.12 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 10.12 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' cohen.kappa(ch10$questionnaire, ch10$demonstration, ch10$items)
 #'
 #' @importFrom stats complete.cases pnorm pchisq quantile

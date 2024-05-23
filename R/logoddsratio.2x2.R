@@ -1,7 +1,7 @@
 #' Perform Log odds ratio test
 #'
 #' @description
-#' `logoddsratio.2x2()` performs the Log odds ratio test and is used in chapter 13 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `logoddsratio.2x2()` performs the Log odds ratio test and is used in chapter 13 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param x Binary factor of same length as y
 #' @param y Binary factor of same length as x
@@ -13,7 +13,7 @@
 #' @param do.mc Boolean indicating whether or not to perform Monte Carlo calculations (defaults to `FALSE`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Exercise 13.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Exercise 13.2 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' #logoddsratio.2x2(ch13$physical.activity[ch13$gender == "Boy"],
 #' #  ch13$tv.viewing[ch13$gender == "Boy"], do.exact = FALSE, do.asymp = TRUE)
 #' #logoddsratio.2x2(ch13$physical.activity[ch13$gender == "Girl"],

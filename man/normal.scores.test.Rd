@@ -33,13 +33,13 @@ normal.scores.test(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{normal.scores.test()} performs the Normal Scores test and is used in chapters 6 and 8 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{normal.scores.test()} performs the Normal Scores test and is used in chapters 6 and 8 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 5.8 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 5.8 from "Applied Nonparametric Statistical Methods" (5th edition)
 normal.scores.test(ch6$groupA, ch6$groupB, do.exact = FALSE, do.asymp = TRUE)
 
-# Exercise 6.15 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 6.15 from "Applied Nonparametric Statistical Methods" (5th edition)
 normal.scores.test(ch6$doseI, ch6$doseII)
 
 }

@@ -238,3 +238,4 @@ print.ANSMstat <- function(x, ...) {
     cat("\n")
   }
 }
+

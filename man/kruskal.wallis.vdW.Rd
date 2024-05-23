@@ -33,10 +33,10 @@ kruskal.wallis.vdW(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{kruskal.wallis.vdW()} performs the Kruskal-Wallis test with van der Waerden scores and is used in chapter 7 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{kruskal.wallis.vdW()} performs the Kruskal-Wallis test with van der Waerden scores and is used in chapter 7 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 7.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 7.2 from "Applied Nonparametric Statistical Methods" (5th edition)
 kruskal.wallis.vdW(ch7$age, ch7$positions)
 kruskal.wallis.vdW(ch7$age, ch7$positions, do.exact = FALSE, do.asymp = TRUE)
 

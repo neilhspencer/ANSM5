@@ -19,12 +19,12 @@ mantel.haenszel(x, y, z, do.asymp = TRUE)
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{mantel.haenszel()} performs the Mantel-Haenszel test and is used in chapter 13 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{mantel.haenszel()} performs the Mantel-Haenszel test and is used in chapter 13 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 13.4 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 13.4 from "Applied Nonparametric Statistical Methods" (5th edition)
 mantel.haenszel(ch13$drug, ch13$side.effects, ch13$age.group)
 
-#  from `Applied Nonparametric Statistical Methods` (5th edition)
+#  from "Applied Nonparametric Statistical Methods" (5th edition)
 
 }

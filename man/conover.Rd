@@ -45,13 +45,13 @@ conover(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{conover()} performs the Conover test using standard or squared ranks and is used in chapters 6 and 7 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{conover()} performs the Conover test using standard or squared ranks and is used in chapters 6 and 7 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 6.13 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 6.13 from "Applied Nonparametric Statistical Methods" (5th edition)
 conover(ch6$typeA, ch6$typeB, do.exact = FALSE, do.asymp = TRUE)
 
-# Exercise 7.15 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 7.15 from "Applied Nonparametric Statistical Methods" (5th edition)
 conover(ch7$braking.distance.2, ch7$initial.speed, do.exact = FALSE, do.asymp = TRUE)
 
 }

@@ -51,13 +51,13 @@ wilcoxon.mann.whitney(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{wilcoxon.mann.whitney()} performs the Wilcoxon-Mann-Whitney test and is used in chapters 6, 8, 9 and 12 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{wilcoxon.mann.whitney()} performs the Wilcoxon-Mann-Whitney test and is used in chapters 6, 8, 9 and 12 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Examples 6.1 and 6.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Examples 6.1 and 6.2 from "Applied Nonparametric Statistical Methods" (5th edition)
 wilcoxon.mann.whitney(ch6$groupA, ch6$groupB)
 
-# Exercise 12.4 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 12.4 from "Applied Nonparametric Statistical Methods" (5th edition)
 wilcoxon.mann.whitney(ch12$feedback.satisfaction[ch12$PPI.person.2 == "Representative"],
   ch12$feedback.satisfaction[ch12$PPI.person.2 == "Researcher"],
   do.exact = FALSE, do.asymp = TRUE)

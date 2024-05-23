@@ -33,10 +33,10 @@ mood(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{mood()} performs the Mood test and is used in chapter 6 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{mood()} performs the Mood test and is used in chapter 6 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 6.12 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 6.12 from "Applied Nonparametric Statistical Methods" (5th edition)
 mood(ch6$typeA, ch6$typeB)
 mood(ch6$typeA, ch6$typeB, do.exact = FALSE, do.asymp = TRUE)
 

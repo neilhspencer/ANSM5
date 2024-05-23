@@ -36,13 +36,13 @@ cochran.q(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{cochran.q()} performs the Cochran Q test and is used in chapter 7 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{cochran.q()} performs the Cochran Q test and is used in chapter 7 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 7.8 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 7.8 from "Applied Nonparametric Statistical Methods" (5th edition)
 cochran.q(ch7$outcome, ch7$climb, ch7$member, do.exact = FALSE, do.asymp = TRUE)
 
-# Exercise 7.14 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 7.14 from "Applied Nonparametric Statistical Methods" (5th edition)
 cochran.q(ch7$soc.media.use, ch7$participant, ch7$day, do.exact = FALSE, do.asymp = TRUE)
 
 }

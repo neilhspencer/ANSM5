@@ -1,7 +1,7 @@
 #' Perform logrank test
 #'
 #' @description
-#' `logrank()` performs the logrank test and is used in chapter 9 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `logrank()` performs the logrank test and is used in chapter 9 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param x Numeric vector of same length as censored, groups
 #' @param censored Binary vector of same length as x, groups
@@ -12,10 +12,10 @@
 #' @param seed Random number seed to be used for Monte Carlo simulations (defaults to `NULL`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Example 9.6 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 9.6 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' logrank(ch9$samplesAB.survtime, ch9$samplesAB.censor, ch9$samplesAB, score.censored = FALSE)
 #'
-#' # Exercise 9.7 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Exercise 9.7 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' logrank(ch9$samplesXYZ.survtime, ch9$samplesXYZ.censor, ch9$samplesXYZ)
 #'
 #' @importFrom stats complete.cases

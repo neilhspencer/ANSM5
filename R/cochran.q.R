@@ -1,7 +1,7 @@
 #' Perform Cochran Q test
 #'
 #' @description
-#' `cochran.q()` performs the Cochran Q test and is used in chapter 7 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `cochran.q()` performs the Cochran Q test and is used in chapter 7 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param y Binary vector of same length as groups, blocks
 #' @param groups Factor of same length as y, blocks with levels such that length(y) == nlevels(groups) * nlevels(blocks)
@@ -13,10 +13,10 @@
 #' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Example 7.8 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 7.8 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' cochran.q(ch7$outcome, ch7$climb, ch7$member, do.exact = FALSE, do.asymp = TRUE)
 #'
-#' # Exercise 7.14 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Exercise 7.14 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' cochran.q(ch7$soc.media.use, ch7$participant, ch7$day, do.exact = FALSE, do.asymp = TRUE)
 #'
 #' @importFrom stats complete.cases pf pchisq

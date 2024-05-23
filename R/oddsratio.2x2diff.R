@@ -1,7 +1,7 @@
 #' Perform test for difference in odds ratios
 #'
 #' @description
-#' `oddsratio.2x2diff()` performs the test for difference in odds ratios and is used in chapter 13 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `oddsratio.2x2diff()` performs the test for difference in odds ratios and is used in chapter 13 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param x Binary factor of same length as y, z
 #' @param y Binary factor of same length as x, z
@@ -17,7 +17,7 @@
 #' @param do.CI Boolean indicating whether or not to perform confidence interval calculations (defaults to `TRUE`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Example 13.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 13.2 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' oddsratio.2x2diff(ch13$physical.activity, ch13$tv.viewing, ch13$gender,
 #'   do.exact = FALSE, do.asymp = TRUE)
 #' oddsratio.2x2diff(ch13$physical.activity, ch13$tv.viewing, ch13$gender,

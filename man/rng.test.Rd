@@ -19,13 +19,13 @@ rng.test(x, alternative = c("two.sided"), minx = 0, maxx = 360)
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{rng.test()} performs the Range test and is used in chapter 4 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{rng.test()} performs the Range test and is used in chapter 4 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 4.17 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 4.17 from "Applied Nonparametric Statistical Methods" (5th edition)
 #rng.test(ch4$dates.as.degrees)
 
-# Exercise 4.13 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 4.13 from "Applied Nonparametric Statistical Methods" (5th edition)
 #rng.test(ch4$accident.bearings)
 
 }

@@ -17,10 +17,10 @@ cramer.von.mises(x, y, alternative = c("two.sided", "less", "greater"))
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{cramer.von.mises()} performs the Cramer-von Mises test and is used in chapter 6 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{cramer.von.mises()} performs the Cramer-von Mises test and is used in chapter 6 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 6.16 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 6.16 from "Applied Nonparametric Statistical Methods" (5th edition)
 cramer.von.mises(ch6$salivaF, ch6$salivaM)
 cramer.von.mises(ch6$salivaF, ch6$salivaM, alternative = "greater")
 

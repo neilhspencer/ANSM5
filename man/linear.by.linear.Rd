@@ -36,13 +36,13 @@ linear.by.linear(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{linear.by.linear()} performs the Linear by linear association test and is used in chapter 13 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{linear.by.linear()} performs the Linear by linear association test and is used in chapter 13 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 13.8 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 13.8 from "Applied Nonparametric Statistical Methods" (5th edition)
 linear.by.linear(ch13$dose, ch13$dose.side.effect, do.mc = FALSE, do.asymp = TRUE)
 
-# Exercise 13.4 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 13.4 from "Applied Nonparametric Statistical Methods" (5th edition)
 linear.by.linear(ch13$SBP, ch13$cholesterol, seed = 1)
 
 }

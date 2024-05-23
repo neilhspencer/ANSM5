@@ -42,14 +42,14 @@ jonckheere.terpstra(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{jonckheere.terpstra()} performs the Jonckheere-Terpstra test and is used in chapters 7, 8 and 12 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{jonckheere.terpstra()} performs the Jonckheere-Terpstra test and is used in chapters 7, 8 and 12 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 7.3 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 7.3 from "Applied Nonparametric Statistical Methods" (5th edition)
 jonckheere.terpstra(ch7$dementia.age, ch7$features, alternative = "greater",
   do.exact = FALSE, do.asymp = TRUE, do.asymp.ties.adjust = FALSE)
 
-# Exercise 12.6 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 12.6 from "Applied Nonparametric Statistical Methods" (5th edition)
 jonckheere.terpstra(ch12$ethnic.group, ch12$diabetes.status, do.exact = FALSE, do.asymp = TRUE)
 
 }

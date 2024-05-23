@@ -19,13 +19,13 @@ lilliefors(x, alternative = c("two.sided"), nsims.mc = 10000, seed = NULL)
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{lilliefors()} performs Lilliefors test of Normality and is used in chapters 4, 5 and 6 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{lilliefors()} performs Lilliefors test of Normality and is used in chapters 4, 5 and 6 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 4.4 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 4.4 from "Applied Nonparametric Statistical Methods" (5th edition)
 lilliefors(ch4$ages, seed = 1)
 
-# Exercise 6.15 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 6.15 from "Applied Nonparametric Statistical Methods" (5th edition)
 lilliefors(ch6$doseI.2, seed = 1, nsims = 1000)
 
 }

@@ -15,13 +15,13 @@ shapirotest.ANSM(x, alternative = c("two.sided"))
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{shapirotest.ANSM()} is a wrapper for shapiro.test() from the \code{stats} package - performs the Shapiro-Wilk test of Normality and is used in chapters 4 and 5 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{shapirotest.ANSM()} is a wrapper for shapiro.test() from the \code{stats} package - performs the Shapiro-Wilk test of Normality and is used in chapters 4 and 5 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 4.4 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 4.4 from "Applied Nonparametric Statistical Methods" (5th edition)
 shapirotest.ANSM(ch4$ages)
 
-# Example 5.3 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 5.3 from "Applied Nonparametric Statistical Methods" (5th edition)
 shapirotest.ANSM(ch5$bp.incorrect)
 
 }

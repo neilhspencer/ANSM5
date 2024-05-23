@@ -27,10 +27,10 @@ moses.extreme.reactions(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{moses.extreme.reactions()} performs the Moses test for extreme reactions and is used in chapter 6 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{moses.extreme.reactions()} performs the Moses test for extreme reactions and is used in chapter 6 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 6.14 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 6.14 from "Applied Nonparametric Statistical Methods" (5th edition)
 moses.extreme.reactions(ch6$groupI.amended, ch6$groupII)
 moses.extreme.reactions(ch6$groupI.amended, ch6$groupII)
 

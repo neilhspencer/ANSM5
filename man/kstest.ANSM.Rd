@@ -33,13 +33,13 @@ kstest.ANSM(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{kstest.ANSM()} is a wrapper for ks.test() from the \code{stats} package - performs the Smirnov test and Kolgomorov test and is used in chapters 4, 6 and 9 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{kstest.ANSM()} is a wrapper for ks.test() from the \code{stats} package - performs the Smirnov test and Kolgomorov test and is used in chapters 4, 6 and 9 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Exercise 4.3 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 4.3 from "Applied Nonparametric Statistical Methods" (5th edition)
 #kstest.ANSM(ch4$visiting.supporters, "pexp", rate = 2600)
 
-# Exercise 9.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 9.2 from "Applied Nonparametric Statistical Methods" (5th edition)
 #kstest.ANSM(ch9$boys.toothtime, ch9$girls.toothtime)
 
 }

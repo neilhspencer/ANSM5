@@ -1,7 +1,7 @@
 #' Calculate Theil-Kendall beta
 #'
 #' @description
-#' `theil.kendall()` calculates the Theil-Kendall beta and is used in chapter 11 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `theil.kendall()` calculates the Theil-Kendall beta and is used in chapter 11 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param y Numeric vector of same length as x
 #' @param x Numeric vector of same length as y
@@ -19,10 +19,10 @@
 #' @param do.mc Boolean indicating whether or not to perform Monte Carlo calculations (defaults to `FALSE`)
 #' @returns An ANSMstat object with the results from applying the function
 #' @examples
-#' # Example 11.6 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 11.6 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' theil.kendall(ch11$reportedtime, ch11$parentlimit, do.alpha = TRUE)
 #'
-#' # Exercise 11.10 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Exercise 11.10 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' theil.kendall(ch11$N.Scotland, ch11$SW.England)
 #'
 #' @importFrom stats complete.cases median pnorm quantile

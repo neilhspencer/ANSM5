@@ -23,13 +23,13 @@ breslow.day(x, y, z, CI.width = 0.95, do.asymp = TRUE, do.CI = TRUE)
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{breslow.day()} performs the Breslow and Day test and is used in chapter 13 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{breslow.day()} performs the Breslow and Day test and is used in chapter 13 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 13.3 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 13.3 from "Applied Nonparametric Statistical Methods" (5th edition)
 breslow.day(ch13$machine, ch13$output.status, ch13$material.source)
 
-# Exercise 13.7 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 13.7 from "Applied Nonparametric Statistical Methods" (5th edition)
 breslow.day(ch13$medicine, ch13$response, ch13$location)
 
 }

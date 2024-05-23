@@ -19,12 +19,12 @@ friedman.lsd(y, groups, blocks, ids)
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{friedman.lsd()} performs the Least Significant Differences test after the Friedman test and is used in chapter 8 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{friedman.lsd()} performs the Least Significant Differences test after the Friedman test and is used in chapter 8 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 8.11 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 8.11 from "Applied Nonparametric Statistical Methods" (5th edition)
 friedman.lsd(ch8$prey.preference, ch8$prey, ch8$larva, c("Cyclops", "Anopheles"))
 
-#  from `Applied Nonparametric Statistical Methods` (5th edition)
+#  from "Applied Nonparametric Statistical Methods" (5th edition)
 
 }

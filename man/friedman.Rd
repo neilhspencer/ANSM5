@@ -39,13 +39,13 @@ friedman(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{friedman()} performs the Friedman test and is used in chapter 7 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{friedman()} performs the Friedman test and is used in chapter 7 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 7.6 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 7.6 from "Applied Nonparametric Statistical Methods" (5th edition)
 friedman(ch7$pulse, ch7$time.period, ch7$student, do.exact = FALSE, do.asymp = TRUE)
 
-# Exercise 7.12 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 7.12 from "Applied Nonparametric Statistical Methods" (5th edition)
 friedman(ch7$names.recalled, ch7$group, ch7$medical.student, use.Iman.Davenport = TRUE,
   do.exact = FALSE, do.asymp = TRUE)
 

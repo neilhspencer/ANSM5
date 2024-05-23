@@ -36,13 +36,13 @@ blomqvist(
 An ANSMstat object with the results from applying the function
 }
 \description{
-\code{blomqvist()} calculates the Blomqvist coefficient and is used in chapter 10 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{blomqvist()} calculates the Blomqvist coefficient and is used in chapter 10 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 10.9 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 10.9 from "Applied Nonparametric Statistical Methods" (5th edition)
 blomqvist(ch10$q1, ch10$q2, alternative = "greater")
 
-# Exercise 10.7 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 10.7 from "Applied Nonparametric Statistical Methods" (5th edition)
 blomqvist(ch10$ERA, ch10$SSS)
 
 }

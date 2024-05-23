@@ -1,8 +1,8 @@
 #' Perform Binomial test
-#' 
+#'
 #' @description
-#' `binom()` performs the Binomial test and calculates the Binomial confidence interval and is used in chapters 4, 5 and 13 of `Applied Nonparametric Statistical Methods` (5th edition)
-#' 
+#' `binom()` performs the Binomial test and calculates the Binomial confidence interval and is used in chapters 4, 5 and 13 of "Applied Nonparametric Statistical Methods" (5th edition)
+#'
 #' @param r Number of successes
 #' @param n Number of trials
 #' @param H0 Null hypothesis value (defaults to `NULL`)
@@ -14,12 +14,12 @@
 #' @param do.CI Boolean indicating whether or not to perform confidence interval calculations (defaults to `TRUE`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Example 4.6 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 4.6 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' binom(3, 20)
-#' 
-#' # Exercise 5.8 from `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' # Exercise 5.8 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' binom(24, 40, 0.5)
-#' 
+#'
 #' @importFrom stats dbinom pbinom pnorm qnorm
 #' @export
 binom <-

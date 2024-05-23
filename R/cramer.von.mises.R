@@ -1,14 +1,14 @@
 #' Perform Cramer-von Mises test
 #'
 #' @description
-#' `cramer.von.mises()` performs the Cramer-von Mises test and is used in chapter 6 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `cramer.von.mises()` performs the Cramer-von Mises test and is used in chapter 6 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param x Numeric vector
 #' @param y Numeric vector
 #' @param alternative Type of alternative hypothesis (defaults to `two.sided`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Example 6.16 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 6.16 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' cramer.von.mises(ch6$salivaF, ch6$salivaM)
 #' cramer.von.mises(ch6$salivaF, ch6$salivaM, alternative = "greater")
 #'

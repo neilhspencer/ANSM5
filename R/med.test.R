@@ -1,7 +1,7 @@
 #' Perform Median test
 #'
 #' @description
-#' `med.test()` performs the Median test and is used in chapters 6 and 7 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `med.test()` performs the Median test and is used in chapters 6 and 7 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param x Numeric vector of same length as y
 #' @param y Numeric vector, or factor of same length as x
@@ -14,10 +14,10 @@
 #' @param do.CI Boolean indicating whether or not to perform confidence interval calculations (defaults to `TRUE`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Example 6.7 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 6.7 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' #med.test(ch6$males, ch6$females)
 #'
-#' # Example 7.5 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 7.5 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' #med.test(ch7$time, ch7$surgeon, do.exact = FALSE, do.asymp = TRUE)
 #'
 #' @importFrom stats complete.cases median chisq.test
@@ -257,7 +257,6 @@ med.test <-
         }
       }
     }
-
     #check if message needed
     if (!is.factor(y) && !do.asymp && !do.exact) {
       test.note <- paste("Neither exact nor asymptotic test/confidence ",
@@ -278,7 +277,6 @@ med.test <-
                             sprintf("%1.0f", max.exact.cases), ")")
       }
     }
-
     #define hypotheses
     if (alternative == "two.sided"){
       H0 <- paste0("H0: samples are from populations with the same median\n",
@@ -292,13 +290,11 @@ med.test <-
                    "H1: median of ", varname1, " is greater than median of ",
                    varname2, "\n")
     }
-
     #create title
     title <- "Median test"
     if (!is.factor(y) && do.exact && !is.null(pval.exact)){
       title <- "Median test (Fisher's Exact Test)"
     }
-
     #return
     result <- list(title = title, varname1 = varname1,
                    varname2 = varname2, H0 = H0,

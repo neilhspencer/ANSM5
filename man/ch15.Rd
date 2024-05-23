@@ -11,13 +11,13 @@ A list with 11 data vectors
 }
 }
 \source{
-\verb{Applied Nonparametric Statistical Methods} (5th edition)
+"Applied Nonparametric Statistical Methods" (5th edition)
 }
 \usage{
 ch15
 }
 \description{
-Data used in Chapter 15 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+Data used in Chapter 15 of "Applied Nonparametric Statistical Methods" (5th edition)
 \itemize{
 \item diet (used in section 15.3.5)
 \item BMI (used in section 15.3.1)

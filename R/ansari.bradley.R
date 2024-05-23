@@ -1,7 +1,7 @@
 #' Perform Ansari-Bradley test
 #'
 #' @description
-#' `ansari.bradley()` performs the Ansari-Bradley test and is used in chapter 6 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `ansari.bradley()` performs the Ansari-Bradley test and is used in chapter 6 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param x Numeric vector
 #' @param y Numeric vector
@@ -12,10 +12,10 @@
 #' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Example 6.12 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 6.12 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' ansari.bradley(ch6$typeA, ch6$typeB)
 #'
-#' # Exercise 6.16 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Exercise 6.16 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' ansari.bradley(ch6$travel, ch6$politics)
 #'
 #' @importFrom stats complete.cases median ansari.test

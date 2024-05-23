@@ -11,13 +11,13 @@ A list with 47 data vectors
 }
 }
 \source{
-\verb{Applied Nonparametric Statistical Methods} (5th edition)
+"Applied Nonparametric Statistical Methods" (5th edition)
 }
 \usage{
 ch7
 }
 \description{
-Data used in Chapter 7 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+Data used in Chapter 7 of "Applied Nonparametric Statistical Methods" (5th edition)
 \itemize{
 \item affordability (used in example 7.1, exercise 7.16)
 \item regions (used in example 7.1, exercise 7.16)

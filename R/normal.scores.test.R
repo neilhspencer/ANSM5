@@ -1,7 +1,7 @@
 #' Perform Normal Scores test
 #'
 #' @description
-#' `normal.scores.test()` performs the Normal Scores test and is used in chapters 6 and 8 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `normal.scores.test()` performs the Normal Scores test and is used in chapters 6 and 8 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param x Numeric vector
 #' @param y Numeric vector
@@ -12,10 +12,10 @@
 #' @param do.exact Boolean indicating whether or not to perform exact calculations (defaults to `TRUE`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Example 5.8 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 5.8 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' normal.scores.test(ch6$groupA, ch6$groupB, do.exact = FALSE, do.asymp = TRUE)
 #'
-#' # Exercise 6.15 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Exercise 6.15 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' normal.scores.test(ch6$doseI, ch6$doseII)
 #'
 #' @importFrom stats complete.cases var

@@ -30,13 +30,13 @@ cox.stuart(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{cox.stuart()} performs the Cox-Stuart test and is used in chapters 4 and 10 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{cox.stuart()} performs the Cox-Stuart test and is used in chapters 4 and 10 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 4.13 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 4.13 from "Applied Nonparametric Statistical Methods" (5th edition)
 cox.stuart(ch4$precipitation)
 
-# Exercise 10.5 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 10.5 from "Applied Nonparametric Statistical Methods" (5th edition)
 cox.stuart(ch10$age.at.death, alternative = "less")
 
 }

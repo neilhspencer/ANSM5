@@ -42,15 +42,15 @@ gehan.wilcoxon(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{gehan.wilcoxon()} performs the Gehan-Wilcoxon test and is used in chapter 9 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{gehan.wilcoxon()} performs the Gehan-Wilcoxon test and is used in chapter 9 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 9.1 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 9.1 from "Applied Nonparametric Statistical Methods" (5th edition)
 gehan.wilcoxon(ch9$symp.survtime, ch9$asymp.survtime,
   ch9$symp.censor, ch9$asymp.censor, alternative = "less",
   do.exact = FALSE, do.asymp = TRUE)
 
-# Exercise 9.5 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 9.5 from "Applied Nonparametric Statistical Methods" (5th edition)
 gehan.wilcoxon(ch9$regimeA.survtime, ch9$regimeB.survtime,
   ch9$regimeA.censor, ch9$regimeB.censor, do.exact = FALSE, do.asymp = TRUE)
 

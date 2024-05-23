@@ -33,13 +33,13 @@ runs.ncat(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{runs.ncat()} performs the Runs test for three or more categories and is used in chapters 4 and 7 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{runs.ncat()} performs the Runs test for three or more categories and is used in chapters 4 and 7 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 4.15 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 4.15 from "Applied Nonparametric Statistical Methods" (5th edition)
 runs.ncat(ch4$births, alternative = "less")
 
-# Exercise 7.16 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 7.16 from "Applied Nonparametric Statistical Methods" (5th edition)
 runs.ncat(ch7$regions[order(ch7$affordability)], alternative = "less")
 
 }

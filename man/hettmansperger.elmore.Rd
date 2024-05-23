@@ -36,13 +36,13 @@ hettmansperger.elmore(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{hettmansperger.elmore()} performs the Hettmansperger and Elmore interaction test and is used in chapter 8 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{hettmansperger.elmore()} performs the Hettmansperger and Elmore interaction test and is used in chapter 8 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 8.6 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 8.6 from "Applied Nonparametric Statistical Methods" (5th edition)
 hettmansperger.elmore(ch8$plant.weight.2, ch8$growth.hormone, ch8$undersoil.heating)
 
-# Exercise 8.3 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 8.3 from "Applied Nonparametric Statistical Methods" (5th edition)
 hettmansperger.elmore(ch8$game.time, ch8$experience, ch8$game)
 
 }

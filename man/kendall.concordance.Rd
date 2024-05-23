@@ -36,10 +36,10 @@ kendall.concordance(
 An ANSMstat object with the results from applying the function
 }
 \description{
-\code{kendall.concordance()} calculates Kendall's concordance and is used in chapter 10 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{kendall.concordance()} calculates Kendall's concordance and is used in chapter 10 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Exercise 10.11 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 10.11 from "Applied Nonparametric Statistical Methods" (5th edition)
 kendall.concordance(ch10$marks, ch10$script, ch10$examiner, do.exact = FALSE, do.asymp = TRUE)
 kendall.concordance(ch10$marks, ch10$examiner, ch10$script, do.exact = FALSE, do.asymp = TRUE)
 

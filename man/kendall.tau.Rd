@@ -39,14 +39,14 @@ kendall.tau(
 An ANSMstat object with the results from applying the function
 }
 \description{
-\code{kendall.tau()} performs the Kendall's tau and is used in chapter 10 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{kendall.tau()} performs the Kendall's tau and is used in chapter 10 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 10.8 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 10.8 from "Applied Nonparametric Statistical Methods" (5th edition)
 kendall.tau(ch10$death.year, ch10$age.at.death, alternative = "greater",
   do.asymp = TRUE, do.exact = FALSE)
 
-# Example 10.9 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 10.9 from "Applied Nonparametric Statistical Methods" (5th edition)
 kendall.tau(ch10$Canadian, ch10$Australian)
 
 }

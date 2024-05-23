@@ -42,13 +42,13 @@ siegel.tukey(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{siegel.tukey()} performs the Siegel-Tukey test using mean or median shift and is used in chapter 6 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{siegel.tukey()} performs the Siegel-Tukey test using mean or median shift and is used in chapter 6 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Exercise 6.11 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 6.11 from "Applied Nonparametric Statistical Methods" (5th edition)
 siegel.tukey(ch6$typeA, ch6$typeB, mean.shift = TRUE)
 
-# Exercise 6.16 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 6.16 from "Applied Nonparametric Statistical Methods" (5th edition)
 siegel.tukey(ch6$travel, ch6$politics)
 
 }

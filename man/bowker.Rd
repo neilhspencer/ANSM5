@@ -17,13 +17,13 @@ bowker(x, y = NULL, do.asymp = TRUE)
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{bowker()} performs the Bowker's extension of McNemar's test and is used in chapter 12 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{bowker()} performs the Bowker's extension of McNemar's test and is used in chapter 12 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 12.12 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 12.12 from "Applied Nonparametric Statistical Methods" (5th edition)
 bowker(ch12$side.effect.new, ch12$side.effect.old)
 
-# Exercise 12.12 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 12.12 from "Applied Nonparametric Statistical Methods" (5th edition)
 bowker(ch12$first.response, ch12$second.response)
 
 }

@@ -36,13 +36,13 @@ kruskal.wallis(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{kruskal.wallis()} performs the Kruskal-Wallis test and is used in chapters 7 and 12 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{kruskal.wallis()} performs the Kruskal-Wallis test and is used in chapters 7 and 12 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 7.1 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 7.1 from "Applied Nonparametric Statistical Methods" (5th edition)
 kruskal.wallis(ch7$affordability, ch7$regions, do.exact = FALSE, do.asymp = TRUE)
 
-# Exercise 7.16 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 7.16 from "Applied Nonparametric Statistical Methods" (5th edition)
 kruskal.wallis(ch7$affordability, ch7$regions)
 
 }

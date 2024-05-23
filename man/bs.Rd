@@ -18,13 +18,13 @@ bs(x, y = NULL, CI.width = 0.95, nsims.bs = 10000, seed = NULL)
 \item{seed}{Random number seed to be used for Monte Carlo simulations (defaults to \code{NULL})}
 }
 \value{
-An A list object object with the results from applying the function
+A list object object with the results from applying the function
 }
 \description{
-\code{bs()} creates a bootstrap confidence interval and is used in chapter 14 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{bs()} creates a bootstrap confidence interval and is used in chapter 14 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 14.5 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 14.5 from "Applied Nonparametric Statistical Methods" (5th edition)
 bs(ch14$example14.2, nsims.bs = 2000, CI.width = 0.95, seed = 1)
 bs(ch14$example14.2, nsims.bs = 2000, CI.width = 0.99, seed = 1)
 

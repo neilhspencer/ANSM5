@@ -39,13 +39,13 @@ wilcoxon.signedrank(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{wilcoxon.signedrank()} performs the Wilcoxon signed-rank test and is used in chapters 3, 4 and 5 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{wilcoxon.signedrank()} performs the Wilcoxon signed-rank test and is used in chapters 3, 4 and 5 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 3.4 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 3.4 from "Applied Nonparametric Statistical Methods" (5th edition)
 wilcoxon.signedrank(ch3$heartrates1, 70, "greater")
 
-# Exercise 5.12 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 5.12 from "Applied Nonparametric Statistical Methods" (5th edition)
 wilcoxon.signedrank(ch5$kHz0.125 - ch5$kHz0.25, 0)
 
 }

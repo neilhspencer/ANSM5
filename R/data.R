@@ -1,7 +1,7 @@
 #' Data used in Chapter 3
 #'
 #' @description
-#' Data used in Chapter 3 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' Data used in Chapter 3 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' * sampleI (used in examples 3.1, 3.2, 3.3, exercise 3.17)
 #' * sampleII (used in examples 3.1, 3.2, 3.3, exercise 3.17)
@@ -31,13 +31,13 @@
 #'
 #' @format ## `ch3`
 #' A list with 25 data vectors
-#' @source `Applied Nonparametric Statistical Methods` (5th edition)
+#' @source "Applied Nonparametric Statistical Methods" (5th edition)
 "ch3"
 
 #' Data used in Chapter 4
 #'
 #' @description
-#' Data used in Chapter 4 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' Data used in Chapter 4 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' * breaks (used in example 4.2)
 #' * ages (used in example 4.4)
@@ -64,13 +64,13 @@
 #'
 #' @format ## `ch4`
 #' A list with 22 data vectors
-#' @source `Applied Nonparametric Statistical Methods` (5th edition)
+#' @source "Applied Nonparametric Statistical Methods" (5th edition)
 "ch4"
 
 #' Data used in Chapter 5
 #'
 #' @description
-#' Data used in Chapter 5 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' Data used in Chapter 5 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' * LVF (used in example 5.1, exercise 6.2)
 #' * RVF (used in example 5.1, exercise 6.2)
@@ -96,13 +96,13 @@
 #'
 #' @format ## `ch5`
 #' A list with 21 data vectors
-#' @source `Applied Nonparametric Statistical Methods` (5th edition)
+#' @source "Applied Nonparametric Statistical Methods" (5th edition)
 "ch5"
 
 #' Data used in Chapter 6
 #'
 #' @description
-#' Data used in Chapter 6 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' Data used in Chapter 6 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' * groupA (used in examples 6.1, 6.2, 6.3, 6.10, 6.17)
 #' * groupB (used in examples 6.1, 6.2, 6.3, 6.10, 6.17)
@@ -148,13 +148,13 @@
 #'
 #' @format ## `ch6`
 #' A list with 41 data vectors
-#' @source `Applied Nonparametric Statistical Methods` (5th edition)
+#' @source "Applied Nonparametric Statistical Methods" (5th edition)
 "ch6"
 
 #' Data used in Chapter 7
 #'
 #' @description
-#' Data used in Chapter 7 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' Data used in Chapter 7 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' * affordability (used in example 7.1, exercise 7.16)
 #' * regions (used in example 7.1, exercise 7.16)
@@ -206,13 +206,13 @@
 #'
 #' @format ## `ch7`
 #' A list with 47 data vectors
-#' @source `Applied Nonparametric Statistical Methods` (5th edition)
+#' @source "Applied Nonparametric Statistical Methods" (5th edition)
 "ch7"
 
 #' Data used in Chapter 8
 #'
 #' @description
-#' Data used in Chapter 8 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' Data used in Chapter 8 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' * plant.weight (used in example 8.2)
 #' * growth.hormone (used in examples 8.6, 8.7)
@@ -246,13 +246,13 @@
 #'
 #' @format ## `ch8`
 #' A list with 29 data vectors
-#' @source `Applied Nonparametric Statistical Methods` (5th edition)
+#' @source "Applied Nonparametric Statistical Methods" (5th edition)
 "ch8"
 
 #' Data used in Chapter 9
 #'
 #' @description
-#' Data used in Chapter 9 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' Data used in Chapter 9 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' * symp.survtime (used in examples 9.1, 9.3)
 #' * symp.censor (used in examples 9.1, 9.3)
@@ -280,13 +280,13 @@
 #'
 #' @format ## `ch9`
 #' A list with 23 data vectors
-#' @source `Applied Nonparametric Statistical Methods` (5th edition)
+#' @source "Applied Nonparametric Statistical Methods" (5th edition)
 "ch9"
 
 #' Data used in Chapter 10
 #'
 #' @description
-#' Data used in Chapter 10 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' Data used in Chapter 10 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' * q1 (used in section 10.1.2, examples 10.2, 10.5, 10.9)
 #' * q2 (used in section 10.1.2, examples 10.2, 10.5, 10.9)
@@ -318,13 +318,13 @@
 #'
 #' @format ## `ch10`
 #' A list with 27 data vectors
-#' @source `Applied Nonparametric Statistical Methods` (5th edition)
+#' @source "Applied Nonparametric Statistical Methods" (5th edition)
 "ch10"
 
 #' Data used in Chapter 11
 #'
 #' @description
-#' Data used in Chapter 11 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' Data used in Chapter 11 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' * parentlimit (used in examples 11.2, 11.3, 11.4, 11.6)
 #' * reportedtime (used in examples 11.2, 11.3, 11.4, 11.6)
@@ -347,13 +347,13 @@
 #'
 #' @format ## `ch11`
 #' A list with 18 data vectors
-#' @source `Applied Nonparametric Statistical Methods` (5th edition)
+#' @source "Applied Nonparametric Statistical Methods" (5th edition)
 "ch11"
 
 #' Data used in Chapter 12
 #'
 #' @description
-#' Data used in Chapter 12 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' Data used in Chapter 12 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' * feedback.freq (used in example 12.1)
 #' * PPI.person (used in example 12.1)
@@ -396,13 +396,13 @@
 #'
 #' @format ## `ch12`
 #' A list with 38 data vectors
-#' @source `Applied Nonparametric Statistical Methods` (5th edition)
+#' @source "Applied Nonparametric Statistical Methods" (5th edition)
 "ch12"
 
 #' Data used in Chapter 13
 #'
 #' @description
-#' Data used in Chapter 13 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' Data used in Chapter 13 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' * physical.activity (used in examples 13.1, 13.2, exercise 13.2)
 #' * tv.viewing (used in examples 13.1, 13.2, exercise 13.2)
@@ -442,13 +442,13 @@
 #'
 #' @format ## `ch13`
 #' A list with 35 data vectors
-#' @source `Applied Nonparametric Statistical Methods` (5th edition)
+#' @source "Applied Nonparametric Statistical Methods" (5th edition)
 "ch13"
 
 #' Data used in Chapter 14
 #'
 #' @description
-#' Data used in Chapter 14 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' Data used in Chapter 14 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' * example14.2 (used in examples 14.2, 14.5)
 #' * X14.4 (used in exercise 14.4)
@@ -456,13 +456,13 @@
 #'
 #' @format ## `ch14`
 #' A list with 3 data vectors
-#' @source `Applied Nonparametric Statistical Methods` (5th edition)
+#' @source "Applied Nonparametric Statistical Methods" (5th edition)
 "ch14"
 
 #' Data used in Chapter 15
 #'
 #' @description
-#' Data used in Chapter 15 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' Data used in Chapter 15 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' * diet (used in section 15.3.5)
 #' * BMI (used in section 15.3.1)
@@ -478,5 +478,6 @@
 #'
 #' @format ## `ch15`
 #' A list with 11 data vectors
-#' @source `Applied Nonparametric Statistical Methods` (5th edition)
+#' @source "Applied Nonparametric Statistical Methods" (5th edition)
 "ch15"
+

@@ -36,13 +36,13 @@ lik.ratio(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{lik.ratio()} performs the Likelihood ratio test and is used in chapters 12 and 13 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{lik.ratio()} performs the Likelihood ratio test and is used in chapters 12 and 13 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 12.2 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 12.2 from "Applied Nonparametric Statistical Methods" (5th edition)
 lik.ratio(ch12$infection.site, ch12$district, do.exact = FALSE, do.asymp = TRUE)
 
-# Example 13.12 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 13.12 from "Applied Nonparametric Statistical Methods" (5th edition)
 chemo.side.effect.3 <- ch13$chemo.side.effect
 levels(chemo.side.effect.3) <- list("Side-effect" = c("Hair loss",
   "Visual impairment", "Hair loss & Visual impairment"), "None" = "None")

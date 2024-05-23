@@ -1,7 +1,7 @@
 #' Perform Hettmansperger and Elmore interaction test
 #'
 #' @description
-#' `hettmansperger.elmore()` performs the Hettmansperger and Elmore interaction test and is used in chapter 8 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `hettmansperger.elmore()` performs the Hettmansperger and Elmore interaction test and is used in chapter 8 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param y Numeric vector of same length as factor.a, factor.b
 #' @param factor.a Factor of same length as y, factor.b
@@ -13,10 +13,10 @@
 #' @param median.polish Boolean indicating whether or not to use median polish (defaults to `FALSE`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Example 8.6 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 8.6 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' hettmansperger.elmore(ch8$plant.weight.2, ch8$growth.hormone, ch8$undersoil.heating)
 #'
-#' # Exercise 8.3 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Exercise 8.3 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' hettmansperger.elmore(ch8$game.time, ch8$experience, ch8$game)
 #'
 #' @importFrom stats complete.cases aov anova medpolish resid pchisq

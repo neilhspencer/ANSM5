@@ -33,13 +33,13 @@ logrank(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{logrank()} performs the logrank test and is used in chapter 9 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{logrank()} performs the logrank test and is used in chapter 9 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 9.6 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 9.6 from "Applied Nonparametric Statistical Methods" (5th edition)
 logrank(ch9$samplesAB.survtime, ch9$samplesAB.censor, ch9$samplesAB, score.censored = FALSE)
 
-# Exercise 9.7 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 9.7 from "Applied Nonparametric Statistical Methods" (5th edition)
 logrank(ch9$samplesXYZ.survtime, ch9$samplesXYZ.censor, ch9$samplesXYZ)
 
 }

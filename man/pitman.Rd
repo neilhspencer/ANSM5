@@ -42,13 +42,13 @@ pitman(
 An ANSMtest object with the results from applying the function
 }
 \description{
-\code{pitman()} performs the Pitman test and is used in chapter 3 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+\code{pitman()} performs the Pitman test and is used in chapter 3 of "Applied Nonparametric Statistical Methods" (5th edition)
 }
 \examples{
-# Example 3.11 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Example 3.11 from "Applied Nonparametric Statistical Methods" (5th edition)
 pitman(ch3$heartrates1, 70, "greater", do.exact = FALSE, do.asymp = TRUE)
 
-# Exercise 3.17 from `Applied Nonparametric Statistical Methods` (5th edition)
+# Exercise 3.17 from "Applied Nonparametric Statistical Methods" (5th edition)
 pitman(ch3$sampleII, 110, do.exact = FALSE, do.asymp = TRUE)
 
 }

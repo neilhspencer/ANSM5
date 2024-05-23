@@ -11,13 +11,13 @@ A list with 3 data vectors
 }
 }
 \source{
-\verb{Applied Nonparametric Statistical Methods} (5th edition)
+"Applied Nonparametric Statistical Methods" (5th edition)
 }
 \usage{
 ch14
 }
 \description{
-Data used in Chapter 14 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+Data used in Chapter 14 of "Applied Nonparametric Statistical Methods" (5th edition)
 \itemize{
 \item example14.2 (used in examples 14.2, 14.5)
 \item X14.4 (used in exercise 14.4)

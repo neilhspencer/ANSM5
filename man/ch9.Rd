@@ -11,13 +11,13 @@ A list with 23 data vectors
 }
 }
 \source{
-\verb{Applied Nonparametric Statistical Methods} (5th edition)
+"Applied Nonparametric Statistical Methods" (5th edition)
 }
 \usage{
 ch9
 }
 \description{
-Data used in Chapter 9 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+Data used in Chapter 9 of "Applied Nonparametric Statistical Methods" (5th edition)
 \itemize{
 \item symp.survtime (used in examples 9.1, 9.3)
 \item symp.censor (used in examples 9.1, 9.3)

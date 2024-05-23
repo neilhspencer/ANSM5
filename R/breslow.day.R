@@ -1,8 +1,8 @@
 #' Perform Breslow and Day test
-#' 
+#'
 #' @description
-#' `breslow.day()` performs the Breslow and Day test and is used in chapter 13 of `Applied Nonparametric Statistical Methods` (5th edition)
-#' 
+#' `breslow.day()` performs the Breslow and Day test and is used in chapter 13 of "Applied Nonparametric Statistical Methods" (5th edition)
+#'
 #' @param x Binary factor of same length as y, z
 #' @param y Binary factor of same length as x, z
 #' @param z Factor of same length as x, y
@@ -11,12 +11,12 @@
 #' @param do.CI Boolean indicating whether or not to perform confidence interval calculations (defaults to `TRUE`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Example 13.3 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 13.3 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' breslow.day(ch13$machine, ch13$output.status, ch13$material.source)
-#' 
-#' # Exercise 13.7 from `Applied Nonparametric Statistical Methods` (5th edition)
+#'
+#' # Exercise 13.7 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' breslow.day(ch13$medicine, ch13$response, ch13$location)
-#' 
+#'
 #' @importFrom stats complete.cases pchisq qnorm
 #' @export
 breslow.day <-

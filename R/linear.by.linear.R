@@ -1,7 +1,7 @@
 #' Perform Linear by linear association test
 #'
 #' @description
-#' `linear.by.linear()` performs the Linear by linear association test and is used in chapter 13 of `Applied Nonparametric Statistical Methods` (5th edition)
+#' `linear.by.linear()` performs the Linear by linear association test and is used in chapter 13 of "Applied Nonparametric Statistical Methods" (5th edition)
 #'
 #' @param x Factor of same length as y
 #' @param y Factor of same length as x
@@ -13,10 +13,10 @@
 #' @param do.mc Boolean indicating whether or not to perform Monte Carlo calculations (defaults to `TRUE`)
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
-#' # Example 13.8 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Example 13.8 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' linear.by.linear(ch13$dose, ch13$dose.side.effect, do.mc = FALSE, do.asymp = TRUE)
 #'
-#' # Exercise 13.4 from `Applied Nonparametric Statistical Methods` (5th edition)
+#' # Exercise 13.4 from "Applied Nonparametric Statistical Methods" (5th edition)
 #' linear.by.linear(ch13$SBP, ch13$cholesterol, seed = 1)
 #'
 #' @importFrom stats complete.cases r2dtable pnorm

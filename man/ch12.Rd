@@ -11,13 +11,13 @@ A list with 38 data vectors
 }
 }
 \source{
-\verb{Applied Nonparametric Statistical Methods} (5th edition)
+"Applied Nonparametric Statistical Methods" (5th edition)
 }
 \usage{
 ch12
 }
 \description{
-Data used in Chapter 12 of \verb{Applied Nonparametric Statistical Methods} (5th edition)
+Data used in Chapter 12 of "Applied Nonparametric Statistical Methods" (5th edition)
 \itemize{
 \item feedback.freq (used in example 12.1)
 \item PPI.person (used in example 12.1)
