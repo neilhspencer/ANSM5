@@ -5,6 +5,7 @@
 #'
 #' @param x An ANSMstat object
 #' @param ... Further arguments relevant to the default `print` function
+#' @returns No return value, called to display results
 #'
 #' @export
 print.ANSMstat <- function(x, ...) {
