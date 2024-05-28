@@ -13,10 +13,10 @@
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
 #' # Exercise 4.3 from "Applied Nonparametric Statistical Methods" (5th edition)
-#' #kstest.ANSM(ch4$visiting.supporters, "pexp", rate = 2600)
+#' kstest.ANSM(ch4$visiting.supporters, "pexp", rate = 2600)
 #'
 #' # Exercise 9.2 from "Applied Nonparametric Statistical Methods" (5th edition)
-#' #kstest.ANSM(ch9$boys.toothtime, ch9$girls.toothtime)
+#' kstest.ANSM(ch9$boys.toothtime, ch9$girls.toothtime)
 #'
 #' @importFrom stats complete.cases ks.test
 #' @export

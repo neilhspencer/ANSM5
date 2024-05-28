@@ -10,10 +10,10 @@
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
 #' # Example 4.17 from "Applied Nonparametric Statistical Methods" (5th edition)
-#' #rng.test(ch4$dates.as.degrees)
+#' rng.test(ch4$dates.as.degrees)
 #'
 #' # Exercise 4.13 from "Applied Nonparametric Statistical Methods" (5th edition)
-#' #rng.test(ch4$accident.bearings)
+#' rng.test(ch4$accident.bearings)
 #'
 #' @importFrom stats complete.cases
 #' @export

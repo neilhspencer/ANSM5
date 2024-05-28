@@ -15,10 +15,10 @@
 #' @returns An ANSMtest object with the results from applying the function
 #' @examples
 #' # Example 3.1 from "Applied Nonparametric Statistical Methods" (5th edition)
-#' #sgn.test(ch3$sampleI, 110)
+#' sgn.test(ch3$sampleI, 110)
 #'
 #' # Exercise 6.2 from "Applied Nonparametric Statistical Methods" (5th edition)
-#' #sgn.test(ch5$LVF - ch5$RVF, 0)
+#' sgn.test(ch5$LVF - ch5$RVF, 0)
 #'
 #' @importFrom stats complete.cases dbinom pbinom pnorm qnorm
 #' @export
