@@ -43,9 +43,9 @@ An ANSMtest object with the results from applying the function
 }
 \examples{
 # Example 6.7 from "Applied Nonparametric Statistical Methods" (5th edition)
-#med.test(ch6$males, ch6$females)
+med.test(ch6$males, ch6$females)
 
 # Example 7.5 from "Applied Nonparametric Statistical Methods" (5th edition)
-#med.test(ch7$time, ch7$surgeon, do.exact = FALSE, do.asymp = TRUE)
+med.test(ch7$time, ch7$surgeon, do.exact = FALSE, do.asymp = TRUE)
 
 }

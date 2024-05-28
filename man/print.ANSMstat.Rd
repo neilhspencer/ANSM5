@@ -11,6 +11,9 @@
 
 \item{...}{Further arguments relevant to the default \code{print} function}
 }
+\value{
+No return value, called to display results
+}
 \description{
 \code{print.ANSMstat()} prints the output contained in an ANSMstat object
 }
