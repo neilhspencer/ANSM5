@@ -1,5 +1,7 @@
 # ANSM5 1.0.1
 
+* Patch for stability of pearson.R() function
+
 # ANSM5 1.0.0
 
 * Submitting package to CRAN
