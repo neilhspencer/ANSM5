@@ -1,3 +1,5 @@
+# ANSM5 1.0.2
+
 # ANSM5 1.0.1
 
 * Patch for stability of pearson.R() function
