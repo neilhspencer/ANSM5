@@ -1,5 +1,7 @@
 # ANSM5 1.0.2
 
+* Changes due to using a better arrangement of datasets
+
 # ANSM5 1.0.1
 
 * Patch for stability of pearson.R() function
