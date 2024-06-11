@@ -1,6 +1,6 @@
 Package: ANSM5
 Title: Functions and Data for the Book "Applied Nonparametric Statistical Methods", 5th Edition
-Version: 1.0.2
+Version: 1.1.0
 Authors@R: 
     person("Neil", "Spencer", , "neilhspencer@gmail.com", role = c("aut", "cre", "cph"),
            comment = c(ORCID = "0000-0002-6068-5887"))
