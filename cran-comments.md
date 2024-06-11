@@ -1,4 +1,9 @@
-## Patch
+## Minor release to v1.1.0
+
+* Changes due to using a better arrangement of datasets
+* Changes to tests to avoid use of stats package while testing
+
+## Patch to v1.0.1
 
 Patch for one function resolving stability issue revealed by M1mac check with development version of R
 N.B. "R Mac Builder" and check_mac_release() currently not working so patch not tested as thoroughly as normal
