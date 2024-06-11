@@ -108,6 +108,7 @@ test_that("Exercise 12.9", {
 
 test_that("Exercise 12.10", {
   poisson.probs <- c(0.543350869, 0.331444030, 0.101090429, 0.020555054, 0.003559618)
+  poisson.probs[5] <- 1 - sum(poisson.probs[1:4])
   #From c(dpois(0:3, 0.61), 1 - sum(dpois(0:3, 0.61)))
   expect_equal(chisqtest.ANSM(table(ch12$recurrent.visits), p = poisson.probs,
                                do.exact = FALSE,
@@ -118,6 +119,7 @@ test_that("Exercise 12.10", {
 
 test_that("Exercise 12.11", {
   binomial.probs <- c(0.35300442, 0.40865044, 0.18922730, 0.04911784)
+  binomial.probs[4] <- 1 - sum(binomial.probs[1:3])
   #From c(dbinom(0:2, 5, 0.188), sum(dbinom(3:5, 5, 0.188)))
   expect_equal(chisqtest.ANSM(table(ch12$holes), p = binomial.probs,
                                do.exact = FALSE,
