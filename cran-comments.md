@@ -1,3 +1,7 @@
+## Patch release to v1.1.1
+
+* Debugging wilcoxon.mann.whitney() function
+
 ## Minor release to v1.1.0
 
 * Changes due to using a better arrangement of datasets
